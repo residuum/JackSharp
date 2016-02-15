@@ -20,17 +20,24 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-
+using System;
+using System.Runtime.InteropServices;
 using JackSharp.Pointers;
 
-namespace JackSharp.Ports
+namespace JackSharp.ApiWrapper
 {
-	static class BufferOperations
+	static class PortCallbackApi
 	{
-		public static AudioBuffer GetAudioBuffer (this Port port, uint nframes)
-		{
-			FloatPointer buffer = port.GetBuffer (nframes);
-			return new AudioBuffer (port, nframes, buffer);
-		}
+		[DllImport (Constants.JACK_LIB_NAME, CallingConvention = CallingConvention.Cdecl)]
+		public static extern unsafe int jack_set_client_registration_callback (UnsafeStructs.jack_client_t* client, Callbacks.JackClientRegistrationCallback registrationCallback, IntPtr arg);
+
+		[DllImport (Constants.JACK_LIB_NAME, CallingConvention = CallingConvention.Cdecl)]
+		public static extern unsafe int jack_set_port_registration_callback (UnsafeStructs.jack_client_t* client, Callbacks.JackPortRegistrationCallback registrationCallback, IntPtr arg);
+
+		[DllImport (Constants.JACK_LIB_NAME, CallingConvention = CallingConvention.Cdecl)]
+		public static extern unsafe int jack_set_port_rename_callback (UnsafeStructs.jack_client_t* client, Callbacks.JackPortRenameCallback renameCallback, IntPtr arg);
+
+		[DllImport (Constants.JACK_LIB_NAME, CallingConvention = CallingConvention.Cdecl)]
+		public static extern unsafe int jack_set_port_connect_callback (UnsafeStructs.jack_client_t* client, Callbacks.JackPortConnectCallback connectCallback, IntPtr arg);
 	}
 }

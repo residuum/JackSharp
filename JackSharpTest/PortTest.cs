@@ -40,28 +40,28 @@ namespace JackSharpTests
 		[Test]
 		public virtual void AudioInPortsAreCreated ()
 		{
-			_client.Open ();
+			_client.Start ();
 			Assert.IsTrue (_client.AudioInPorts.Count () == 2);
 		}
 
 		[Test]
 		public virtual void AudioOutPortsAreCreated ()
 		{
-			_client.Open ();
+			_client.Start ();
 			Assert.IsTrue (_client.AudioOutPorts.Count () == 4);
 		}
 
 		[Test]
 		public virtual void MidiInPortsAreCreated ()
 		{
-			_client.Open ();
+			_client.Start ();
 			Assert.IsTrue (_client.MidiInPorts.Count () == 1);
 		}
 
 		[Test]
 		public virtual void MidiOutPortsAreCreated ()
 		{
-			_client.Open ();
+			_client.Start ();
 			Assert.IsTrue (_client.MidiOutPorts.Count () == 3);
 		}
 

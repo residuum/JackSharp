@@ -20,10 +20,10 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-using System;
 using NUnit.Framework;
 using JackSharp;
 using System.Threading;
+using JackSharpTest.Dummies;
 
 namespace JackSharpTest
 {
@@ -41,12 +41,12 @@ namespace JackSharpTest
 		[Test]
 		public virtual void AudioCopying ()
 		{
-			AudioCallbackReceiver receiver = new AudioCallbackReceiver ();
+			CallbackReceiver receiver = new CallbackReceiver ();
 			_client.ProcessFunc = receiver.CopyInToOut;
-			_client.Open ();
-			Thread.Sleep (1000);
+			_client.Start ();
+			Thread.Sleep (200);
+			Assert.IsTrue (receiver.Called > 0);
 		}
-
 
 		[TearDown]
 		public static void DestroyClient ()

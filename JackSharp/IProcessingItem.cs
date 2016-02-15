@@ -1,4 +1,4 @@
-// Author:
+﻿// Author:
 //       Thomas Mayer <thomas@residuum.org>
 //
 // Copyright (c) 2016 Thomas Mayer
@@ -20,14 +20,12 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+using JackSharp.Ports;
 
-namespace JackSharp.Ports
+namespace JackSharp
 {
-
-	public enum PortType
+	interface IProcessingItem
 	{
-		Audio,
-		Midi
+		Port Port { get; }
 	}
-    
 }

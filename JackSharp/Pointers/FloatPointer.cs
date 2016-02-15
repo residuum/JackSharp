@@ -33,7 +33,7 @@ namespace JackSharp.Pointers
 
 		public float[] Array { get; set; }
 
-		public unsafe void Finish ()
+		public unsafe void CopyToPointer ()
 		{
 			int length = (int)Math.Min (Size, Array.Length);
 			Marshal.Copy (Array, 0, (IntPtr)_pointer, length);
@@ -49,7 +49,7 @@ namespace JackSharp.Pointers
 			return result;
 		}
 
-		public unsafe FloatPointer (float*pointer, uint size)
+		public unsafe FloatPointer (float* pointer, uint size)
 		{
 			_pointer = pointer;
 			Size = size;

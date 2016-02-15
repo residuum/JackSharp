@@ -42,7 +42,8 @@
     <Compile Include="ClientTest.cs" />
     <Compile Include="PortTest.cs" />
     <Compile Include="AudioTest.cs" />
-    <Compile Include="Dummies\AudioCallbackReceiver.cs" />
+    <Compile Include="Dummies\CallbackReceiver.cs" />
+    <Compile Include="MidiTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\JackSharp\JackSharp.csproj">

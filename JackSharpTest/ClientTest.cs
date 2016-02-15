@@ -21,38 +21,63 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System.Linq;
+using System.Threading;
 using JackSharp;
+using JackSharpTest.Dummies;
 using NUnit.Framework;
 
-namespace JackSharpTests
+namespace JackSharpTest
 {
 	[TestFixture]
 	public class ClientTest
 	{
-
 		[Test]
-		public virtual void TestOpen ()
+		public virtual void TestStart ()
 		{
 			using (Client client = new Client ("testing")) {
-				Assert.IsTrue (client.Open ());
-				client.Close ();
+				Assert.IsTrue (client.Start ());
+				client.Stop ();
 			}
 		}
 
 		[Test]
-		public virtual void TestClose ()
+		public virtual void TestDoubleStart ()
 		{
 			using (Client client = new Client ("testing")) {
-				client.Open ();
-				Assert.IsTrue (client.Close ());
+				Assert.IsTrue (client.Start ());
+				Assert.IsFalse (client.Start ());
 			}
 		}
 
 		[Test]
-		public virtual void TestCloseIfNotOpened ()
+		public virtual void TestStartAfterStopped ()
+		{
+			using (Client client = new Client ("testing", 1)) {
+				CallbackReceiver receiver = new CallbackReceiver ();
+				client.ProcessFunc = receiver.ChannelCounter;
+				Assert.IsTrue (client.Start ());
+				client.Stop ();
+				Assert.IsTrue (client.Start ());
+				Assert.IsTrue (client.AudioInPorts.Count () == 1);
+				Thread.Sleep (200);
+				Assert.IsTrue (receiver.Called > 0);
+			}
+		}
+
+		[Test]
+		public virtual void TestStop ()
 		{
 			using (Client client = new Client ("testing")) {
-				Assert.IsFalse (client.Close ());
+				client.Start ();
+				Assert.IsTrue (client.Stop ());
+			}
+		}
+
+		[Test]
+		public virtual void TestStopIfNotStarted ()
+		{
+			using (Client client = new Client ("testing")) {
+				Assert.IsFalse (client.Stop ());
 			}
 		}
 
@@ -60,9 +85,9 @@ namespace JackSharpTests
 		public virtual void TestSampleRate ()
 		{
 			using (Client client = new Client ("testing")) {
-				client.Open ();
+				client.Start ();
 				Assert.IsTrue (client.SampleRate == 44100 || client.SampleRate == 48000);
-				client.Close ();
+				client.Stop ();
 			}
 
 		}
@@ -71,11 +96,10 @@ namespace JackSharpTests
 		public virtual void TestBufferSize ()
 		{
 			using (Client client = new Client ("testing")) {
-				client.Open ();
+				client.Start ();
 				Assert.IsTrue (client.BufferSize > 0);
-				client.Close ();
+				client.Stop ();
 			}
-
 		}
 	}
 }

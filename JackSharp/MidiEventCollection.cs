@@ -1,4 +1,4 @@
-﻿// Author:
+// Author:
 //       Thomas Mayer <thomas@residuum.org>
 //
 // Copyright (c) 2016 Thomas Mayer
@@ -20,17 +20,37 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-using System;
-using JackSharp;
 
-namespace JackSharpTest
+using System.Collections;
+using System.Collections.Generic;
+using JackSharp.Ports;
+
+namespace JackSharp
 {
-	public class AudioCallbackReceiver
+	public class MidiEventCollection : IEnumerable<JackMidiEvent>, IProcessingItem
 	{
-		public void CopyInToOut (ProcessingChunk processItems)
+		public Port Port { get; private set; }
+
+		internal MidiEventCollection (Port port)
 		{
-			Array.Copy (processItems.AudioInBuffer.Audio, processItems.AudioOutBuffer.Audio, processItems.AudioInBuffer.BufferSizePerChannel * processItems.AudioInBuffer.ChannelCount);
+			Port = port;
+		}
+
+		public void AddEvent (JackMidiEvent midiEvent)
+		{
+			_midiEvents.Add (midiEvent);
+		}
+
+		private readonly List<JackMidiEvent> _midiEvents = new List<JackMidiEvent> ();
+
+		public IEnumerator<JackMidiEvent> GetEnumerator ()
+		{
+			return _midiEvents.GetEnumerator ();
+		}
+
+		IEnumerator IEnumerable.GetEnumerator ()
+		{
+			return GetEnumerator ();
 		}
 	}
 }
-

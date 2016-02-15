@@ -22,22 +22,25 @@
 // THE SOFTWARE.
 namespace JackSharp.Pointers
 {
-    class UnsafeStructs
-    {
-        internal struct jack_client_t
-        {
-        }
+	class UnsafeStructs
+	{
+		internal struct jack_client_t
+		{
+		}
 
-        internal struct jack_port_t
-        {
-        }
+		internal struct jack_port_t
+		{
+		}
 
-        /** A Jack MIDI event. */
-        internal struct jack_midi_event_t
-        {
-            uint time;   /**< Sample index at which event is valid */
-            uint size;   /**< Number of bytes of data in \a buffer */
-            unsafe byte* buffer; /**< Raw MIDI data */
-        }
-    }
+		/** A Jack MIDI event. */
+		internal struct jack_midi_event_t
+		{
+			uint time;
+			/**< Sample index at which event is valid */
+			uint size;
+			/**< Number of bytes of data in \a buffer */
+			unsafe byte* buffer;
+			/**< Raw MIDI data */
+		}
+	}
 }

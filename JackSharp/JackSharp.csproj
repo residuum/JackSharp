@@ -52,17 +52,25 @@
     <Compile Include="Pointers\StringFromIntPtr.cs" />
     <Compile Include="Pointers\UnsafeStructs.cs" />
     <Compile Include="Pointers\FloatPointer.cs" />
-    <Compile Include="Internal\Callbacks.cs" />
-    <Compile Include="Internal\Constants.cs" />
-    <Compile Include="Internal\Invoke.cs" />
-    <Compile Include="Internal\JackLatencyCallbackMode.cs" />
-    <Compile Include="Internal\JackOptions.cs" />
-    <Compile Include="Internal\JackPortFlags.cs" />
-    <Compile Include="Internal\JackStatus.cs" />
     <Compile Include="ProcessingChunk.cs" />
     <Compile Include="Ports\PortType.cs" />
     <Compile Include="Ports\Direction.cs" />
     <Compile Include="Ports\BufferOperations.cs" />
+    <Compile Include="IProcessingItem.cs" />
+    <Compile Include="MidiEventCollection.cs" />
+    <Compile Include="Pointers\MidiPointer.cs" />
+    <Compile Include="ApiWrapper\Callbacks.cs" />
+    <Compile Include="ApiWrapper\ClientApi.cs" />
+    <Compile Include="ApiWrapper\ClientCallbackApi.cs" />
+    <Compile Include="ApiWrapper\Constants.cs" />
+    <Compile Include="ApiWrapper\Invoke.cs" />
+    <Compile Include="ApiWrapper\JackLatencyCallbackMode.cs" />
+    <Compile Include="ApiWrapper\JackOptions.cs" />
+    <Compile Include="ApiWrapper\JackPortFlags.cs" />
+    <Compile Include="ApiWrapper\JackStatus.cs" />
+    <Compile Include="ApiWrapper\MidiApi.cs" />
+    <Compile Include="ApiWrapper\PortApi.cs" />
+    <Compile Include="ApiWrapper\PortCallbackApi.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -72,7 +80,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <ItemGroup>
-    <Folder Include="Internal\" />
-  </ItemGroup>
 </Project>

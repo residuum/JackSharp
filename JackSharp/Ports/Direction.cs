@@ -23,9 +23,9 @@
 namespace JackSharp.Ports
 {
 
-    public enum Direction
-    {
-        In,
-        Out
-    }
+	public enum Direction
+	{
+		In,
+		Out
+	}
 }

@@ -22,9 +22,10 @@
 // THE SOFTWARE.
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using JackSharp.Pointers;
 using JackSharp.Ports;
-using JackSharp.Internal;
+using JackSharp.ApiWrapper;
 
 namespace JackSharp
 {
@@ -36,6 +37,7 @@ namespace JackSharp
 		MidiInPort[] _midiInPorts;
 		MidiOutPort[] _midiOutPorts;
 		unsafe UnsafeStructs.jack_client_t* _jackClient;
+		bool _isStarted;
 
 		public Action<ProcessingChunk> ProcessFunc { get; set; }
 
@@ -96,44 +98,61 @@ namespace JackSharp
 		Callbacks.JackBufferSizeCallback _bufferSizeCallback;
 		Callbacks.JackSampleRateCallback _sampleRateCallback;
 
-		void WireUpCallbacks ()
+		unsafe void WireUpCallbacks ()
 		{
-			Invoke.jack_set_process_callback (_jackClient, _processCallback, IntPtr.Zero);
-			Invoke.jack_set_buffer_size_callback (_jackClient, _bufferSizeCallback, IntPtr.Zero);
-			Invoke.jack_set_sample_rate_callback (_jackClient, _sampleRateCallback, IntPtr.Zero);
+			ClientCallbackApi.jack_set_process_callback (_jackClient, _processCallback, IntPtr.Zero);
+			ClientCallbackApi.jack_set_buffer_size_callback (_jackClient, _bufferSizeCallback, IntPtr.Zero);
+			ClientCallbackApi.jack_set_sample_rate_callback (_jackClient, _sampleRateCallback, IntPtr.Zero);
 		}
 
-		public unsafe bool Open (bool autoconnectAudio = false)
+		public unsafe bool Start ()
 		{
-			_jackClient = Invoke.jack_client_open (_name, JackOptions.JackNullOption, IntPtr.Zero);
-			if (_jackClient == null) {
+			if (_isStarted) {
 				return false;
 			}
-			CreatePorts ();
-			WireUpCallbacks ();
-			int status = Invoke.jack_activate (_jackClient);
+			if (!Open ())
+				return false;
+			int status = ClientApi.jack_activate (_jackClient);
 			if (status != 0) {
 				return false;
 			}
 			SampleRate = Invoke.jack_get_sample_rate (_jackClient);
 			BufferSize = Invoke.jack_get_buffer_size (_jackClient);
+			_isStarted = true;
+			return true;
+		}
+
+		unsafe bool Open ()
+		{
+			if (_jackClient != null) {
+				return true;
+			}
+			_jackClient = ClientApi.jack_client_open (_name, JackOptions.JackNullOption, IntPtr.Zero);
+			if (_jackClient == null) {
+				return false;
+			}
+			CreatePorts ();
+			WireUpCallbacks ();
 			return true;
 		}
 
 		int OnProcess (uint nframes, IntPtr arg)
 		{
-			FloatPointer[] audioInBuffers = _audioInPorts.GetAudioBuffers (nframes);
-			FloatPointer[] audioOutBuffers = _audioOutPorts.GetAudioBuffers (nframes);
-			float[] interleavedInAudio = audioInBuffers.InterleaveAudio (nframes);
-			float[] interleavedOutAudio = audioOutBuffers.InterleaveAudio (nframes);
+			AudioBuffer[] audioInBuffers = _audioInPorts.Select (p => p.GetAudioBuffer (nframes)).ToArray ();
+			AudioBuffer[] audioOutBuffers = _audioOutPorts.Select (p => p.GetAudioBuffer (nframes)).ToArray ();
 			if (ProcessFunc != null) {
 				ProcessFunc (new ProcessingChunk {
-					AudioInBuffer = new AudioBuffer (nframes, _audioInPorts.Length, interleavedInAudio),
-					AudioOutBuffer = new AudioBuffer (nframes, _audioOutPorts.Length, interleavedOutAudio)
+					AudioIn = audioInBuffers,
+					AudioOut = audioOutBuffers
 				});
 			}
-			interleavedInAudio.DeinterleaveAudio (nframes, ref audioInBuffers);
-			interleavedOutAudio.DeinterleaveAudio (nframes, ref audioOutBuffers);
+			foreach (var audioInBuffer in audioInBuffers) {
+				audioInBuffer.CopyToPointer ();
+			}
+			foreach (var audioOutBuffer in audioOutBuffers) {
+				audioOutBuffer.CopyToPointer ();
+			}
+
 			return 0;
 		}
 
@@ -149,13 +168,33 @@ namespace JackSharp
 			return 0;
 		}
 
-		public unsafe bool Close ()
+		public unsafe bool Stop ()
 		{
-			int status = Invoke.jack_client_close (_jackClient);
+			bool status = ClientApi.jack_deactivate (_jackClient) == 0;
+			_isStarted = !status;
+
+			return status;
+		}
+
+		unsafe void Close ()
+		{
+			for (var i = _midiOutPorts.Length - 1; i >= 0; i--) {
+				_midiOutPorts [i].Dispose ();
+			}
+			for (var i = _midiInPorts.Length - 1; i >= 0; i--) {
+				_midiInPorts [i].Dispose ();
+			}
+			for (var i = _audioOutPorts.Length - 1; i >= 0; i--) {
+				_audioOutPorts [i].Dispose ();
+			}
+			for (var i = _audioInPorts.Length - 1; i >= 0; i--) {
+				_audioInPorts [i].Dispose ();
+			}
+			int status = ClientApi.jack_client_close (_jackClient);
 			if (status == 0) {
 				_jackClient = null;
 			}
-			return status == 0;
+			return;
 		}
 
 		unsafe void CreatePorts ()
@@ -176,6 +215,7 @@ namespace JackSharp
 
 		void Dispose (bool isDisposing)
 		{
+			Stop ();
 			Close ();
 		}
 	}

@@ -21,18 +21,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using System;
-using System.Collections.Generic;
-using JackSharp.Pointers;
-using JackSharp.Ports;
-
 namespace JackSharp
 {
-
 	public class ProcessingChunk
 	{
-		public AudioBuffer AudioInBuffer { get; set; }
+		public AudioBuffer[] AudioIn { get; set; }
 
-		public AudioBuffer AudioOutBuffer { get; set; }
+		public AudioBuffer[] AudioOut { get; set; }
+
+		public MidiEventCollection[] MidiIn { get; set; }
+
+		public MidiEventCollection[] MidiOut { get; set; }
 	}
 }
