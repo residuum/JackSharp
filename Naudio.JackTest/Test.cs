@@ -20,51 +20,18 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+using NUnit.Framework;
 using System;
-using JackSharp;
 
-namespace JackSharpTest.Dummies
+namespace Naudio.JackTest
 {
-	public class CallbackReceiver
+	[TestFixture ()]
+	public class Test
 	{
-		public int Called { get; set; }
-
-		public void CopyInToOut (ProcessingChunk processItems)
+		[Test ()]
+		public void TestCase ()
 		{
-			for (var i = 0; i < Math.Min (processItems.AudioIn.Length, processItems.AudioOut.Length); i++) {
-				Array.Copy (processItems.AudioIn [i].Audio, processItems.AudioOut [i].Audio, processItems.AudioIn [i].BufferSize);
-		        
-			}
-			Called++;
 		}
-
-		public void PlayMidiNote (ProcessingChunk processItems)
-		{
-			Called++;
-			//throw new NotImplementedException();
-		}
-
-		public void ChannelCounter (ProcessingChunk processItems)
-		{
-			Called = processItems.AudioIn.Length;
-		}
-
-		public void CallBackOne (ProcessingChunk processItems)
-		{
-			if (Called == 0){
-				Called = 1;
-			}
-			Called *= 2;
-		}
-
-		public void CallBackTwo (ProcessingChunk processItems)
-		{
-			if (Called == 0){
-				Called = 1;
-			}
-			Called *= 3;
-		}
-
 	}
 }
 

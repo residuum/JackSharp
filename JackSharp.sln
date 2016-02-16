@@ -7,16 +7,28 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JackSharp", "JackSharp\Jack
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JackSharpTest", "JackSharpTest\JackSharpTest.csproj", "{FF26D28D-D7DB-4E19-8713-4E057182DF7B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naudio.Jack", "Naudio.Jack\Naudio.Jack.csproj", "{4EEA78CA-593E-48B1-BF6A-EED70F6DC557}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Naudio.JackTest", "Naudio.JackTest\Naudio.JackTest.csproj", "{516BF6A5-5B69-4A24-B709-C8D817D60634}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4EEA78CA-593E-48B1-BF6A-EED70F6DC557}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EEA78CA-593E-48B1-BF6A-EED70F6DC557}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EEA78CA-593E-48B1-BF6A-EED70F6DC557}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EEA78CA-593E-48B1-BF6A-EED70F6DC557}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4F92C51C-92A4-4B82-A3D9-0F9EBF76ADA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4F92C51C-92A4-4B82-A3D9-0F9EBF76ADA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F92C51C-92A4-4B82-A3D9-0F9EBF76ADA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F92C51C-92A4-4B82-A3D9-0F9EBF76ADA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{516BF6A5-5B69-4A24-B709-C8D817D60634}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{516BF6A5-5B69-4A24-B709-C8D817D60634}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{516BF6A5-5B69-4A24-B709-C8D817D60634}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{516BF6A5-5B69-4A24-B709-C8D817D60634}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FF26D28D-D7DB-4E19-8713-4E057182DF7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FF26D28D-D7DB-4E19-8713-4E057182DF7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF26D28D-D7DB-4E19-8713-4E057182DF7B}.Release|Any CPU.ActiveCfg = Release|Any CPU

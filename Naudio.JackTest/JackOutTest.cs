@@ -21,48 +21,41 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Linq;
 using JackSharp;
+using Naudio.Jack;
+using NUnit.Framework;
 
-namespace JackSharpTest.Dummies
+namespace Naudio.JackTest
 {
-	public class CallbackReceiver
+	[TestFixture]
+	public class JackOutTest
 	{
-		public int Called { get; set; }
+		static Client _client;
+		static JackOut _jackOut;
 
-		public void CopyInToOut (ProcessingChunk processItems)
+		[SetUp]
+		public static void CreateOutput ()
 		{
-			for (var i = 0; i < Math.Min (processItems.AudioIn.Length, processItems.AudioOut.Length); i++) {
-				Array.Copy (processItems.AudioIn [i].Audio, processItems.AudioOut [i].Audio, processItems.AudioIn [i].BufferSize);
-		        
-			}
-			Called++;
+			_client = new Client ("testing", 0, 2);
+			_jackOut = new JackOut (_client);
 		}
 
-		public void PlayMidiNote (ProcessingChunk processItems)
+		[Test]
+		public virtual void AudioFormat ()
 		{
-			Called++;
-			//throw new NotImplementedException();
+			_client.Start ();
+			_jackOut.Play ();
+			Assert.AreEqual (_jackOut.OutputWaveFormat.SampleRate, _client.SampleRate);
+			Assert.AreEqual (_jackOut.OutputWaveFormat.Channels, _client.AudioOutPorts.Count ());
 		}
 
-		public void ChannelCounter (ProcessingChunk processItems)
-		{
-			Called = processItems.AudioIn.Length;
-		}
 
-		public void CallBackOne (ProcessingChunk processItems)
+		[TearDown]
+		public static void DestroyClient ()
 		{
-			if (Called == 0){
-				Called = 1;
-			}
-			Called *= 2;
-		}
-
-		public void CallBackTwo (ProcessingChunk processItems)
-		{
-			if (Called == 0){
-				Called = 1;
-			}
-			Called *= 3;
+			_jackOut.Dispose ();
+			_client.Dispose ();
 		}
 
 	}

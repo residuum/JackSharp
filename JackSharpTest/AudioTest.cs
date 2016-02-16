@@ -48,6 +48,17 @@ namespace JackSharpTest
 			Assert.IsTrue (receiver.Called > 0);
 		}
 
+		[Test]
+		public virtual void AudioCopyingAfterDummy ()
+		{
+			CallbackReceiver receiver = new CallbackReceiver ();
+			_client.ProcessFunc += receiver.CallBackOne;
+			_client.ProcessFunc += receiver.CallBackTwo;
+			_client.Start ();
+			Thread.Sleep (200);
+			Assert.IsTrue (receiver.Called % 6 == 0);
+		}
+
 		[TearDown]
 		public static void DestroyClient ()
 		{

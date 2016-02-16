@@ -20,51 +20,30 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-using System;
-using JackSharp;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
-namespace JackSharpTest.Dummies
-{
-	public class CallbackReceiver
-	{
-		public int Called { get; set; }
+// Information about this assembly is defined by the following attributes.
+// Change them to the values specific to your project.
 
-		public void CopyInToOut (ProcessingChunk processItems)
-		{
-			for (var i = 0; i < Math.Min (processItems.AudioIn.Length, processItems.AudioOut.Length); i++) {
-				Array.Copy (processItems.AudioIn [i].Audio, processItems.AudioOut [i].Audio, processItems.AudioIn [i].BufferSize);
-		        
-			}
-			Called++;
-		}
+[assembly: AssemblyTitle ("Naudio.Jack")]
+[assembly: AssemblyDescription ("")]
+[assembly: AssemblyConfiguration ("")]
+[assembly: AssemblyCompany ("")]
+[assembly: AssemblyProduct ("")]
+[assembly: AssemblyCopyright ("Thomas Mayer")]
+[assembly: AssemblyTrademark ("")]
+[assembly: AssemblyCulture ("")]
 
-		public void PlayMidiNote (ProcessingChunk processItems)
-		{
-			Called++;
-			//throw new NotImplementedException();
-		}
+// The assembly version has the format "{Major}.{Minor}.{Build}.{Revision}".
+// The form "{Major}.{Minor}.*" will automatically update the build and revision,
+// and "{Major}.{Minor}.{Build}.*" will update just the revision.
 
-		public void ChannelCounter (ProcessingChunk processItems)
-		{
-			Called = processItems.AudioIn.Length;
-		}
+[assembly: AssemblyVersion ("1.0.*")]
 
-		public void CallBackOne (ProcessingChunk processItems)
-		{
-			if (Called == 0){
-				Called = 1;
-			}
-			Called *= 2;
-		}
+// The following attributes are used to specify the signing key for the assembly,
+// if desired. See the Mono documentation for more information about signing.
 
-		public void CallBackTwo (ProcessingChunk processItems)
-		{
-			if (Called == 0){
-				Called = 1;
-			}
-			Called *= 3;
-		}
-
-	}
-}
+//[assembly: AssemblyDelaySign(false)]
+//[assembly: AssemblyKeyFile("")]
 

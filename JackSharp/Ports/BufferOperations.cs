@@ -25,12 +25,31 @@ using JackSharp.Pointers;
 
 namespace JackSharp.Ports
 {
-	static class BufferOperations
+	public static class BufferOperations
 	{
-		public static AudioBuffer GetAudioBuffer (this Port port, uint nframes)
+		internal static AudioBuffer GetAudioBuffer (this Port port, uint nframes)
 		{
 			FloatPointer buffer = port.GetBuffer (nframes);
 			return new AudioBuffer (port, nframes, buffer);
+		}
+
+		public static float[] InterlaceAudio (AudioBuffer[] audioBuffers, uint bufferSize, uint bufferCount){
+			float[] interlaced = new float[bufferSize * bufferCount];
+
+			for (uint i = 0; i < bufferSize; i++){
+				for (uint j = 0; j < bufferSize; j++){
+					interlaced[i*bufferCount + j] = audioBuffers[j].Audio[i];
+				}
+			}
+			return interlaced;
+		}
+
+		public static void DeinterlaceAudio (float[] interlaced, AudioBuffer[] audioBuffers, uint bufferSize, uint bufferCount){
+			for (uint i = 0; i < bufferSize; i++){
+				for (uint j = 0; j < bufferSize; j++){
+					audioBuffers[j].Audio[i] = interlaced[i*bufferCount + j];
+				}
+			}
 		}
 	}
 }
