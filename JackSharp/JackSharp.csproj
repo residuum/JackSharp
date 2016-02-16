@@ -45,13 +45,13 @@
   <ItemGroup>
     <Compile Include="Client.cs" />
     <Compile Include="JackMidiEvent.cs" />
+    <Compile Include="Pointers\StructPointer.cs" />
     <Compile Include="Ports\AudioInPort.cs" />
     <Compile Include="Ports\Port.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AudioBuffer.cs" />
     <Compile Include="Pointers\StringFromIntPtr.cs" />
     <Compile Include="Pointers\UnsafeStructs.cs" />
-    <Compile Include="Pointers\FloatPointer.cs" />
     <Compile Include="ProcessingChunk.cs" />
     <Compile Include="Ports\PortType.cs" />
     <Compile Include="Ports\Direction.cs" />
@@ -71,6 +71,9 @@
     <Compile Include="ApiWrapper\MidiApi.cs" />
     <Compile Include="ApiWrapper\PortApi.cs" />
     <Compile Include="ApiWrapper\PortCallbackApi.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

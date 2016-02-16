@@ -29,7 +29,7 @@ namespace JackSharp.Ports
 	{
 		internal static AudioBuffer GetAudioBuffer (this Port port, uint nframes)
 		{
-			FloatPointer buffer = port.GetBuffer (nframes);
+			StructPointer<float> buffer = port.GetBuffer (nframes);
 			return new AudioBuffer (port, nframes, buffer);
 		}
 

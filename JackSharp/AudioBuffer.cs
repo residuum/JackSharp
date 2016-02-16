@@ -33,11 +33,11 @@ namespace JackSharp
 
 		public int BufferSize { get; private set; }
 
-		internal FloatPointer PointerWrapper { get; private set; }
+		internal StructPointer<float> PointerWrapper { get; private set; }
 
 		public float[] Audio { get; set; }
 
-		internal AudioBuffer (Port port, uint bufferSize, FloatPointer pointer)
+		internal AudioBuffer (Port port, uint bufferSize, StructPointer<float> pointer)
 		{
 			BufferSize = (int) bufferSize;
 			Port = port;

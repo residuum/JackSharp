@@ -44,7 +44,6 @@ namespace Naudio.JackTest
 		[Test]
 		public virtual void AudioFormat ()
 		{
-			_client.Start ();
 			_jackOut.Play ();
 			Assert.AreEqual (_jackOut.OutputWaveFormat.SampleRate, _client.SampleRate);
 			Assert.AreEqual (_jackOut.OutputWaveFormat.Channels, _client.AudioOutPorts.Count ());

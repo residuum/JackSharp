@@ -108,8 +108,8 @@ namespace Naudio.Jack
 
 		public void Init (IWaveProvider waveProvider)
 		{
-			this._waveStream = waveProvider;
-			int bufferSize = (int)_client.BufferSize;
+			_waveStream = waveProvider;
+			int bufferSize = _client.BufferSize;
 
 			_playbackState = PlaybackState.Stopped;
 			_buffer = new CircularBuffer (_client.AudioInPorts.Count () * bufferSize * 2 * sizeof (float));
