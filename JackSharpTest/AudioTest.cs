@@ -1,5 +1,5 @@
-﻿// Author:
-//       Thomas Mayer <thomas@residuum.org>
+// Author:
+//	   Thomas Mayer <thomas@residuum.org>
 //
 // Copyright (c) 2016 Thomas Mayer
 //
@@ -20,6 +20,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+
 using NUnit.Framework;
 using JackSharp;
 using System.Threading;
@@ -49,14 +50,26 @@ namespace JackSharpTest
 		}
 
 		[Test]
-		public virtual void AudioCopyingAfterDummy ()
+		public virtual void AudioAddMultipleActions ()
 		{
-			CallbackReceiver receiver = new CallbackReceiver ();
+			CallbackReceiver receiver = new CallbackReceiver();
 			_client.ProcessFunc += receiver.CallBackOne;
 			_client.ProcessFunc += receiver.CallBackTwo;
 			_client.Start ();
-			Thread.Sleep (200);
+			Thread.Sleep (400);
 			Assert.IsTrue (receiver.Called % 6 == 0);
+		}
+
+		[Test]
+		public virtual void AudioAddRemoveAction ()
+		{
+			CallbackReceiver receiver = new CallbackReceiver();
+			_client.ProcessFunc += receiver.CallBackOne;
+			_client.ProcessFunc += receiver.CallBackTwo;
+			_client.ProcessFunc -= receiver.CallBackOne;
+			_client.Start ();
+			Thread.Sleep (400);
+			Assert.IsTrue (receiver.Called % 6 != 0);
 		}
 
 		[TearDown]

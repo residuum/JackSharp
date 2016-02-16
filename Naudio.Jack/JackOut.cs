@@ -1,5 +1,5 @@
-﻿// Author:
-//       Thomas Mayer <thomas@residuum.org>
+// Author:
+//	   Thomas Mayer <thomas@residuum.org>
 //
 // Copyright (c) 2016 Thomas Mayer
 //
@@ -91,13 +91,17 @@ namespace Naudio.Jack
 		void ProcessAudio (ProcessingChunk processingChunk)
 		{
 			int bufferCount = processingChunk.AudioOut.Length;
-			if (bufferCount == 0){
+			if (bufferCount == 0) {
 				return;
 			}
-			uint bufferSize = processingChunk.AudioOut [0].BufferSize;
-			int completeSampleSize = bufferCount * bufferSize;
-			float[] interlacedSamples;
-			_buffer.Read (interlacedSamples, 0, completeSampleSize);
+			int bufferSize = processingChunk.AudioOut [0].BufferSize;
+			int floatsCount = bufferCount * bufferSize;
+			int bytesCount = floatsCount * sizeof (float);
+			byte[] fromCircularBuffer = new byte[bytesCount];
+			_buffer.Read (fromCircularBuffer, 0, floatsCount);
+			float[] interlacedSamples = new float[floatsCount];
+			Buffer.BlockCopy (fromCircularBuffer,0, interlacedSamples, 0, bytesCount);
+
 			BufferOperations.DeinterlaceAudio (interlacedSamples, processingChunk.AudioOut, bufferSize, bufferCount);
 			
 		}
@@ -108,7 +112,7 @@ namespace Naudio.Jack
 			int bufferSize = (int)_client.BufferSize;
 
 			_playbackState = PlaybackState.Stopped;
-			_buffer = new CircularBuffer (_client.AudioInPorts.Length * _client.BufferSize * 2);
+			_buffer = new CircularBuffer (_client.AudioInPorts.Count () * bufferSize * 2 * sizeof (float));
 			_client.ProcessFunc += ProcessAudio;
 		}
 

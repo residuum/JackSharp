@@ -28,7 +28,7 @@ namespace JackSharp.Pointers
 	{
 		readonly unsafe float* _pointer;
 
-		public uint Size { get; set; }
+		public int Size { get; set; }
 
 		public float[] Array { get; set; }
 
@@ -38,7 +38,7 @@ namespace JackSharp.Pointers
 		{
 			_port = port;
 			_pointer = pointer;
-			Size = nframes;
+			Size = (int) nframes;
 		}
 	}
 }

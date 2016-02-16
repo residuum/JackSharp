@@ -1,4 +1,4 @@
-﻿// Author:
+// Author:
 //       Thomas Mayer <thomas@residuum.org>
 //
 // Copyright (c) 2016 Thomas Mayer
@@ -31,7 +31,7 @@ namespace JackSharp
 
 		public Port Port { get; private set; }
 
-		public uint BufferSize { get; private set; }
+		public int BufferSize { get; private set; }
 
 		internal FloatPointer PointerWrapper { get; private set; }
 
@@ -39,7 +39,7 @@ namespace JackSharp
 
 		internal AudioBuffer (Port port, uint bufferSize, FloatPointer pointer)
 		{
-			BufferSize = bufferSize;
+			BufferSize = (int) bufferSize;
 			Port = port;
 			PointerWrapper = pointer;
 			Audio = PointerWrapper.Array;

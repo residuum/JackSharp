@@ -29,13 +29,13 @@ namespace JackSharp.Pointers
 	{
 		readonly unsafe float* _pointer;
 
-		public uint Size { get; set; }
+		public int Size { get; set; }
 
 		public float[] Array { get; set; }
 
 		public unsafe void CopyToPointer ()
 		{
-			int length = (int)Math.Min (Size, Array.Length);
+			int length = Math.Min (Size, Array.Length);
 			Marshal.Copy (Array, 0, (IntPtr)_pointer, length);
 			for (int i = length; i < Size; i++) {
 				_pointer [i] = 0;
@@ -45,14 +45,14 @@ namespace JackSharp.Pointers
 		unsafe float[] CopyFromPointer ()
 		{
 			float[] result = new float[Size];
-			Marshal.Copy ((IntPtr)_pointer, result, 0, (int)Size);
+			Marshal.Copy ((IntPtr)_pointer, result, 0, Size);
 			return result;
 		}
 
 		public unsafe FloatPointer (float* pointer, uint size)
 		{
 			_pointer = pointer;
-			Size = size;
+			Size = (int) size;
 			Array = CopyFromPointer ();
 		}
 	}

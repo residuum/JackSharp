@@ -1,4 +1,4 @@
-﻿// Author:
+// Author:
 //       Thomas Mayer <thomas@residuum.org>
 //
 // Copyright (c) 2016 Thomas Mayer
@@ -76,9 +76,9 @@ namespace JackSharp
 			_sampleRateCallback = OnSampleRateChange;
 		}
 
-		public uint SampleRate { get; set; }
+		public int SampleRate { get; set; }
 
-		public uint BufferSize {
+		public int BufferSize {
 			get { return _bufferSize; }
 			set {
 				_bufferSize = value;
@@ -93,7 +93,7 @@ namespace JackSharp
 
 		public IEnumerable<AudioInPort> AudioInPorts { get { return _audioInPorts; } }
 
-		uint _bufferSize;
+		int _bufferSize;
 		Callbacks.JackProcessCallback _processCallback;
 		Callbacks.JackBufferSizeCallback _bufferSizeCallback;
 		Callbacks.JackSampleRateCallback _sampleRateCallback;
@@ -116,8 +116,8 @@ namespace JackSharp
 			if (status != 0) {
 				return false;
 			}
-			SampleRate = Invoke.jack_get_sample_rate (_jackClient);
-			BufferSize = Invoke.jack_get_buffer_size (_jackClient);
+			SampleRate = (int) Invoke.jack_get_sample_rate (_jackClient);
+			BufferSize = (int) Invoke.jack_get_buffer_size (_jackClient);
 			_isStarted = true;
 			return true;
 		}
@@ -158,13 +158,13 @@ namespace JackSharp
 
 		int OnSampleRateChange (uint nframes, IntPtr arg)
 		{
-			SampleRate = nframes;
+			SampleRate = (int) nframes;
 			return 0;
 		}
 
 		int OnBufferSizeChange (uint nframes, IntPtr arg)
 		{
-			BufferSize = nframes;
+			BufferSize = (int) nframes;
 			return 0;
 		}
 

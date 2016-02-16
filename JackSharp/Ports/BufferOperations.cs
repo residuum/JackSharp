@@ -1,4 +1,4 @@
-﻿// Author:
+// Author:
 //       Thomas Mayer <thomas@residuum.org>
 //
 // Copyright (c) 2016 Thomas Mayer
@@ -33,20 +33,20 @@ namespace JackSharp.Ports
 			return new AudioBuffer (port, nframes, buffer);
 		}
 
-		public static float[] InterlaceAudio (AudioBuffer[] audioBuffers, uint bufferSize, uint bufferCount){
+		public static float[] InterlaceAudio (AudioBuffer[] audioBuffers, int bufferSize, int bufferCount){
 			float[] interlaced = new float[bufferSize * bufferCount];
 
-			for (uint i = 0; i < bufferSize; i++){
-				for (uint j = 0; j < bufferSize; j++){
+			for (int i = 0; i < bufferSize; i++) {
+				for (int j = 0; j < bufferSize; j++) {
 					interlaced[i*bufferCount + j] = audioBuffers[j].Audio[i];
 				}
 			}
 			return interlaced;
 		}
 
-		public static void DeinterlaceAudio (float[] interlaced, AudioBuffer[] audioBuffers, uint bufferSize, uint bufferCount){
-			for (uint i = 0; i < bufferSize; i++){
-				for (uint j = 0; j < bufferSize; j++){
+		public static void DeinterlaceAudio (float[] interlaced, AudioBuffer[] audioBuffers, int bufferSize, int bufferCount){
+			for (int i = 0; i < bufferSize; i++) {
+				for (int j = 0; j < bufferSize; j++) {
 					audioBuffers[j].Audio[i] = interlaced[i*bufferCount + j];
 				}
 			}

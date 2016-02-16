@@ -1,4 +1,4 @@
-﻿// Author:
+// Author:
 //       Thomas Mayer <thomas@residuum.org>
 //
 // Copyright (c) 2016 Thomas Mayer
@@ -24,14 +24,14 @@ namespace JackSharp
 {
 	public class JackMidiEvent
 	{
-		public uint Time { get; private set; }
+		public int Time { get; private set; }
 
 		public byte[] MidiData { get; private set; }
 
 		public JackMidiEvent (uint time, byte[] midiData)
 		{
 			MidiData = midiData;
-			Time = time;
+			Time = (int) time;
 		}
 	}
 }
