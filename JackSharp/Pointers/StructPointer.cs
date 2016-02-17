@@ -48,7 +48,7 @@ namespace JackSharp.Pointers
 		public void CopyToPointer ()
 		{
 			int length = Math.Min (Size, Array.Length);
-			int byteCount = length * Marshal.SizeOf (typeof (T));
+			int byteCount = length * Marshal.SizeOf (typeof(T));
 			GCHandle handle = GCHandle.Alloc (Array, GCHandleType.Pinned);
 			unsafe {
 				for (int i = 0; i < byteCount; i++) {
@@ -59,7 +59,7 @@ namespace JackSharp.Pointers
 
 			if (Size > Array.Length) {
 				unsafe {
-					int byteCount2 = byteCount + (Marshal.SizeOf (typeof (T)) * (Size - Array.Length));
+					int byteCount2 = byteCount + (Marshal.SizeOf (typeof(T)) * (Size - Array.Length));
 					for (int i = byteCount; i < byteCount2; i++) {
 						*(((byte*)_pointer) + i) = 0;
 					}
@@ -74,7 +74,7 @@ namespace JackSharp.Pointers
 		{
 			T[] array = new T[Size];
 			GCHandle handle = GCHandle.Alloc (array, GCHandleType.Pinned);
-			int byteCount = array.Length * Marshal.SizeOf (typeof (T));
+			int byteCount = array.Length * Marshal.SizeOf (typeof(T));
 			unsafe {
 				for (int i = 0; i < byteCount; i++) {
 					*(((byte*)handle.AddrOfPinnedObject ()) + i) = *(((byte*)_pointer) + i);

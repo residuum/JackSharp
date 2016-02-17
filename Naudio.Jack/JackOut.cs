@@ -24,20 +24,17 @@ using System;
 using NAudio.Wave;
 using JackSharp;
 using System.Linq;
-using NAudio.Utils;
 using JackSharp.Ports;
 
 namespace Naudio.Jack
 {
 	public class JackOut : IWavePlayer, IWavePosition
 	{
-		Client _client;
+		readonly Client _client;
 
 		IWaveProvider _waveStream;
 
 		PlaybackState _playbackState;
-
-		CircularBuffer _buffer;
 
 		public JackOut (Client client)
 		{
@@ -83,7 +80,7 @@ namespace Naudio.Jack
 
 		public void Pause ()
 		{
-			if (_client.Stop ()){
+			if (_client.Stop ()) {
 				_playbackState = PlaybackState.Paused;
 			}
 		}
@@ -96,11 +93,12 @@ namespace Naudio.Jack
 			}
 			int bufferSize = processingChunk.AudioOut [0].BufferSize;
 			int floatsCount = bufferCount * bufferSize;
-			int bytesCount = floatsCount * sizeof (float);
-			byte[] fromCircularBuffer = new byte[bytesCount];
-			_buffer.Read (fromCircularBuffer, 0, floatsCount);
+			int bytesCount = floatsCount * sizeof(float);
+			byte[] fromWave = new byte[bytesCount];
+
+			_waveStream.Read (fromWave, 0, floatsCount);
 			float[] interlacedSamples = new float[floatsCount];
-			Buffer.BlockCopy (fromCircularBuffer,0, interlacedSamples, 0, bytesCount);
+			Buffer.BlockCopy (fromWave, 0, interlacedSamples, 0, bytesCount);
 
 			BufferOperations.DeinterlaceAudio (interlacedSamples, processingChunk.AudioOut, bufferSize, bufferCount);
 			
@@ -109,10 +107,8 @@ namespace Naudio.Jack
 		public void Init (IWaveProvider waveProvider)
 		{
 			_waveStream = waveProvider;
-			int bufferSize = _client.BufferSize;
 
 			_playbackState = PlaybackState.Stopped;
-			_buffer = new CircularBuffer (_client.AudioInPorts.Count () * bufferSize * 2 * sizeof (float));
 			_client.ProcessFunc += ProcessAudio;
 		}
 

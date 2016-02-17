@@ -1,5 +1,5 @@
 // Author:
-//       Thomas Mayer <thomas@residuum.org>
+//	   Thomas Mayer <thomas@residuum.org>
 //
 // Copyright (c) 2016 Thomas Mayer
 //
@@ -21,9 +21,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.IO;
 using System.Linq;
+using System.Threading;
 using JackSharp;
 using Naudio.Jack;
+using Naudio.JackTest.WaveIntegration;
+using NAudio.Wave;
 using NUnit.Framework;
 
 namespace Naudio.JackTest
@@ -49,6 +53,22 @@ namespace Naudio.JackTest
 			Assert.AreEqual (_jackOut.OutputWaveFormat.Channels, _client.AudioOutPorts.Count ());
 		}
 
+		[Test]
+		public virtual void PlayAudioFile ()
+		{
+			string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+			string wavFile = Path.Combine (currentDirectory, "example.wav");
+			WaveFileReader reader = new WaveFileReader (wavFile);
+			Wave16ToFloatProvider converter = new Wave16ToFloatProvider (reader);				
+			Analyser analyser = new Analyser ();
+			_client.ProcessFunc += analyser.AnalyseOutAction;
+			_jackOut.Init (converter);
+			_jackOut.Play ();
+			Thread.Sleep (10000);
+			_jackOut.Stop ();
+			reader.Close ();
+			Assert.AreNotEqual (0, analyser.NotEmptySamples);
+		}
 
 		[TearDown]
 		public static void DestroyClient ()
@@ -59,4 +79,3 @@ namespace Naudio.JackTest
 
 	}
 }
-

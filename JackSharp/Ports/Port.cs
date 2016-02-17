@@ -99,7 +99,7 @@ namespace JackSharp.Ports
 		internal unsafe StructPointer<float> GetBuffer (uint nframes)
 		{
 			Debug.Assert (PortType == PortType.Audio);
-			return new StructPointer<float>((IntPtr)PortApi.jack_port_get_buffer (_port, nframes), nframes);
+			return new StructPointer<float> ((IntPtr)PortApi.jack_port_get_buffer (_port, nframes), nframes);
 		}
 
 		unsafe void Dispose (bool isDisposing)

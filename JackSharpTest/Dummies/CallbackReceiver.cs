@@ -1,5 +1,5 @@
 // Author:
-//       Thomas Mayer <thomas@residuum.org>
+//	   Thomas Mayer <thomas@residuum.org>
 //
 // Copyright (c) 2016 Thomas Mayer
 //
@@ -28,7 +28,7 @@ namespace JackSharpTest.Dummies
 {
 	public class CallbackReceiver
 	{
-		public int Called { get; set; }
+		public int Called { get; private set; }
 
 		public Action<ProcessingChunk> CopyInToOutAction;
 		public Action<ProcessingChunk> PlayMidiNoteAction;

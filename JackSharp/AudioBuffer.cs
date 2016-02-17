@@ -39,7 +39,7 @@ namespace JackSharp
 
 		internal AudioBuffer (Port port, uint bufferSize, StructPointer<float> pointer)
 		{
-			BufferSize = (int) bufferSize;
+			BufferSize = (int)bufferSize;
 			Port = port;
 			PointerWrapper = pointer;
 			Audio = PointerWrapper.Array;

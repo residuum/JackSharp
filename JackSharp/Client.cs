@@ -1,5 +1,5 @@
 // Author:
-//       Thomas Mayer <thomas@residuum.org>
+//	   Thomas Mayer <thomas@residuum.org>
 //
 // Copyright (c) 2016 Thomas Mayer
 //
@@ -110,14 +110,15 @@ namespace JackSharp
 			if (_isStarted) {
 				return false;
 			}
-			if (!Open ())
+			if (!Open ()) {
 				return false;
+			}
 			int status = ClientApi.jack_activate (_jackClient);
 			if (status != 0) {
 				return false;
 			}
-			SampleRate = (int) Invoke.jack_get_sample_rate (_jackClient);
-			BufferSize = (int) Invoke.jack_get_buffer_size (_jackClient);
+			SampleRate = (int)Invoke.jack_get_sample_rate (_jackClient);
+			BufferSize = (int)Invoke.jack_get_buffer_size (_jackClient);
 			_isStarted = true;
 			return true;
 		}
@@ -161,13 +162,13 @@ namespace JackSharp
 
 		int OnSampleRateChange (uint nframes, IntPtr arg)
 		{
-			SampleRate = (int) nframes;
+			SampleRate = (int)nframes;
 			return 0;
 		}
 
 		int OnBufferSizeChange (uint nframes, IntPtr arg)
 		{
-			BufferSize = (int) nframes;
+			BufferSize = (int)nframes;
 			return 0;
 		}
 
@@ -181,17 +182,25 @@ namespace JackSharp
 
 		unsafe void Close ()
 		{
-			for (var i = _midiOutPorts.Length - 1; i >= 0; i--) {
-				_midiOutPorts [i].Dispose ();
+			for (int i = _midiOutPorts.Length - 1; i >= 0; i--) {
+				if (_midiOutPorts [i] != null) {
+					_midiOutPorts [i].Dispose ();
+				}
 			}
-			for (var i = _midiInPorts.Length - 1; i >= 0; i--) {
-				_midiInPorts [i].Dispose ();
+			for (int i = _midiInPorts.Length - 1; i >= 0; i--) {
+				if (_midiInPorts [i] != null) {
+					_midiInPorts [i].Dispose ();
+				}
 			}
-			for (var i = _audioOutPorts.Length - 1; i >= 0; i--) {
-				_audioOutPorts [i].Dispose ();
+			for (int i = _audioOutPorts.Length - 1; i >= 0; i--) {
+				if (_audioOutPorts [i] != null) {
+					_audioOutPorts [i].Dispose ();
+				}
 			}
-			for (var i = _audioInPorts.Length - 1; i >= 0; i--) {
-				_audioInPorts [i].Dispose ();
+			for (int i = _audioInPorts.Length - 1; i >= 0; i--) {
+				if (_audioInPorts [i] != null) {
+					_audioInPorts [i].Dispose ();
+				}
 			}
 			int status = ClientApi.jack_client_close (_jackClient);
 			if (status == 0) {
