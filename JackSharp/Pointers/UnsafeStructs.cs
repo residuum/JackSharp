@@ -35,11 +35,11 @@ namespace JackSharp.Pointers
 		/** A Jack MIDI event. */
 		internal struct jack_midi_event_t
 		{
-			uint time;
+			public uint time;
 			/**< Sample index at which event is valid */
-			uint size;
+			public uint size;
 			/**< Number of bytes of data in \a buffer */
-			unsafe byte* buffer;
+			public unsafe byte* buffer;
 			/**< Raw MIDI data */
 		}
 	}

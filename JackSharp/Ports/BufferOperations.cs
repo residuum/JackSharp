@@ -33,21 +33,32 @@ namespace JackSharp.Ports
 			return new AudioBuffer (port, nframes, buffer);
 		}
 
-		public static float[] InterlaceAudio (AudioBuffer[] audioBuffers, int bufferSize, int bufferCount){
+		internal static MidiEventCollection GetMidiBuffer (this MidiInPort port, uint nframes)
+		{
+			MidiEventCollection eventCollection = new MidiEventCollection (port);
+			foreach (JackMidiEvent midiEvent in port.GetMidiEvents(nframes)) {
+				eventCollection.AddEvent (midiEvent);
+			}
+			return eventCollection;
+		}
+
+		public static float[] InterlaceAudio (AudioBuffer[] audioBuffers, int bufferSize, int bufferCount)
+		{
 			float[] interlaced = new float[bufferSize * bufferCount];
 
 			for (int i = 0; i < bufferSize; i++) {
 				for (int j = 0; j < bufferSize; j++) {
-					interlaced[i*bufferCount + j] = audioBuffers[j].Audio[i];
+					interlaced [i * bufferCount + j] = audioBuffers [j].Audio [i];
 				}
 			}
 			return interlaced;
 		}
 
-		public static void DeinterlaceAudio (float[] interlaced, AudioBuffer[] audioBuffers, int bufferSize, int bufferCount){
+		public static void DeinterlaceAudio (float[] interlaced, AudioBuffer[] audioBuffers, int bufferSize, int bufferCount)
+		{
 			for (int i = 0; i < bufferSize; i++) {
 				for (int j = 0; j < bufferSize; j++) {
-					audioBuffers[j].Audio[i] = interlaced[i*bufferCount + j];
+					audioBuffers [j].Audio [i] = interlaced [i * bufferCount + j];
 				}
 			}
 		}

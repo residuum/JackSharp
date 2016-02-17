@@ -58,7 +58,6 @@
     <Compile Include="Ports\BufferOperations.cs" />
     <Compile Include="IProcessingItem.cs" />
     <Compile Include="MidiEventCollection.cs" />
-    <Compile Include="Pointers\MidiPointer.cs" />
     <Compile Include="ApiWrapper\Callbacks.cs" />
     <Compile Include="ApiWrapper\ClientApi.cs" />
     <Compile Include="ApiWrapper\ClientCallbackApi.cs" />
@@ -71,6 +70,7 @@
     <Compile Include="ApiWrapper\MidiApi.cs" />
     <Compile Include="ApiWrapper\PortApi.cs" />
     <Compile Include="ApiWrapper\PortCallbackApi.cs" />
+    <Compile Include="Ports\MidiInPort.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -30,8 +30,8 @@ namespace JackSharp.Ports
 {
 	public abstract class Port : IDisposable
 	{
-		readonly unsafe UnsafeStructs.jack_client_t* _jackClient;
-		readonly unsafe UnsafeStructs.jack_port_t* _port;
+		internal readonly unsafe UnsafeStructs.jack_client_t* _jackClient;
+		internal readonly unsafe UnsafeStructs.jack_port_t* _port;
 
 
 		internal unsafe Port (UnsafeStructs.jack_client_t*jackClient, int index, Direction direction, PortType portType)
@@ -100,12 +100,6 @@ namespace JackSharp.Ports
 		{
 			Debug.Assert (PortType == PortType.Audio);
 			return new StructPointer<float>((IntPtr)PortApi.jack_port_get_buffer (_port, nframes), nframes);
-		}
-
-		internal unsafe MidiPointer GetMidiBuffer (uint nframes)
-		{
-			Debug.Assert (PortType == PortType.Midi);
-			return new MidiPointer (_port, PortApi.jack_port_get_buffer (_port, nframes), nframes);
 		}
 
 		unsafe void Dispose (bool isDisposing)

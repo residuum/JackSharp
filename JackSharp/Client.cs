@@ -140,10 +140,13 @@ namespace JackSharp
 		{
 			AudioBuffer[] audioInBuffers = _audioInPorts.Select (p => p.GetAudioBuffer (nframes)).ToArray ();
 			AudioBuffer[] audioOutBuffers = _audioOutPorts.Select (p => p.GetAudioBuffer (nframes)).ToArray ();
+			MidiEventCollection[] midiInEvents = _midiInPorts.Select (p => p.GetMidiBuffer (nframes)).ToArray ();
+
 			if (ProcessFunc != null) {
 				ProcessFunc (new ProcessingChunk {
 					AudioIn = audioInBuffers,
-					AudioOut = audioOutBuffers
+					AudioOut = audioOutBuffers,
+					MidiIn = midiInEvents
 				});
 			}
 			foreach (var audioInBuffer in audioInBuffers) {

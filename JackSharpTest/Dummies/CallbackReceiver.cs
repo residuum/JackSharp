@@ -22,6 +22,7 @@
 // THE SOFTWARE.
 using System;
 using JackSharp;
+using System.Collections.Generic;
 
 namespace JackSharpTest.Dummies
 {
@@ -54,8 +55,11 @@ namespace JackSharpTest.Dummies
 
 		void PlayMidiNote (ProcessingChunk processItems)
 		{
-			Called++;
-			//throw new NotImplementedException();
+			foreach (MidiEventCollection eventCollection in processItems.MidiIn) {
+				foreach (JackMidiEvent midiEvent in eventCollection) {
+					Called++;
+				}
+			}
 		}
 
 		void ChannelCounter (ProcessingChunk processItems)

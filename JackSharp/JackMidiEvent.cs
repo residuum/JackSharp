@@ -20,18 +20,29 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+using JackSharp.Pointers;
+using System;
+
+
 namespace JackSharp
 {
 	public class JackMidiEvent
 	{
 		public int Time { get; private set; }
 
-		public byte[] MidiData { get; private set; }
+		public byte[] MidiData { get { return _bytePointer.Array; } }
+
+		StructPointer<byte> _bytePointer;
+
 
 		public JackMidiEvent (uint time, byte[] midiData)
 		{
-			MidiData = midiData;
-			Time = (int) time;
+		}
+
+		internal unsafe JackMidiEvent (UnsafeStructs.jack_midi_event_t inEvent)
+		{
+			Time = (int)inEvent.time;
+			_bytePointer = new StructPointer<byte> ((IntPtr)inEvent.buffer, inEvent.size);
 		}
 	}
 }

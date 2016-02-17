@@ -22,29 +22,32 @@
 // THE SOFTWARE.
 
 using JackSharp.Pointers;
+using JackSharp.ApiWrapper;
 using System.Collections.Generic;
+using System;
 
 namespace JackSharp.Ports
 {
-	public class AudioInPort : Port
+
+	public class MidiInPort : Port
 	{
-		internal unsafe AudioInPort (UnsafeStructs.jack_client_t* jackClient, int index) : base (jackClient, index, Direction.In, PortType.Audio)
+		internal unsafe MidiInPort (UnsafeStructs.jack_client_t* jackClient, int index) : base (jackClient, index, Direction.In, PortType.Midi)
 		{
 		}
-	}
 
-	public class AudioOutPort : Port
-	{
-		internal unsafe AudioOutPort (UnsafeStructs.jack_client_t* jackClient, int index) : base (jackClient, index, Direction.Out, PortType.Audio)
+		internal unsafe List<JackMidiEvent> GetMidiEvents (uint nframes)
 		{
+			List<JackMidiEvent> midiEvents = new List<JackMidiEvent> ();
+			UnsafeStructs.jack_midi_event_t inEvent;
+
+			IntPtr portBuffer = (IntPtr)PortApi.jack_port_get_buffer (_port, nframes);
+			uint eventCount = MidiApi.jack_midi_get_event_count (portBuffer);
+			for (uint i = 0; i < eventCount; i++) {
+				MidiApi.jack_midi_event_get (&inEvent, portBuffer, i);
+				midiEvents.Add (new JackMidiEvent (inEvent));
+			}
+			return midiEvents;
 		}
 	}
-
-
-	public class MidiOutPort : Port
-	{
-		internal unsafe MidiOutPort (UnsafeStructs.jack_client_t* jackClient, int index) : base (jackClient, index, Direction.Out, PortType.Midi)
-		{
-		}
-	}
+	
 }
