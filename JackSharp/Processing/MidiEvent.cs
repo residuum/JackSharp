@@ -20,24 +20,25 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-namespace JackSharp.Internal
+using JackSharp.Pointers;
+using System;
+
+
+namespace JackSharp.Processing
 {
-	enum JackLatencyCallbackMode
+	public class MidiEvent
 	{
+		public int Time { get; private set; }
 
-		/**
-         * Latency Callback for Capture Latency.
-         * Input Ports have their latency value setup.
-         * In the Callback the client needs to set the latency of the output ports
-         */
-		JackCaptureLatency,
+		public byte[] MidiData { get { return _bytePointer.Array; } }
 
-		/**
-         * Latency Callback for Playback Latency.
-         * Output Ports have their latency value setup.
-         * In the Callback the client needs to set the latency of the input ports
-         */
-		JackPlaybackLatency}
+		StructPointer<byte> _bytePointer;
 
-	;
+
+		internal unsafe MidiEvent (UnsafeStructs.jack_midi_event_t inEvent)
+		{
+			Time = (int)inEvent.time;
+			_bytePointer = new StructPointer<byte> ((IntPtr)inEvent.buffer, inEvent.size);
+		}
+	}
 }

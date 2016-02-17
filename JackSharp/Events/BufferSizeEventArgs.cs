@@ -20,37 +20,15 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-
-using System.Collections;
-using System.Collections.Generic;
-using JackSharp.Ports;
-
-namespace JackSharp
+namespace JackSharp.Events
 {
-	public class MidiEventCollection : IEnumerable<JackMidiEvent>, IProcessingItem
+	public class BufferSizeEventArgs
 	{
-		public Port Port { get; private set; }
+		public int BufferSize { get; private set; }
 
-		internal MidiEventCollection (Port port)
+		public BufferSizeEventArgs (int bufferSize)
 		{
-			Port = port;
-		}
-
-		public void AddEvent (JackMidiEvent midiEvent)
-		{
-			_midiEvents.Add (midiEvent);
-		}
-
-		private readonly List<JackMidiEvent> _midiEvents = new List<JackMidiEvent> ();
-
-		public IEnumerator<JackMidiEvent> GetEnumerator ()
-		{
-			return _midiEvents.GetEnumerator ();
-		}
-
-		IEnumerator IEnumerable.GetEnumerator ()
-		{
-			return GetEnumerator ();
+			BufferSize = bufferSize;
 		}
 	}
 }

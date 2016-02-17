@@ -25,6 +25,7 @@ using JackSharp.Pointers;
 using JackSharp.ApiWrapper;
 using System.Collections.Generic;
 using System;
+using JackSharp.Processing;
 
 namespace JackSharp.Ports
 {
@@ -35,16 +36,16 @@ namespace JackSharp.Ports
 		{
 		}
 
-		internal unsafe List<JackMidiEvent> GetMidiEvents (uint nframes)
+		internal unsafe List<MidiEvent> GetMidiEvents (uint nframes)
 		{
-			List<JackMidiEvent> midiEvents = new List<JackMidiEvent> ();
+			List<MidiEvent> midiEvents = new List<MidiEvent> ();
 			UnsafeStructs.jack_midi_event_t inEvent;
 
 			IntPtr portBuffer = (IntPtr)PortApi.jack_port_get_buffer (_port, nframes);
 			uint eventCount = MidiApi.jack_midi_get_event_count (portBuffer);
 			for (uint i = 0; i < eventCount; i++) {
 				MidiApi.jack_midi_event_get (&inEvent, portBuffer, i);
-				midiEvents.Add (new JackMidiEvent (inEvent));
+				midiEvents.Add (new MidiEvent (inEvent));
 			}
 			return midiEvents;
 		}

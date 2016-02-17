@@ -21,30 +21,56 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Linq;
+using System.IO;
+using System.Threading;
 using JackSharp;
-using JackSharp.Processing;
+using Naudio.Jack;
+using NAudio.Wave;
+using NUnit.Framework;
 
-namespace Naudio.JackTest.WaveIntegration
+namespace Naudio.JackTest
 {
-	class Analyser
+	[TestFixture]
+	public class JackInTest
 	{
-		public Action<Chunk> AnalyseOutAction;
+		static Client _client;
+		static JackIn _jackIn;
 
-		public int NotEmptySamples { get; private set; }
-
-		public Analyser ()
+		[SetUp]
+		public static void CreateInput ()
 		{
-			AnalyseOutAction = AnalyseOut;
+			_client = new Client ("testing", 2);
+			_jackIn = new JackIn (_client);
 		}
 
-		void AnalyseOut (Chunk processItem)
+		[Test]
+		public virtual void RecordAudioFile ()
 		{
-			foreach (AudioBuffer outBuffer in processItem.AudioOut) {
-				if (outBuffer.Audio.Any (s => s != 0)) {
-					NotEmptySamples++;
-				}
-			}
+			string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+			string wavFile = Path.Combine (currentDirectory, "recording.wav");
+			long writtenSamples = 0;
+			WaveFileWriter writer = new WaveFileWriter (wavFile, _jackIn.WaveFormat);
+			_jackIn.DataAvailable += (sender, args) => {
+				writer.Write (args.Buffer, 0, args.BytesRecorded);
+			};
+			_jackIn.RecordingStopped += (sender, e) => {
+				writer.Flush ();
+				writer.Dispose ();
+				long fileSize = new FileInfo (wavFile).Length;
+				Assert.AreNotEqual (0, fileSize);
+			};
+			_jackIn.StartRecording ();
+			Thread.Sleep (200);
+			_jackIn.StopRecording ();
+			writtenSamples = writer.Length;
+			Assert.AreNotEqual (0, writtenSamples);
+		}
+
+		[TearDown]
+		public static void DestroyClient ()
+		{
+			_jackIn.Dispose ();
+			_client.Dispose ();
 		}
 	}
 }

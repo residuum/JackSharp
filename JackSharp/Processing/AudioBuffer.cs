@@ -24,7 +24,7 @@
 using JackSharp.Pointers;
 using JackSharp.Ports;
 
-namespace JackSharp
+namespace JackSharp.Processing
 {
 	public class AudioBuffer : IProcessingItem
 	{
@@ -39,7 +39,7 @@ namespace JackSharp
 
 		internal AudioBuffer (Port port, uint bufferSize, StructPointer<float> pointer)
 		{
-			BufferSize = (int)bufferSize;
+			BufferSize = (int) bufferSize;
 			Port = port;
 			PointerWrapper = pointer;
 			Audio = PointerWrapper.Array;

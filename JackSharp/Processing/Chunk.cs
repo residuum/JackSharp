@@ -20,12 +20,29 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-using JackSharp.Ports;
 
-namespace JackSharp
+namespace JackSharp.Processing
 {
-	interface IProcessingItem
+	public class Chunk
 	{
-		Port Port { get; }
+        /// <summary>
+        /// Audio in buffers. Should not be changed.
+        /// </summary>
+		public AudioBuffer[] AudioIn { get; set; }
+
+        /// <summary>
+        /// Audio out buffers.
+        /// </summary>
+        public AudioBuffer[] AudioOut { get; set; }
+
+        /// <summary>
+        /// MIDI in buffers. Should not be changed.
+        /// </summary>
+        public MidiEventCollection[] MidiIn { get; set; }
+
+        /// <summary>
+        /// Midi out buffers.
+        /// </summary>
+        public MidiEventCollection[] MidiOut { get; set; }
 	}
 }

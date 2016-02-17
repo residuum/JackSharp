@@ -43,7 +43,7 @@ namespace JackSharp.Pointers
 		public T[] Array { get; set; }
 
 		/// <summary>
-		/// Copy Array to Pointer
+		/// Copy Array to pointer. Must be called after operating on Array and before using the pointer in P/Invoke.
 		/// </summary>
 		public void CopyToPointer ()
 		{

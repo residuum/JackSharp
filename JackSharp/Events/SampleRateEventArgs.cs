@@ -20,12 +20,15 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-namespace JackSharp.Internal
+namespace JackSharp.Events
 {
-	static class Constants
+	public class SampleRateEventArgs
 	{
-		public const string JACK_LIB_NAME = "libjack";
-		public const string JACK_DEFAULT_AUDIO_TYPE = "32 bit float mono audio";
-		public const string JACK_DEFAULT_MIDI_TYPE = "8 bit raw midi";
+		public int SampleRate { get; private set; }
+
+		public SampleRateEventArgs (int sampleRate)
+		{
+			SampleRate = sampleRate;
+		}
 	}
 }

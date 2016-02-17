@@ -89,7 +89,6 @@ namespace JackSharpTest
 				Assert.IsTrue (client.SampleRate == 44100 || client.SampleRate == 48000);
 				client.Stop ();
 			}
-
 		}
 
 		[Test]

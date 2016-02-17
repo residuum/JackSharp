@@ -20,29 +20,38 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-using JackSharp.Pointers;
-using System;
 
+using System.Collections;
+using System.Collections.Generic;
+using JackSharp.Ports;
+using JackSharp.Processing;
 
 namespace JackSharp
 {
-	public class JackMidiEvent
+	public class MidiEventCollection : IEnumerable<MidiEvent>, IProcessingItem
 	{
-		public int Time { get; private set; }
+		public Port Port { get; private set; }
 
-		public byte[] MidiData { get { return _bytePointer.Array; } }
-
-		StructPointer<byte> _bytePointer;
-
-
-		public JackMidiEvent (uint time, byte[] midiData)
+		internal MidiEventCollection (Port port)
 		{
+			Port = port;
 		}
 
-		internal unsafe JackMidiEvent (UnsafeStructs.jack_midi_event_t inEvent)
+		public void AddEvent (MidiEvent midiEvent)
 		{
-			Time = (int)inEvent.time;
-			_bytePointer = new StructPointer<byte> ((IntPtr)inEvent.buffer, inEvent.size);
+			_midiEvents.Add (midiEvent);
+		}
+
+		private readonly List<MidiEvent> _midiEvents = new List<MidiEvent> ();
+
+		public IEnumerator<MidiEvent> GetEnumerator ()
+		{
+			return _midiEvents.GetEnumerator ();
+		}
+
+		IEnumerator IEnumerable.GetEnumerator ()
+		{
+			return GetEnumerator ();
 		}
 	}
 }

@@ -26,6 +26,8 @@ using System.Linq;
 using JackSharp.Pointers;
 using JackSharp.Ports;
 using JackSharp.ApiWrapper;
+using JackSharp.Events;
+using JackSharp.Processing;
 
 namespace JackSharp
 {
@@ -39,7 +41,10 @@ namespace JackSharp
 		unsafe UnsafeStructs.jack_client_t* _jackClient;
 		bool _isStarted;
 
-		public Action<ProcessingChunk> ProcessFunc { get; set; }
+		/// <summary>
+		/// Delegates to be called on the process callback of Jack. Multiple Actions can be added.
+		/// </summary>
+		public Action<Chunk> ProcessFunc { get; set; }
 
 		public Client (string name, int audioInPorts = 0, int audioOutPorts = 0, int midiInPorts = 0,
 		               int midiOutPorts = 0)
@@ -76,14 +81,9 @@ namespace JackSharp
 			_sampleRateCallback = OnSampleRateChange;
 		}
 
-		public int SampleRate { get; set; }
+		public int SampleRate { get; private set; }
 
-		public int BufferSize {
-			get { return _bufferSize; }
-			set {
-				_bufferSize = value;
-			}
-		}
+		public int BufferSize { get; private set; }
 
 		public IEnumerable<MidiOutPort> MidiOutPorts { get { return _midiOutPorts; } }
 
@@ -93,10 +93,14 @@ namespace JackSharp
 
 		public IEnumerable<AudioInPort> AudioInPorts { get { return _audioInPorts; } }
 
-		int _bufferSize;
 		Callbacks.JackProcessCallback _processCallback;
 		Callbacks.JackBufferSizeCallback _bufferSizeCallback;
+
+		public event EventHandler<BufferSizeEventArgs> BufferSizeChanged;
+
 		Callbacks.JackSampleRateCallback _sampleRateCallback;
+
+		public event EventHandler<SampleRateEventArgs> SampleRateChanged;
 
 		unsafe void WireUpCallbacks ()
 		{
@@ -105,6 +109,10 @@ namespace JackSharp
 			ClientCallbackApi.jack_set_sample_rate_callback (_jackClient, _sampleRateCallback, IntPtr.Zero);
 		}
 
+		/// <summary>
+		/// Activates the client and connects to Jack.
+		/// </summary>
+		/// <returns>[true] is starting was successful, else [false].</returns>
 		public unsafe bool Start ()
 		{
 			if (_isStarted) {
@@ -144,7 +152,7 @@ namespace JackSharp
 			MidiEventCollection[] midiInEvents = _midiInPorts.Select (p => p.GetMidiBuffer (nframes)).ToArray ();
 
 			if (ProcessFunc != null) {
-				ProcessFunc (new ProcessingChunk {
+				ProcessFunc (new Chunk {
 					AudioIn = audioInBuffers,
 					AudioOut = audioOutBuffers,
 					MidiIn = midiInEvents
@@ -163,12 +171,18 @@ namespace JackSharp
 		int OnSampleRateChange (uint nframes, IntPtr arg)
 		{
 			SampleRate = (int)nframes;
+			if (SampleRateChanged != null) {
+				SampleRateChanged (this, new SampleRateEventArgs (SampleRate));
+			}
 			return 0;
 		}
 
 		int OnBufferSizeChange (uint nframes, IntPtr arg)
 		{
 			BufferSize = (int)nframes;
+			if (BufferSizeChanged != null) {
+				BufferSizeChanged (this, new BufferSizeEventArgs (BufferSize));
+			}
 			return 0;
 		}
 

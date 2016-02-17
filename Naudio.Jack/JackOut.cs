@@ -25,6 +25,7 @@ using NAudio.Wave;
 using JackSharp;
 using System.Linq;
 using JackSharp.Ports;
+using JackSharp.Processing;
 
 namespace Naudio.Jack
 {
@@ -42,7 +43,16 @@ namespace Naudio.Jack
 			_playbackState = PlaybackState.Stopped;
 		}
 
-		#region IWavePosition implementation
+		~JackOut ()
+		{
+			Dispose (true);
+		}
+
+		public void Dispose ()
+		{
+			Dispose (false);
+			GC.SuppressFinalize (this);
+		}
 
 		public long GetPosition ()
 		{
@@ -51,13 +61,9 @@ namespace Naudio.Jack
 
 		public WaveFormat OutputWaveFormat {
 			get {
-				return WaveFormat.CreateIeeeFloatWaveFormat ((int)_client.SampleRate, _client.AudioOutPorts.Count ());
+				return WaveFormat.CreateIeeeFloatWaveFormat (_client.SampleRate, _client.AudioOutPorts.Count ());
 			}
 		}
-
-		#endregion
-
-		#region IWavePlayer implementation
 
 		public event EventHandler<StoppedEventArgs> PlaybackStopped;
 
@@ -85,7 +91,7 @@ namespace Naudio.Jack
 			}
 		}
 
-		void ProcessAudio (ProcessingChunk processingChunk)
+		void ProcessAudio (Chunk processingChunk)
 		{
 			int bufferCount = processingChunk.AudioOut.Length;
 			if (bufferCount == 0) {
@@ -96,7 +102,8 @@ namespace Naudio.Jack
 			int bytesCount = floatsCount * sizeof(float);
 			byte[] fromWave = new byte[bytesCount];
 
-			_waveStream.Read (fromWave, 0, floatsCount);
+			_waveStream.Read (fromWave, 0, bytesCount);
+            
 			float[] interlacedSamples = new float[floatsCount];
 			Buffer.BlockCopy (fromWave, 0, interlacedSamples, 0, bytesCount);
 
@@ -127,16 +134,10 @@ namespace Naudio.Jack
 			}
 		}
 
-		#endregion
-
-		#region IDisposable implementation
-
-		public void Dispose ()
+		void Dispose (bool isDisposing)
 		{
 			Stop ();
 		}
-
-		#endregion
 	}
 }
 

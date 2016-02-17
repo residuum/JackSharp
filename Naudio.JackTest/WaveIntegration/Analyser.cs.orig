@@ -1,4 +1,4 @@
-// Author:
+﻿// Author:
 //	   Thomas Mayer <thomas@residuum.org>
 //
 // Copyright (c) 2016 Thomas Mayer
@@ -20,46 +20,55 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+using System;
+using System.Linq;
+using JackSharp;
 
-using JackSharp.Pointers;
-using JackSharp.Processing;
-
-namespace JackSharp.Ports
+namespace Naudio.JackTest.WaveIntegration
 {
-	public static class BufferOperations
+	class Analyser
 	{
-		internal static AudioBuffer GetAudioBuffer (this Port port, uint nframes)
+		public Action<ProcessingChunk> AnalyseOutAction;
+		public Action<ProcessingChunk> AnalyseInAction;
+		public Action<ProcessingChunk> AnalyseBothAction;
+
+		public int NotEmptySamples { get; private set; }
+
+		public Analyser ()
 		{
-			StructPointer<float> buffer = port.GetBuffer (nframes);
-			return new AudioBuffer (port, nframes, buffer);
+			AnalyseOutAction = AnalyseOut;
+			AnalyseInAction = AnalyseIn;
+			AnalyseBothAction = AnalyseBoth;
 		}
 
-		internal static MidiEventCollection GetMidiBuffer (this MidiInPort port, uint nframes)
+		void AnalyseOut (ProcessingChunk processItem)
 		{
-			MidiEventCollection eventCollection = new MidiEventCollection (port);
-			foreach (MidiEvent midiEvent in port.GetMidiEvents(nframes)) {
-				eventCollection.AddEvent (midiEvent);
-			}
-			return eventCollection;
-		}
-
-		public static float[] InterlaceAudio (AudioBuffer[] audioBuffers, int bufferSize, int bufferCount)
-		{
-			float[] interlaced = new float[bufferSize * bufferCount];
-
-			for (int i = 0; i < bufferSize; i++) {
-				for (int j = 0; j < bufferCount; j++) {
-					interlaced [i * bufferCount + j] = audioBuffers [j].Audio [i];
+			foreach (AudioBuffer outBuffer in processItem.AudioOut) {
+				if (outBuffer.Audio.Any (s => s != 0)) {
+					NotEmptySamples++;
 				}
 			}
-			return interlaced;
 		}
 
-		public static void DeinterlaceAudio (float[] interlaced, AudioBuffer[] audioBuffers, int bufferSize, int bufferCount)
+		void AnalyseIn (ProcessingChunk processItem)
 		{
-			for (int i = 0; i < bufferSize; i++) {
-				for (int j = 0; j < bufferCount; j++) {
-					audioBuffers [j].Audio [i] = interlaced [i * bufferCount + j];
+			foreach (AudioBuffer inBuffer in processItem.AudioIn) {
+				if (inBuffer.Audio.Any (s => s != 0)) {
+					NotEmptySamples++;
+				}
+			}
+		}
+
+		void AnalyseBoth (ProcessingChunk processItem)
+		{
+			foreach (AudioBuffer inBuffer in processItem.AudioIn) {
+				if (inBuffer.Audio.Any (s => s != 0)) {
+					NotEmptySamples |= 1;
+				}
+			}
+			foreach (AudioBuffer outBuffer in processItem.AudioOut) {
+				if (outBuffer.Audio.Any (s => s != 0)) {
+					NotEmptySamples |= 2;
 				}
 			}
 		}

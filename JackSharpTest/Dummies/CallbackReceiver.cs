@@ -23,6 +23,7 @@
 using System;
 using JackSharp;
 using System.Collections.Generic;
+using JackSharp.Processing;
 
 namespace JackSharpTest.Dummies
 {
@@ -30,11 +31,11 @@ namespace JackSharpTest.Dummies
 	{
 		public int Called { get; private set; }
 
-		public Action<ProcessingChunk> CopyInToOutAction;
-		public Action<ProcessingChunk> PlayMidiNoteAction;
-		public Action<ProcessingChunk> ChannelCounterAction;
-		public Action<ProcessingChunk> CallBackOneAction;
-		public Action<ProcessingChunk> CallBackTwoAction;
+		public Action<Chunk> CopyInToOutAction;
+		public Action<Chunk> PlayMidiNoteAction;
+		public Action<Chunk> ChannelCounterAction;
+		public Action<Chunk> CallBackOneAction;
+		public Action<Chunk> CallBackTwoAction;
 
 		public CallbackReceiver ()
 		{
@@ -45,7 +46,7 @@ namespace JackSharpTest.Dummies
 			CallBackTwoAction = CallBackTwo;
 		}
 
-		void CopyInToOut (ProcessingChunk processItems)
+		void CopyInToOut (Chunk processItems)
 		{
 			for (var i = 0; i < Math.Min (processItems.AudioIn.Length, processItems.AudioOut.Length); i++) {
 				Array.Copy (processItems.AudioIn [i].Audio, processItems.AudioOut [i].Audio, processItems.AudioIn [i].BufferSize);
@@ -53,26 +54,26 @@ namespace JackSharpTest.Dummies
 			Called++;
 		}
 
-		void PlayMidiNote (ProcessingChunk processItems)
+		void PlayMidiNote (Chunk processItems)
 		{
 			foreach (MidiEventCollection eventCollection in processItems.MidiIn) {
-				foreach (JackMidiEvent midiEvent in eventCollection) {
+				foreach (MidiEvent midiEvent in eventCollection) {
 					Called++;
 				}
 			}
 		}
 
-		void ChannelCounter (ProcessingChunk processItems)
+		void ChannelCounter (Chunk processItems)
 		{
 			Called = processItems.AudioIn.Length;
 		}
 
-		void CallBackOne (ProcessingChunk processItems)
+		void CallBackOne (Chunk processItems)
 		{
 			Called |= 1;
 		}
 
-		void CallBackTwo (ProcessingChunk processItems)
+		void CallBackTwo (Chunk processItems)
 		{
 			Called |= 2;
 		}
