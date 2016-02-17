@@ -29,42 +29,48 @@ namespace JackSharpTest.Dummies
 	{
 		public int Called { get; set; }
 
-		public void CopyInToOut (ProcessingChunk processItems)
+		public Action<ProcessingChunk> CopyInToOutAction;
+		public Action<ProcessingChunk> PlayMidiNoteAction;
+		public Action<ProcessingChunk> ChannelCounterAction;
+		public Action<ProcessingChunk> CallBackOneAction;
+		public Action<ProcessingChunk> CallBackTwoAction;
+
+		public CallbackReceiver ()
+		{
+			CopyInToOutAction = CopyInToOut;
+			PlayMidiNoteAction = PlayMidiNote;
+			ChannelCounterAction = ChannelCounter;
+			CallBackOneAction = CallBackOne;
+			CallBackTwoAction = CallBackTwo;
+		}
+
+		void CopyInToOut (ProcessingChunk processItems)
 		{
 			for (var i = 0; i < Math.Min (processItems.AudioIn.Length, processItems.AudioOut.Length); i++) {
 				Array.Copy (processItems.AudioIn [i].Audio, processItems.AudioOut [i].Audio, processItems.AudioIn [i].BufferSize);
-		        
 			}
 			Called++;
 		}
 
-		public void PlayMidiNote (ProcessingChunk processItems)
+		void PlayMidiNote (ProcessingChunk processItems)
 		{
 			Called++;
 			//throw new NotImplementedException();
 		}
 
-		public void ChannelCounter (ProcessingChunk processItems)
+		void ChannelCounter (ProcessingChunk processItems)
 		{
 			Called = processItems.AudioIn.Length;
 		}
 
-		public void CallBackOne (ProcessingChunk processItems)
+		void CallBackOne (ProcessingChunk processItems)
 		{
-			if (Called == 0){
-				Called = 1;
-			}
-			Called *= 2;
+			Called |= 1;
 		}
 
-		public void CallBackTwo (ProcessingChunk processItems)
+		void CallBackTwo (ProcessingChunk processItems)
 		{
-			if (Called == 0){
-				Called = 1;
-			}
-			Called *= 3;
+			Called |= 2;
 		}
-
 	}
 }
-

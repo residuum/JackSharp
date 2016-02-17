@@ -43,33 +43,35 @@ namespace JackSharpTest
 		public virtual void AudioCopying ()
 		{
 			CallbackReceiver receiver = new CallbackReceiver ();
-			_client.ProcessFunc = receiver.CopyInToOut;
+			_client.ProcessFunc = receiver.CopyInToOutAction;
 			_client.Start ();
-			Thread.Sleep (200);
+			Thread.Sleep (2000);
 			Assert.IsTrue (receiver.Called > 0);
 		}
 
 		[Test]
 		public virtual void AudioAddMultipleActions ()
 		{
-			CallbackReceiver receiver = new CallbackReceiver();
-			_client.ProcessFunc += receiver.CallBackOne;
-			_client.ProcessFunc += receiver.CallBackTwo;
+			CallbackReceiver receiver = new CallbackReceiver ();
+			_client.ProcessFunc += receiver.CallBackOneAction;
+			_client.ProcessFunc += receiver.CallBackTwoAction;
 			_client.Start ();
-			Thread.Sleep (400);
-			Assert.IsTrue (receiver.Called % 6 == 0);
+			Thread.Sleep (200);
+			_client.Stop ();
+			Assert.AreEqual (3, receiver.Called);
 		}
 
 		[Test]
 		public virtual void AudioAddRemoveAction ()
 		{
-			CallbackReceiver receiver = new CallbackReceiver();
-			_client.ProcessFunc += receiver.CallBackOne;
-			_client.ProcessFunc += receiver.CallBackTwo;
-			_client.ProcessFunc -= receiver.CallBackOne;
+			CallbackReceiver receiver = new CallbackReceiver ();
+			_client.ProcessFunc += receiver.CallBackOneAction;
+			_client.ProcessFunc += receiver.CallBackTwoAction;
+			_client.ProcessFunc -= receiver.CallBackOneAction;
 			_client.Start ();
-			Thread.Sleep (400);
-			Assert.IsTrue (receiver.Called % 6 != 0);
+			Thread.Sleep (200);
+			_client.Stop ();
+			Assert.AreEqual (2, receiver.Called);
 		}
 
 		[TearDown]
@@ -77,7 +79,5 @@ namespace JackSharpTest
 		{
 			_client.Dispose ();
 		}
-
 	}
 }
-

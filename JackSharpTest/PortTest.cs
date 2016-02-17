@@ -24,7 +24,7 @@ using System.Linq;
 using JackSharp;
 using NUnit.Framework;
 
-namespace JackSharpTests
+namespace JackSharpTest
 {
 	[TestFixture]
 	public class PortTest
@@ -41,28 +41,28 @@ namespace JackSharpTests
 		public virtual void AudioInPortsAreCreated ()
 		{
 			_client.Start ();
-			Assert.IsTrue (_client.AudioInPorts.Count () == 2);
+			Assert.AreEqual (2, _client.AudioInPorts.Count ());
 		}
 
 		[Test]
 		public virtual void AudioOutPortsAreCreated ()
 		{
 			_client.Start ();
-			Assert.IsTrue (_client.AudioOutPorts.Count () == 4);
+			Assert.AreEqual (4, _client.AudioOutPorts.Count ());
 		}
 
 		[Test]
 		public virtual void MidiInPortsAreCreated ()
 		{
 			_client.Start ();
-			Assert.IsTrue (_client.MidiInPorts.Count () == 1);
+			Assert.AreEqual (1, _client.MidiInPorts.Count ());
 		}
 
 		[Test]
 		public virtual void MidiOutPortsAreCreated ()
 		{
 			_client.Start ();
-			Assert.IsTrue (_client.MidiOutPorts.Count () == 3);
+			Assert.AreEqual (3, _client.MidiOutPorts.Count ());
 		}
 
 		[TearDown]

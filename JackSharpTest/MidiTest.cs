@@ -20,7 +20,7 @@ namespace JackSharpTest
 		public virtual void MidiPlayNote ()
 		{
 			CallbackReceiver receiver = new CallbackReceiver ();
-			_client.ProcessFunc = receiver.PlayMidiNote;
+			_client.ProcessFunc = receiver.PlayMidiNoteAction;
 			_client.Start ();
 			Thread.Sleep (200);
 			Assert.IsTrue (receiver.Called > 0);
