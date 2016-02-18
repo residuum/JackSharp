@@ -73,6 +73,8 @@
     <Compile Include="Processing\IProcessingItem.cs" />
     <Compile Include="Processing\MidiEvent.cs" />
     <Compile Include="Processing\MidiEventCollection.cs" />
+    <Compile Include="ClientBase.cs" />
+    <Compile Include="Events\XrunEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

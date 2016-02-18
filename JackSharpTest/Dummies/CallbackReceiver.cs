@@ -57,9 +57,7 @@ namespace JackSharpTest.Dummies
 		void PlayMidiNote (Chunk processItems)
 		{
 			foreach (MidiEventCollection eventCollection in processItems.MidiIn) {
-				foreach (MidiEvent midiEvent in eventCollection) {
-					Called++;
-				}
+				Called++;
 			}
 		}
 

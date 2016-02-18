@@ -65,6 +65,9 @@ namespace JackSharp.ApiWrapper
 		public static extern unsafe uint jack_time_to_frames (UnsafeStructs.jack_client_t* client, ulong frames);
 
 		[DllImport (Constants.JACK_LIB_NAME, CallingConvention = CallingConvention.Cdecl)]
+		public static extern unsafe float jack_get_xrun_delayed_usecs (UnsafeStructs.jack_client_t* client);
+
+		[DllImport (Constants.JACK_LIB_NAME, CallingConvention = CallingConvention.Cdecl)]
 		public static extern ulong jack_get_time ();
 
 		[DllImport (Constants.JACK_LIB_NAME, CallingConvention = CallingConvention.Cdecl)]

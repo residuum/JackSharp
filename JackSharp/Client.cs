@@ -31,39 +31,32 @@ using JackSharp.Processing;
 
 namespace JackSharp
 {
-	public class Client : IDisposable
+	public class Client : ClientBase
 	{
-		readonly string _name;
 		AudioInPort[] _audioInPorts;
 		AudioOutPort[] _audioOutPorts;
 		MidiInPort[] _midiInPorts;
 		MidiOutPort[] _midiOutPorts;
-		unsafe UnsafeStructs.jack_client_t* _jackClient;
-		bool _isStarted;
 
 		/// <summary>
 		/// Delegates to be called on the process callback of Jack. Multiple Actions can be added.
 		/// </summary>
 		public Action<Chunk> ProcessFunc { get; set; }
 
-		public Client (string name, int audioInPorts = 0, int audioOutPorts = 0, int midiInPorts = 0,
-		               int midiOutPorts = 0)
+		public Client (string name, int audioInPorts = 0, int audioOutPorts = 0, int midiInPorts = 0, int midiOutPorts = 0) : base (name)
 		{
-			_name = name;
 			SetUpPorts (audioInPorts, audioOutPorts, midiInPorts, midiOutPorts);
-
 			SetUpCallbacks ();
 		}
 
 		~Client ()
 		{
-			Dispose (false);
+			base.Dispose (false);
 		}
 
-		public void Dispose ()
+		public new void Dispose ()
 		{
-			Dispose (true);
-			GC.SuppressFinalize (this);
+			base.Dispose ();
 		}
 
 		void SetUpPorts (int audioInPorts, int audioOutPorts, int midiInPorts, int midiOutPorts)
@@ -77,13 +70,7 @@ namespace JackSharp
 		void SetUpCallbacks ()
 		{
 			_processCallback = OnProcess;
-			_bufferSizeCallback = OnBufferSizeChange;
-			_sampleRateCallback = OnSampleRateChange;
 		}
-
-		public int SampleRate { get; private set; }
-
-		public int BufferSize { get; private set; }
 
 		public IEnumerable<MidiOutPort> MidiOutPorts { get { return _midiOutPorts; } }
 
@@ -94,55 +81,37 @@ namespace JackSharp
 		public IEnumerable<AudioInPort> AudioInPorts { get { return _audioInPorts; } }
 
 		Callbacks.JackProcessCallback _processCallback;
-		Callbacks.JackBufferSizeCallback _bufferSizeCallback;
-
-		public event EventHandler<BufferSizeEventArgs> BufferSizeChanged;
-
-		Callbacks.JackSampleRateCallback _sampleRateCallback;
-
-		public event EventHandler<SampleRateEventArgs> SampleRateChanged;
-
-		unsafe void WireUpCallbacks ()
-		{
-			ClientCallbackApi.jack_set_process_callback (_jackClient, _processCallback, IntPtr.Zero);
-			ClientCallbackApi.jack_set_buffer_size_callback (_jackClient, _bufferSizeCallback, IntPtr.Zero);
-			ClientCallbackApi.jack_set_sample_rate_callback (_jackClient, _sampleRateCallback, IntPtr.Zero);
-		}
 
 		/// <summary>
 		/// Activates the client and connects to Jack.
 		/// </summary>
 		/// <returns>[true] is starting was successful, else [false].</returns>
-		public unsafe bool Start ()
+		public unsafe new bool Start ()
 		{
-			if (_isStarted) {
-				return false;
-			}
-			if (!Open ()) {
-				return false;
-			}
-			int status = ClientApi.jack_activate (_jackClient);
-			if (status != 0) {
-				return false;
-			}
-			SampleRate = (int)Invoke.jack_get_sample_rate (_jackClient);
-			BufferSize = (int)Invoke.jack_get_buffer_size (_jackClient);
-			_isStarted = true;
-			return true;
+			return base.Start ();
 		}
 
-		unsafe bool Open ()
+		protected override unsafe bool Open ()
 		{
-			if (_jackClient != null) {
+			ClientStatus status = BaseOpen ();
+			switch (status) {
+			case ClientStatus.AlreadyThere:
+				return true;
+			case ClientStatus.Failure:
+				return false;
+			case ClientStatus.New:
+				CreatePorts ();
+				WireUpCallbacks ();
+				WireUpBaseCallbacks ();
 				return true;
 			}
-			_jackClient = ClientApi.jack_client_open (_name, JackOptions.JackNullOption, IntPtr.Zero);
-			if (_jackClient == null) {
-				return false;
-			}
-			CreatePorts ();
-			WireUpCallbacks ();
-			return true;
+			return false;
+		}
+
+
+		unsafe void WireUpCallbacks ()
+		{
+			ClientCallbackApi.jack_set_process_callback (_jackClient, _processCallback, IntPtr.Zero);
 		}
 
 		int OnProcess (uint nframes, IntPtr arg)
@@ -168,33 +137,13 @@ namespace JackSharp
 			return 0;
 		}
 
-		int OnSampleRateChange (uint nframes, IntPtr arg)
+		public new bool Stop ()
 		{
-			SampleRate = (int)nframes;
-			if (SampleRateChanged != null) {
-				SampleRateChanged (this, new SampleRateEventArgs (SampleRate));
-			}
-			return 0;
+			return base.Stop ();
+
 		}
 
-		int OnBufferSizeChange (uint nframes, IntPtr arg)
-		{
-			BufferSize = (int)nframes;
-			if (BufferSizeChanged != null) {
-				BufferSizeChanged (this, new BufferSizeEventArgs (BufferSize));
-			}
-			return 0;
-		}
-
-		public unsafe bool Stop ()
-		{
-			bool status = ClientApi.jack_deactivate (_jackClient) == 0;
-			_isStarted = !status;
-
-			return status;
-		}
-
-		unsafe void Close ()
+		protected unsafe override void Close ()
 		{
 			for (int i = _midiOutPorts.Length - 1; i >= 0; i--) {
 				if (_midiOutPorts [i] != null) {
@@ -216,10 +165,7 @@ namespace JackSharp
 					_audioInPorts [i].Dispose ();
 				}
 			}
-			int status = ClientApi.jack_client_close (_jackClient);
-			if (status == 0) {
-				_jackClient = null;
-			}
+			base.Close ();
 			return;
 		}
 
@@ -237,12 +183,6 @@ namespace JackSharp
 			for (int i = 0; i < _midiOutPorts.Length; i++) {
 				_midiOutPorts [i] = new MidiOutPort (_jackClient, i);
 			}
-		}
-
-		void Dispose (bool isDisposing)
-		{
-			Stop ();
-			Close ();
 		}
 	}
 }
