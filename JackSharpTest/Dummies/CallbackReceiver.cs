@@ -31,6 +31,7 @@ namespace JackSharpTest.Dummies
 
 		public Action<Chunk> CopyInToOutAction;
 		public Action<Chunk> PlayMidiNoteAction;
+		public Action<Chunk> SequenceMidiAction;
 		public Action<Chunk> ChannelCounterAction;
 		public Action<Chunk> CallBackOneAction;
 		public Action<Chunk> CallBackTwoAction;
@@ -42,11 +43,12 @@ namespace JackSharpTest.Dummies
 			ChannelCounterAction = ChannelCounter;
 			CallBackOneAction = CallBackOne;
 			CallBackTwoAction = CallBackTwo;
+			SequenceMidiAction = SequenceMidi;
 		}
 
 		void CopyInToOut (Chunk processItems)
 		{
-			for (var i = 0; i < Math.Min (processItems.AudioIn.Length, processItems.AudioOut.Length); i++) {
+			for (int i = 0; i < Math.Min (processItems.AudioIn.Length, processItems.AudioOut.Length); i++) {
 				Array.Copy (processItems.AudioIn [i].Audio, processItems.AudioOut [i].Audio, processItems.AudioIn [i].BufferSize);
 			}
 			Called++;
@@ -54,7 +56,7 @@ namespace JackSharpTest.Dummies
 
 		void PlayMidiNote (Chunk processItems)
 		{
-			foreach (MidiEventCollection eventCollection in processItems.MidiIn) {
+			foreach (MidiEventCollection<MidiInEvent> eventCollection in processItems.MidiIn) {
 				Called++;
 			}
 		}
@@ -72,6 +74,27 @@ namespace JackSharpTest.Dummies
 		void CallBackTwo (Chunk processItems)
 		{
 			Called |= 2;
+		}
+
+		public void SequenceMidi (Chunk processItems)
+		{
+			foreach (MidiEventCollection<MidiOutEvent> eventCollection in processItems.MidiOut) {
+				var noteOn = new MidiOutEvent (processItems.Frames / 4,
+					                         new byte[] {
+						0x90 /* note on */,
+						30 /* note */,
+						64 /* velocity */
+					});
+				var noteOff = new MidiOutEvent (processItems.Frames / 2,
+					                          new byte[] {
+						0x80 /* note off */,
+						30 /* note */,
+						64 /* velocity */
+					});
+				eventCollection.AddEvent (noteOn);
+				eventCollection.AddEvent (noteOff);
+				Called++;
+			}
 		}
 	}
 }

@@ -116,20 +116,20 @@ namespace JackSharp
 		{
 			AudioBuffer[] audioInBuffers = _audioInPorts.Select (p => p.GetAudioBuffer (nframes)).ToArray ();
 			AudioBuffer[] audioOutBuffers = _audioOutPorts.Select (p => p.GetAudioBuffer (nframes)).ToArray ();
-			MidiEventCollection[] midiInEvents = _midiInPorts.Select (p => p.GetMidiBuffer (nframes)).ToArray ();
+			MidiEventCollection<MidiInEvent>[] midiInEvents = _midiInPorts.Select (p => p.GetMidiBuffer (nframes)).ToArray ();
+			MidiEventCollection<MidiOutEvent>[] midiOutEvents = _midiOutPorts.Select (p => p.GetMidiBuffer ()).ToArray ();
 
 			if (ProcessFunc != null) {
-				ProcessFunc (new Chunk {
-					AudioIn = audioInBuffers,
-					AudioOut = audioOutBuffers,
-					MidiIn = midiInEvents
-				});
+				ProcessFunc (new Chunk (nframes, audioInBuffers, audioOutBuffers, midiInEvents, midiOutEvents));
 			}
 			foreach (var audioInBuffer in audioInBuffers) {
 				audioInBuffer.CopyToPointer ();
 			}
 			foreach (var audioOutBuffer in audioOutBuffers) {
 				audioOutBuffer.CopyToPointer ();
+			}
+			foreach (MidiEventCollection<MidiOutEvent> midiEvents in midiOutEvents) {
+				midiEvents.WriteToJackMidi (nframes);
 			}
 
 			return 0;

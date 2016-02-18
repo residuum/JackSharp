@@ -21,6 +21,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System;
+using JackSharp.ApiWrapper;
 using JackSharp.Pointers;
 using JackSharp.Processing;
 
@@ -34,12 +36,18 @@ namespace JackSharp.Ports
 			return new AudioBuffer (port, nframes, buffer);
 		}
 
-		internal static MidiEventCollection GetMidiBuffer (this MidiInPort port, uint nframes)
+		internal static MidiEventCollection<MidiInEvent> GetMidiBuffer (this MidiInPort port, uint nframes)
 		{
-			MidiEventCollection eventCollection = new MidiEventCollection (port);
-			foreach (MidiEvent midiEvent in port.GetMidiEvents(nframes)) {
+			MidiEventCollection<MidiInEvent> eventCollection = new MidiEventCollection<MidiInEvent> (port);
+			foreach (MidiInEvent midiEvent in port.GetMidiEvents(nframes)) {
 				eventCollection.AddEvent (midiEvent);
 			}
+			return eventCollection;
+		}
+
+		internal static MidiEventCollection<MidiOutEvent> GetMidiBuffer (this MidiOutPort port)
+		{
+			MidiEventCollection<MidiOutEvent> eventCollection = new MidiEventCollection<MidiOutEvent> (port);
 			return eventCollection;
 		}
 
@@ -61,6 +69,18 @@ namespace JackSharp.Ports
 				for (int j = 0; j < bufferCount; j++) {
 					audioBuffers [j].Audio [i] = interlaced [i * bufferCount + j];
 				}
+			}
+		}
+
+		public static unsafe void WriteToJackMidi (this MidiEventCollection<MidiOutEvent> midiEvents, uint nframes)
+		{
+			float* portBuf = PortApi.jack_port_get_buffer (midiEvents.Port._port, nframes);
+			MidiApi.jack_midi_clear_buffer (portBuf);
+			foreach (MidiOutEvent midiEvent in midiEvents) {
+				byte* buffer = MidiApi.jack_midi_event_reserve (portBuf, (uint)midiEvent.Time, (uint)midiEvent.MidiData.Length);
+				StructPointer<byte> bufferPointer = new StructPointer<byte> ((IntPtr)buffer, (uint)midiEvent.MidiData.Length);
+				bufferPointer.Array = midiEvent.MidiData;
+				bufferPointer.CopyToPointer ();
 			}
 		}
 	}

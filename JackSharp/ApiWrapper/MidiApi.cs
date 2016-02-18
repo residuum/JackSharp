@@ -35,13 +35,13 @@ namespace JackSharp.ApiWrapper
 		public static extern unsafe int jack_midi_event_get (UnsafeStructs.jack_midi_event_t* ev, IntPtr port_buffer, uint event_index);
 
 		[DllImport (Constants.JACK_LIB_NAME, CallingConvention = CallingConvention.Cdecl)]
-		public static extern unsafe void jack_midi_clear_buffer (IntPtr port_buffer);
+		public static extern unsafe void jack_midi_clear_buffer (float* port_buffer);
 
 		[DllImport (Constants.JACK_LIB_NAME, CallingConvention = CallingConvention.Cdecl)]
 		public static extern unsafe uint jack_midi_max_event_size (IntPtr port_buffer);
 
 		[DllImport (Constants.JACK_LIB_NAME, CallingConvention = CallingConvention.Cdecl)]
-		public static extern unsafe byte* jack_midi_event_reserve (IntPtr port_buffer, uint time, uint data_size);
+		public static extern unsafe byte* jack_midi_event_reserve (float* port_buffer, uint time, uint data_size);
 
 		[DllImport (Constants.JACK_LIB_NAME, CallingConvention = CallingConvention.Cdecl)]
 		public static extern unsafe int jack_midi_event_write (IntPtr port_buffer, uint time, byte* data, uint data_size);

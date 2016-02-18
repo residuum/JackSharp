@@ -54,13 +54,13 @@ namespace JackSharpTest
 		{
 			using (Client client = new Client ("testing", 1)) {
 				CallbackReceiver receiver = new CallbackReceiver ();
-				client.ProcessFunc = receiver.ChannelCounterAction;
+				client.ProcessFunc += receiver.ChannelCounterAction;
 				Assert.IsTrue (client.Start ());
 				client.Stop ();
 				Assert.IsTrue (client.Start ());
-				Assert.AreEqual (client.AudioInPorts.Count (), 1);
+				Assert.AreEqual (1, client.AudioInPorts.Count ());
 				Thread.Sleep (200);
-				Assert.IsTrue (receiver.Called > 0);
+				Assert.AreEqual(1, receiver.Called);
 			}
 		}
 

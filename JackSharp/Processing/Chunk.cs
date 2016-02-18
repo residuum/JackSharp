@@ -38,11 +38,26 @@ namespace JackSharp.Processing
 		/// <summary>
 		/// MIDI in buffers. Should not be changed.
 		/// </summary>
-		public MidiEventCollection[] MidiIn { get; set; }
+		public MidiEventCollection<MidiInEvent>[] MidiIn { get; set; }
 
 		/// <summary>
 		/// Midi out buffers.
 		/// </summary>
-		public MidiEventCollection[] MidiOut { get; set; }
+		public MidiEventCollection<MidiOutEvent>[] MidiOut { get; set; }
+
+		/// <summary>
+		/// Number of frames for this Chunk
+		/// </summary>
+		public int Frames { get; private set; }
+
+		internal Chunk (uint nframes, AudioBuffer[] audioInBuffers, AudioBuffer[] audioOutBuffers, MidiEventCollection<MidiInEvent>[] midiInEvents, MidiEventCollection<MidiOutEvent>[] midiOutEvents)
+		{
+			Frames = (int)nframes;
+			AudioIn = audioInBuffers;
+			AudioOut = audioOutBuffers;
+			MidiIn = midiInEvents;
+			MidiOut = midiOutEvents;
+		}
+
 	}
 }

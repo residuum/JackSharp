@@ -26,7 +26,7 @@ using System;
 
 namespace JackSharp.Processing
 {
-	public class MidiEvent
+	public class MidiInEvent : IMidiEvent
 	{
 		public int Time { get; private set; }
 
@@ -35,7 +35,7 @@ namespace JackSharp.Processing
 		readonly StructPointer<byte> _bytePointer;
 
 
-		internal unsafe MidiEvent (UnsafeStructs.jack_midi_event_t inEvent)
+		internal unsafe MidiInEvent (UnsafeStructs.jack_midi_event_t inEvent)
 		{
 			Time = (int)inEvent.time;
 			_bytePointer = new StructPointer<byte> ((IntPtr)inEvent.buffer, inEvent.size);
