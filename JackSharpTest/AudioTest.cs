@@ -36,7 +36,7 @@ namespace JackSharpTest
 		[SetUp]
 		public static void CreateClient ()
 		{
-			_client = new Client ("testing", 2, 2);
+			_client = new Client ("testAudio", 2, 2);
 		}
 
 		[Test]

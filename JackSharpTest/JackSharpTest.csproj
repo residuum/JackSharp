@@ -19,6 +19,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -40,6 +41,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientTest.cs" />
+    <Compile Include="ControllerTest.cs" />
+    <Compile Include="Dummies\ControllerReceiver.cs" />
     <Compile Include="PortTest.cs" />
     <Compile Include="AudioTest.cs" />
     <Compile Include="Dummies\CallbackReceiver.cs" />

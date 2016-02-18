@@ -22,7 +22,6 @@
 // THE SOFTWARE.
 namespace JackSharp.Ports
 {
-
 	public enum Direction
 	{
 		In,

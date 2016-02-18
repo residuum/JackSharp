@@ -28,7 +28,7 @@ namespace JackSharp.ApiWrapper
 	static class Callbacks
 	{
 		[UnmanagedFunctionPointer (CallingConvention.Cdecl)]
-        	public delegate void JackPortRegistrationCallback (uint port,int register,IntPtr args);
+		public delegate void JackPortRegistrationCallback (uint port,int register,IntPtr args);
 
 		[UnmanagedFunctionPointer (CallingConvention.Cdecl)]
 		public delegate void JackPortConnectCallback (uint a,uint b,int connect,IntPtr args);

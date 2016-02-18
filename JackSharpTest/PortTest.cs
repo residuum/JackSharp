@@ -34,7 +34,7 @@ namespace JackSharpTest
 		[SetUp]
 		public static void CreateClient ()
 		{
-			_client = new Client ("testing", 2, 4, 1, 3);
+			_client = new Client ("testPorts", 2, 4, 1, 3);
 		}
 
 		[Test]

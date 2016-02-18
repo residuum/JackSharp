@@ -20,35 +20,24 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-
-using JackSharp.Pointers;
+using System;
 using JackSharp.Ports;
 
-namespace JackSharp.Processing
+namespace JackSharp.Events
 {
-	public class AudioBuffer : IProcessingItem
+	public class ConnectionChangeEventArgs : EventArgs
 	{
-		public Port Port { get; private set; }
+		public PortReference Outlet { get; private set; }
 
-		public int BufferSize { get; private set; }
+		public PortReference Inlet { get; private set; }
 
-		internal StructPointer<float> PointerWrapper { get; private set; }
+		public ChangeType ChangeType { get; private set; }
 
-		public float[] Audio { get; set; }
-
-		internal AudioBuffer (Port port, uint bufferSize, StructPointer<float> pointer)
+		public ConnectionChangeEventArgs (PortReference outlet, PortReference inlet, ChangeType changeType)
 		{
-			BufferSize = (int)bufferSize;
-			Port = port;
-			PointerWrapper = pointer;
-			Audio = PointerWrapper.Array;
-		}
-
-		internal void CopyToPointer ()
-		{
-			PointerWrapper.Array = Audio;
-			PointerWrapper.CopyToPointer ();
+			Outlet = outlet;
+			Inlet = inlet;
+			ChangeType = changeType;
 		}
 	}
 }
-

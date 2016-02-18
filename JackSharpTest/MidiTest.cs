@@ -13,7 +13,7 @@ namespace JackSharpTest
 		[SetUp]
 		public static void CreateClient ()
 		{
-			_client = new Client ("testing", 0, 1, 1, 1);
+			_client = new Client ("testMidi", 0, 1, 1, 1);
 		}
 
 		[Test]

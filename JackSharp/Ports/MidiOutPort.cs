@@ -20,35 +20,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-
 using JackSharp.Pointers;
-using JackSharp.Ports;
 
-namespace JackSharp.Processing
+namespace JackSharp.Ports
 {
-	public class AudioBuffer : IProcessingItem
+	public class MidiOutPort : Port
 	{
-		public Port Port { get; private set; }
-
-		public int BufferSize { get; private set; }
-
-		internal StructPointer<float> PointerWrapper { get; private set; }
-
-		public float[] Audio { get; set; }
-
-		internal AudioBuffer (Port port, uint bufferSize, StructPointer<float> pointer)
+		internal unsafe MidiOutPort (UnsafeStructs.jack_client_t* jackClient, int index) : base (jackClient, index, Direction.Out, PortType.Midi)
 		{
-			BufferSize = (int)bufferSize;
-			Port = port;
-			PointerWrapper = pointer;
-			Audio = PointerWrapper.Array;
-		}
-
-		internal void CopyToPointer ()
-		{
-			PointerWrapper.Array = Audio;
-			PointerWrapper.CopyToPointer ();
 		}
 	}
 }
-

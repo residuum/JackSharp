@@ -22,28 +22,12 @@
 // THE SOFTWARE.
 
 using JackSharp.Pointers;
-using System.Collections.Generic;
 
 namespace JackSharp.Ports
 {
 	public class AudioInPort : Port
 	{
 		internal unsafe AudioInPort (UnsafeStructs.jack_client_t* jackClient, int index) : base (jackClient, index, Direction.In, PortType.Audio)
-		{
-		}
-	}
-
-	public class AudioOutPort : Port
-	{
-		internal unsafe AudioOutPort (UnsafeStructs.jack_client_t* jackClient, int index) : base (jackClient, index, Direction.Out, PortType.Audio)
-		{
-		}
-	}
-
-
-	public class MidiOutPort : Port
-	{
-		internal unsafe MidiOutPort (UnsafeStructs.jack_client_t* jackClient, int index) : base (jackClient, index, Direction.Out, PortType.Midi)
 		{
 		}
 	}

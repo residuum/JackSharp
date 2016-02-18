@@ -33,6 +33,11 @@ namespace JackSharp.Ports
 		internal readonly unsafe UnsafeStructs.jack_client_t* _jackClient;
 		internal readonly unsafe UnsafeStructs.jack_port_t* _port;
 
+		public PortType PortType { get; private set; }
+
+		public Direction Direction { get; private set; }
+
+		public string Name { get; set; }
 
 		internal unsafe Port (UnsafeStructs.jack_client_t*jackClient, int index, Direction direction, PortType portType)
 		{
@@ -89,12 +94,6 @@ namespace JackSharp.Ports
 			}
 			return typeName;
 		}
-
-		public PortType PortType { get; set; }
-
-		public Direction Direction { get; set; }
-
-		public string Name { get; set; }
 
 		internal unsafe StructPointer<float> GetBuffer (uint nframes)
 		{

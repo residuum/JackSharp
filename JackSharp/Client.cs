@@ -23,10 +23,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using JackSharp.Pointers;
 using JackSharp.Ports;
 using JackSharp.ApiWrapper;
-using JackSharp.Events;
 using JackSharp.Processing;
 
 namespace JackSharp
@@ -86,12 +84,12 @@ namespace JackSharp
 		/// Activates the client and connects to Jack.
 		/// </summary>
 		/// <returns>[true] is starting was successful, else [false].</returns>
-		public unsafe new bool Start ()
+		public new bool Start ()
 		{
 			return base.Start ();
 		}
 
-		protected override unsafe bool Open ()
+		protected override bool Open ()
 		{
 			ClientStatus status = BaseOpen ();
 			switch (status) {
@@ -111,7 +109,7 @@ namespace JackSharp
 
 		unsafe void WireUpCallbacks ()
 		{
-			ClientCallbackApi.jack_set_process_callback (_jackClient, _processCallback, IntPtr.Zero);
+			ClientCallbackApi.jack_set_process_callback (JackClient, _processCallback, IntPtr.Zero);
 		}
 
 		int OnProcess (uint nframes, IntPtr arg)
@@ -140,10 +138,9 @@ namespace JackSharp
 		public new bool Stop ()
 		{
 			return base.Stop ();
-
 		}
 
-		protected unsafe override void Close ()
+		protected override void Close ()
 		{
 			for (int i = _midiOutPorts.Length - 1; i >= 0; i--) {
 				if (_midiOutPorts [i] != null) {
@@ -166,22 +163,21 @@ namespace JackSharp
 				}
 			}
 			base.Close ();
-			return;
 		}
 
 		unsafe void CreatePorts ()
 		{
 			for (int i = 0; i < _audioInPorts.Length; i++) {
-				_audioInPorts [i] = new AudioInPort (_jackClient, i);
+				_audioInPorts [i] = new AudioInPort (JackClient, i);
 			}
 			for (int i = 0; i < _audioOutPorts.Length; i++) {
-				_audioOutPorts [i] = new AudioOutPort (_jackClient, i);
+				_audioOutPorts [i] = new AudioOutPort (JackClient, i);
 			}
 			for (int i = 0; i < _midiInPorts.Length; i++) {
-				_midiInPorts [i] = new MidiInPort (_jackClient, i);
+				_midiInPorts [i] = new MidiInPort (JackClient, i);
 			}
 			for (int i = 0; i < _midiOutPorts.Length; i++) {
-				_midiOutPorts [i] = new MidiOutPort (_jackClient, i);
+				_midiOutPorts [i] = new MidiOutPort (JackClient, i);
 			}
 		}
 	}

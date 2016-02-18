@@ -1,5 +1,5 @@
-﻿// Author:
-//	   Thomas Mayer <thomas@residuum.org>
+// Author:
+//       Thomas Mayer <thomas@residuum.org>
 //
 // Copyright (c) 2016 Thomas Mayer
 //
@@ -21,56 +21,48 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Linq;
-using JackSharp;
+using System.Runtime.InteropServices;
 
-namespace Naudio.JackTest.WaveIntegration
+namespace JackSharp.Pointers
 {
-	class Analyser
+	static class MarshallingHelper
 	{
-		public Action<ProcessingChunk> AnalyseOutAction;
-		public Action<ProcessingChunk> AnalyseInAction;
-		public Action<ProcessingChunk> AnalyseBothAction;
-
-		public int NotEmptySamples { get; private set; }
-
-		public Analyser ()
+		public static string PtrToString (this IntPtr ptr)
 		{
-			AnalyseOutAction = AnalyseOut;
-			AnalyseInAction = AnalyseIn;
-			AnalyseBothAction = AnalyseBoth;
+			return Marshal.PtrToStringAnsi (ptr);
 		}
 
-		void AnalyseOut (ProcessingChunk processItem)
+		public static string[] PtrToStringArray (this IntPtr stringArray)
 		{
-			foreach (AudioBuffer outBuffer in processItem.AudioOut) {
-				if (outBuffer.Audio.Any (s => s != 0)) {
-					NotEmptySamples++;
-				}
+			if (stringArray == IntPtr.Zero) {
+				return new string[] { };
 			}
+
+			ushort arrayCount = stringArray.CountStrings ();
+			return stringArray.PtrToStringArray (arrayCount);
 		}
 
-		void AnalyseIn (ProcessingChunk processItem)
+		static ushort CountStrings (this IntPtr stringArray)
 		{
-			foreach (AudioBuffer inBuffer in processItem.AudioIn) {
-				if (inBuffer.Audio.Any (s => s != 0)) {
-					NotEmptySamples++;
-				}
+			ushort count = 0;
+			while (Marshal.ReadIntPtr (stringArray, count * IntPtr.Size) != IntPtr.Zero) {
+				++count;
 			}
+			return count;
 		}
 
-		void AnalyseBoth (ProcessingChunk processItem)
+		static string[] PtrToStringArray (this IntPtr stringArray, ushort count)
 		{
-			foreach (AudioBuffer inBuffer in processItem.AudioIn) {
-				if (inBuffer.Audio.Any (s => s != 0)) {
-					NotEmptySamples |= 1;
-				}
+			if (stringArray == IntPtr.Zero) {
+				return new string[count];
 			}
-			foreach (AudioBuffer outBuffer in processItem.AudioOut) {
-				if (outBuffer.Audio.Any (s => s != 0)) {
-					NotEmptySamples |= 2;
-				}
+
+			string[] members = new string[count];
+			for (int i = 0; i < count; ++i) {
+				IntPtr s = Marshal.ReadIntPtr (stringArray, i * IntPtr.Size);
+				members [i] = PtrToString (s);
 			}
+			return members;
 		}
 	}
 }

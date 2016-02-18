@@ -25,24 +25,24 @@ namespace JackSharp.Processing
 {
 	public class Chunk
 	{
-        /// <summary>
-        /// Audio in buffers. Should not be changed.
-        /// </summary>
+		/// <summary>
+		/// Audio in buffers. Should not be changed.
+		/// </summary>
 		public AudioBuffer[] AudioIn { get; set; }
 
-        /// <summary>
-        /// Audio out buffers.
-        /// </summary>
-        public AudioBuffer[] AudioOut { get; set; }
+		/// <summary>
+		/// Audio out buffers.
+		/// </summary>
+		public AudioBuffer[] AudioOut { get; set; }
 
-        /// <summary>
-        /// MIDI in buffers. Should not be changed.
-        /// </summary>
-        public MidiEventCollection[] MidiIn { get; set; }
+		/// <summary>
+		/// MIDI in buffers. Should not be changed.
+		/// </summary>
+		public MidiEventCollection[] MidiIn { get; set; }
 
-        /// <summary>
-        /// Midi out buffers.
-        /// </summary>
-        public MidiEventCollection[] MidiOut { get; set; }
+		/// <summary>
+		/// Midi out buffers.
+		/// </summary>
+		public MidiEventCollection[] MidiOut { get; set; }
 	}
 }

@@ -24,9 +24,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using JackSharp.Ports;
-using JackSharp.Processing;
 
-namespace JackSharp
+namespace JackSharp.Processing
 {
 	public class MidiEventCollection : IEnumerable<MidiEvent>, IProcessingItem
 	{
@@ -42,7 +41,7 @@ namespace JackSharp
 			_midiEvents.Add (midiEvent);
 		}
 
-		private readonly List<MidiEvent> _midiEvents = new List<MidiEvent> ();
+		readonly List<MidiEvent> _midiEvents = new List<MidiEvent> ();
 
 		public IEnumerator<MidiEvent> GetEnumerator ()
 		{

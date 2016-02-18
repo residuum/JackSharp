@@ -22,7 +22,6 @@
 // THE SOFTWARE.
 using System;
 using System.Linq;
-using JackSharp;
 using JackSharp.Processing;
 
 namespace Naudio.JackTest.WaveIntegration

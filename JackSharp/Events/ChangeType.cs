@@ -20,25 +20,12 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-using JackSharp.ApiWrapper;
-
-namespace JackSharp.Pointers
+namespace JackSharp.Events
 {
-	internal class MidiPointer
+	public enum ChangeType
 	{
-		readonly unsafe float* _pointer;
-
-		public int Size { get; set; }
-
-		public float[] Array { get; set; }
-
-		private unsafe UnsafeStructs.jack_port_t* _port;
-
-		public unsafe MidiPointer (UnsafeStructs.jack_port_t* port, float* pointer, uint nframes)
-		{
-			_port = port;
-			_pointer = pointer;
-			Size = (int) nframes;
-		}
+		New,
+		Deleted,
+		Renamed
 	}
 }

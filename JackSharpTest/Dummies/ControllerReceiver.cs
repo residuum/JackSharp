@@ -20,35 +20,54 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-
-using JackSharp.Pointers;
+using System.Collections.Generic;
+using System.Linq;
+using JackSharp.Events;
 using JackSharp.Ports;
 
-namespace JackSharp.Processing
+namespace JackSharpTest.Dummies
 {
-	public class AudioBuffer : IProcessingItem
+	class ControllerReceiver
 	{
-		public Port Port { get; private set; }
+		public int PortsFound { get; private set; }
 
-		public int BufferSize { get; private set; }
+		public int ConnectionsFound { get; private set; }
 
-		internal StructPointer<float> PointerWrapper { get; private set; }
+		List<PortReference> _ports = new List<PortReference> ();
 
-		public float[] Audio { get; set; }
 
-		internal AudioBuffer (Port port, uint bufferSize, StructPointer<float> pointer)
+		public void PortChanged (object sender, PortRegistrationEventArgs e)
 		{
-			BufferSize = (int)bufferSize;
-			Port = port;
-			PointerWrapper = pointer;
-			Audio = PointerWrapper.Array;
+			switch (e.ChangeType) {
+			case ChangeType.New:
+				_ports.Add (e.Port);
+				PortsFound++;
+				break;
+			case ChangeType.Deleted:
+				_ports.Remove (e.Port);
+				PortsFound--;
+				break;
+			}
 		}
 
-		internal void CopyToPointer ()
+		public PortReference FirstOutPort {
+			get { return _ports.FirstOrDefault (p => p.Direction == Direction.Out && p.PortType == PortType.Audio); }
+		}
+
+		public PortReference FirstInPort {
+			get { return _ports.FirstOrDefault (p => p.Direction == Direction.In && p.PortType == PortType.Audio); }
+		}
+
+		public void ConnectionChanged (object sender, ConnectionChangeEventArgs e)
 		{
-			PointerWrapper.Array = Audio;
-			PointerWrapper.CopyToPointer ();
+			switch (e.ChangeType) {
+			case ChangeType.New:
+				ConnectionsFound++;
+				break;
+			case ChangeType.Deleted:
+				ConnectionsFound--;
+				break;
+			}
 		}
 	}
 }
-

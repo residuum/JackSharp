@@ -41,7 +41,7 @@ namespace Naudio.JackTest
 		[SetUp]
 		public static void CreateOutput ()
 		{
-			_client = new Client ("testing", 0, 2);
+			_client = new Client ("testNaudioOut", 0, 2);
 			_jackOut = new JackOut (_client);
 		}
 

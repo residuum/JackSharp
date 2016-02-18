@@ -39,7 +39,7 @@ namespace Naudio.JackTest
 		[SetUp]
 		public static void CreateInput ()
 		{
-			_client = new Client ("testing", 2);
+			_client = new Client ("testNaudioIn", 2);
 			_jackIn = new JackIn (_client);
 		}
 

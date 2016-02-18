@@ -34,7 +34,7 @@ namespace JackSharp.Pointers
 
 		public void FromIntPtr (IntPtr ptr)
 		{
-			Value = Marshal.PtrToStringAnsi (ptr);
+			Value = ptr.PtrToString ();
 		}
 	}
 }

@@ -32,16 +32,16 @@ namespace JackSharpTest
 	public class ClientTest
 	{
 		[Test]
-		public virtual void TestStart ()
+		public virtual void Start ()
 		{
-			using (Client client = new Client ("testing")) {
+			using (Client client = new Client ("testClient")) {
 				Assert.IsTrue (client.Start ());
 				client.Stop ();
 			}
 		}
 
 		[Test]
-		public virtual void TestDoubleStart ()
+		public virtual void DoubleStart ()
 		{
 			using (Client client = new Client ("testing")) {
 				Assert.IsTrue (client.Start ());
@@ -50,7 +50,7 @@ namespace JackSharpTest
 		}
 
 		[Test]
-		public virtual void TestStartAfterStopped ()
+		public virtual void StartAfterStopped ()
 		{
 			using (Client client = new Client ("testing", 1)) {
 				CallbackReceiver receiver = new CallbackReceiver ();
@@ -65,7 +65,7 @@ namespace JackSharpTest
 		}
 
 		[Test]
-		public virtual void TestStop ()
+		public virtual void Stop ()
 		{
 			using (Client client = new Client ("testing")) {
 				client.Start ();
@@ -74,7 +74,7 @@ namespace JackSharpTest
 		}
 
 		[Test]
-		public virtual void TestStopIfNotStarted ()
+		public virtual void StopIfNotStarted ()
 		{
 			using (Client client = new Client ("testing")) {
 				Assert.IsFalse (client.Stop ());
@@ -82,7 +82,7 @@ namespace JackSharpTest
 		}
 
 		[Test]
-		public virtual void TestSampleRate ()
+		public virtual void SampleRate ()
 		{
 			using (Client client = new Client ("testing")) {
 				client.Start ();
@@ -92,7 +92,7 @@ namespace JackSharpTest
 		}
 
 		[Test]
-		public virtual void TestBufferSize ()
+		public virtual void BufferSize ()
 		{
 			using (Client client = new Client ("testing")) {
 				client.Start ();

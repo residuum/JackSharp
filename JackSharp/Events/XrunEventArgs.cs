@@ -1,4 +1,4 @@
-﻿// Author:
+// Author:
 //       Thomas Mayer <thomas@residuum.org>
 //
 // Copyright (c) 2016 Thomas Mayer
@@ -20,13 +20,12 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-using System;
 
 namespace JackSharp.Events
 {
 	public class XrunEventArgs
 	{
-		public float XrunDelay { get; private 	set; }
+		public float XrunDelay { get; private set; }
 
 		public XrunEventArgs (float xrunDelay)
 		{

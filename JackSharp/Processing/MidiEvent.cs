@@ -32,7 +32,7 @@ namespace JackSharp.Processing
 
 		public byte[] MidiData { get { return _bytePointer.Array; } }
 
-		StructPointer<byte> _bytePointer;
+		readonly StructPointer<byte> _bytePointer;
 
 
 		internal unsafe MidiEvent (UnsafeStructs.jack_midi_event_t inEvent)

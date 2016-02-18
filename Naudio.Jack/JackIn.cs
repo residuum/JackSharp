@@ -56,7 +56,7 @@ namespace Naudio.Jack
 			StopRecording ();
 		}
 
-		private void ProcessAudio (Chunk processingChunk)
+		void ProcessAudio (Chunk processingChunk)
 		{
 			int bufferCount = processingChunk.AudioIn.Length;
 			if (bufferCount == 0) {
