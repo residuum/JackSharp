@@ -39,11 +39,11 @@ namespace JackSharp.Ports
 		{
 			List<MidiInEvent> midiEvents = new List<MidiInEvent> ();
 
-			IntPtr portBuffer = (IntPtr)PortApi.jack_port_get_buffer (_port, nframes);
-			uint eventCount = MidiApi.jack_midi_get_event_count (portBuffer);
+			IntPtr portBuffer = (IntPtr)PortApi.GetBuffer (_port, nframes);
+			uint eventCount = MidiApi.GetEventCount (portBuffer);
 			for (uint i = 0; i < eventCount; i++) {
 				UnsafeStructs.jack_midi_event_t inEvent;
-				MidiApi.jack_midi_event_get (&inEvent, portBuffer, i);
+				MidiApi.GetEvent (&inEvent, portBuffer, i);
 				midiEvents.Add (new MidiInEvent (inEvent));
 			}
 			return midiEvents;

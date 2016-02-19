@@ -64,7 +64,7 @@ namespace JackSharp.Ports
 		{
 			var typeName = GetTypeName (portType);
 			var flags = GetJackPortFlags (direction);
-			return PortApi.jack_port_register (_jackClient, Name, typeName, flags, 0);
+			return PortApi.Register (_jackClient, Name, typeName, flags, 0);
 		}
 
 		static JackPortFlags GetJackPortFlags (Direction direction)
@@ -98,12 +98,12 @@ namespace JackSharp.Ports
 		internal unsafe StructPointer<float> GetBuffer (uint nframes)
 		{
 			Debug.Assert (PortType == PortType.Audio);
-			return new StructPointer<float> ((IntPtr)PortApi.jack_port_get_buffer (_port, nframes), nframes);
+			return new StructPointer<float> ((IntPtr)PortApi.GetBuffer (_port, nframes), nframes);
 		}
 
 		unsafe void Dispose (bool isDisposing)
 		{
-			PortApi.jack_port_unregister (_jackClient, _port);
+			PortApi.Unregister (_jackClient, _port);
 		}
 	}
 }

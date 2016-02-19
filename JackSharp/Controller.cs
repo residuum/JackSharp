@@ -76,7 +76,7 @@ namespace JackSharp
 
 		unsafe PortReference MapPort (uint portId)
 		{
-			UnsafeStructs.jack_port_t* portPointer = PortApi.jack_port_by_id (JackClient, portId);
+			UnsafeStructs.jack_port_t* portPointer = PortApi.GetPortById (JackClient, portId);
 			if (portPointer == null) {
 				return null;
 			}
@@ -85,7 +85,7 @@ namespace JackSharp
 
 		unsafe PortReference MapPort (string portName)
 		{
-			UnsafeStructs.jack_port_t* portPointer = PortApi.jack_port_by_name (JackClient, portName);
+			UnsafeStructs.jack_port_t* portPointer = PortApi.GetPortByName (JackClient, portName);
 			if (portPointer == null) {
 				return null;
 			}
@@ -139,7 +139,7 @@ namespace JackSharp
 			foreach (PortReference port in allPorts) {
 				// In ports are connected to out ports, so we only need to map these.
 				if (port.Direction == Direction.Out) {
-					IntPtr connectedPortNames = PortApi.jack_port_get_connections (port.PortPointer);
+					IntPtr connectedPortNames = PortApi.GetConnections (port.PortPointer);
 					List<PortReference> connectedPorts = PortListFromPointer (connectedPortNames);
 
 					if (ConnectionChanged != null) {
@@ -147,21 +147,21 @@ namespace JackSharp
 							ConnectionChanged (this, new ConnectionChangeEventArgs (port, connected, ChangeType.New));
 						}
 					}
-					Invoke.jack_free (connectedPortNames);
+					Invoke.Free (connectedPortNames);
 				}
 			}
 		}
 
 		unsafe List<PortReference> GetAndSendPorts ()
 		{
-			IntPtr initialPorts = PortApi.jack_get_ports (JackClient, null, null, 0);
+			IntPtr initialPorts = PortApi.GetPorts (JackClient, null, null, 0);
 			List<PortReference> ports = PortListFromPointer (initialPorts);
 			if (PortChanged != null) {
 				foreach (PortReference port in ports) {
 					PortChanged (this, new PortRegistrationEventArgs (port, ChangeType.New));
 				}
 			}
-			Invoke.jack_free (initialPorts);
+			Invoke.Free (initialPorts);
 			return ports;
 		}
 
@@ -173,10 +173,10 @@ namespace JackSharp
 
 		unsafe void WireUpCallbacks ()
 		{
-			PortCallbackApi.jack_set_client_registration_callback (JackClient, _clientRegistration, IntPtr.Zero);
-			PortCallbackApi.jack_set_port_registration_callback (JackClient, _portRegistration, IntPtr.Zero);
-			PortCallbackApi.jack_set_port_rename_callback (JackClient, _portRename, IntPtr.Zero);
-			PortCallbackApi.jack_set_port_connect_callback (JackClient, _portConnect, IntPtr.Zero);
+			PortCallbackApi.SetClientRegistrationCallback (JackClient, _clientRegistration, IntPtr.Zero);
+			PortCallbackApi.SetPortRegistrationCallback (JackClient, _portRegistration, IntPtr.Zero);
+			PortCallbackApi.SetPortRenameCallback (JackClient, _portRename, IntPtr.Zero);
+			PortCallbackApi.SetPortConnectCallback (JackClient, _portConnect, IntPtr.Zero);
 		}
 
 		/// <summary>
@@ -196,14 +196,14 @@ namespace JackSharp
 		public bool Connect (PortReference outPort, PortReference inPort)
 		{
 			unsafe {
-				return PortApi.jack_connect (JackClient, outPort.FullName, inPort.FullName) == 0;
+				return PortApi.Connect (JackClient, outPort.FullName, inPort.FullName) == 0;
 			}
 		}
 
 		public bool Disconnect (PortReference outPort, PortReference inPort)
 		{
 			unsafe {
-				return PortApi.jack_disconnect (JackClient, outPort.FullName, inPort.FullName) == 0;
+				return PortApi.Disconnect (JackClient, outPort.FullName, inPort.FullName) == 0;
 			}
 		}
 	}

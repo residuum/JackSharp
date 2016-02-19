@@ -74,10 +74,10 @@ namespace JackSharp.Ports
 
 		public static unsafe void WriteToJackMidi (this MidiEventCollection<MidiOutEvent> midiEvents, uint nframes)
 		{
-			float* portBuf = PortApi.jack_port_get_buffer (midiEvents.Port._port, nframes);
-			MidiApi.jack_midi_clear_buffer (portBuf);
+			float* portBuf = PortApi.GetBuffer (midiEvents.Port._port, nframes);
+			MidiApi.ClearBuffer (portBuf);
 			foreach (MidiOutEvent midiEvent in midiEvents) {
-				byte* buffer = MidiApi.jack_midi_event_reserve (portBuf, (uint)midiEvent.Time, (uint)midiEvent.MidiData.Length);
+				byte* buffer = MidiApi.ReserveEvent (portBuf, (uint)midiEvent.Time, (uint)midiEvent.MidiData.Length);
 				StructPointer<byte> bufferPointer = new StructPointer<byte> ((IntPtr)buffer, (uint)midiEvent.MidiData.Length);
 				bufferPointer.Array = midiEvent.MidiData;
 				bufferPointer.CopyToPointer ();

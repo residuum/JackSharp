@@ -47,14 +47,14 @@ namespace JackSharp.Ports
 		internal unsafe PortReference (UnsafeStructs.jack_port_t* portPointer)
 		{
 			PortPointer = portPointer;
-			FullName = PortApi.jack_port_name (portPointer).PtrToString ();
+			FullName = PortApi.GetName (portPointer).PtrToString ();
 			Direction = GetDirection (portPointer);
 			PortType = GetPortType (portPointer);
 		}
 
 		static unsafe PortType GetPortType (UnsafeStructs.jack_port_t* portPointer)
 		{
-			string connectionTypeName = PortApi.jack_port_type (portPointer).PtrToString ();
+			string connectionTypeName = PortApi.GetType (portPointer).PtrToString ();
 			switch (connectionTypeName) {
 			case Constants.JACK_DEFAULT_AUDIO_TYPE:
 				return PortType.Audio;
@@ -66,7 +66,7 @@ namespace JackSharp.Ports
 
 		static unsafe Direction GetDirection (UnsafeStructs.jack_port_t* portPointer)
 		{
-			JackPortFlags portFlags = (JackPortFlags)PortApi.jack_port_flags (portPointer);
+			JackPortFlags portFlags = (JackPortFlags)PortApi.GetPortFlags (portPointer);
 			if ((portFlags & JackPortFlags.JackPortIsInput) == JackPortFlags.JackPortIsInput) {
 				return Direction.In;
 			}

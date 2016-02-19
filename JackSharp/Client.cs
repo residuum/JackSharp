@@ -109,7 +109,7 @@ namespace JackSharp
 
 		unsafe void WireUpCallbacks ()
 		{
-			ClientCallbackApi.jack_set_process_callback (JackClient, _processCallback, IntPtr.Zero);
+			ClientCallbackApi.SetProcessCallback (JackClient, _processCallback, IntPtr.Zero);
 		}
 
 		int OnProcess (uint nframes, IntPtr arg)

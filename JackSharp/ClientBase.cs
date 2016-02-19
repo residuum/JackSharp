@@ -90,13 +90,13 @@ namespace JackSharp
 
 		protected unsafe void WireUpBaseCallbacks ()
 		{
-			ClientCallbackApi.jack_set_buffer_size_callback (JackClient, _bufferSizeCallback, IntPtr.Zero);
-			ClientCallbackApi.jack_set_sample_rate_callback (JackClient, _sampleRateCallback, IntPtr.Zero);
-			ClientCallbackApi.jack_on_shutdown (JackClient, _shutdownCallback, IntPtr.Zero);
-			ClientCallbackApi.jack_on_info_shutdown (JackClient, _jackInfoShutdown, IntPtr.Zero);
-			//	ClientCallbackApi.jack_set_error_function (JackClient, _jackErrorFunction, IntPtr.Zero);
-			//	ClientCallbackApi.jack_set_info_function (JackClient, _jackInfoFunction, IntPtr.Zero);
-			ClientCallbackApi.jack_set_xrun_callback (JackClient, _jackXrunCallback, IntPtr.Zero);
+			ClientCallbackApi.SetBufferSizeCallback (JackClient, _bufferSizeCallback, IntPtr.Zero);
+			ClientCallbackApi.SetSampleRateCallback (JackClient, _sampleRateCallback, IntPtr.Zero);
+			ClientCallbackApi.SetShutdownCallback (JackClient, _shutdownCallback, IntPtr.Zero);
+			ClientCallbackApi.SetInfoShutdownCallback (JackClient, _jackInfoShutdown, IntPtr.Zero);
+			//ClientCallbackApi.SetErrorFunction (JackClient, _jackErrorFunction, IntPtr.Zero);
+			//ClientCallbackApi.SetInfoFunction (JackClient, _jackInfoFunction, IntPtr.Zero);
+			ClientCallbackApi.SetXrunCallback (JackClient, _jackXrunCallback, IntPtr.Zero);
 		}
 
 
@@ -140,7 +140,7 @@ namespace JackSharp
 
 		unsafe int OnJackXrun (IntPtr args)
 		{
-			float xrunDelay = Invoke.jack_get_xrun_delayed_usecs (JackClient);
+			float xrunDelay = Invoke.GetXrunDelayedUsecs (JackClient);
 			if (xrunDelay > 0 && Xrun != null) { 
 				Xrun (this, new XrunEventArgs (xrunDelay));
 			}
@@ -154,7 +154,7 @@ namespace JackSharp
 			if (JackClient != null) {
 				return ClientStatus.AlreadyThere;
 			}
-			JackClient = ClientApi.jack_client_open (Name, JackOptions.JackNullOption, IntPtr.Zero);
+			JackClient = ClientApi.Open (Name, JackOptions.JackNullOption, IntPtr.Zero);
 			if (JackClient == null) {
 				return ClientStatus.Failure;
 			}
@@ -169,26 +169,26 @@ namespace JackSharp
 			if (!Open ()) {
 				return false;
 			}
-			int status = ClientApi.jack_activate (JackClient);
+			int status = ClientApi.Activate (JackClient);
 			if (status != 0) {
 				return false;
 			}
-			SampleRate = (int)Invoke.jack_get_sample_rate (JackClient);
-			BufferSize = (int)Invoke.jack_get_buffer_size (JackClient);
+			SampleRate = (int)Invoke.GetSampleRate (JackClient);
+			BufferSize = (int)Invoke.GetBufferSize (JackClient);
 			IsStarted = true;
 			return true;
 		}
 
 		protected virtual unsafe bool Stop ()
 		{
-			bool status = ClientApi.jack_deactivate (JackClient) == 0;
+			bool status = ClientApi.Deactivate (JackClient) == 0;
 			IsStarted = !status;
 			return status;
 		}
 
 		protected virtual unsafe void Close ()
 		{
-			int status = ClientApi.jack_client_close (JackClient);
+			int status = ClientApi.Close (JackClient);
 			if (status == 0) {
 				JackClient = null;
 			}
