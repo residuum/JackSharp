@@ -19,20 +19,20 @@ namespace JackSharpTest
 		[Test]
 		public virtual void MidiPlayNote ()
 		{
-			CallbackReceiver receiver = new CallbackReceiver ();
+			ClientReceiver receiver = new ClientReceiver ();
 			_client.ProcessFunc += receiver.PlayMidiNoteAction;
 			_client.Start ();
-			Thread.Sleep (200);
+			Thread.Sleep (100);
 			Assert.IsTrue (receiver.Called > 0);
 		}
 
 		[Test]
 		public virtual void MidiSequence ()
 		{
-			CallbackReceiver receiver = new CallbackReceiver ();
+			ClientReceiver receiver = new ClientReceiver ();
 			_client.ProcessFunc += receiver.SequenceMidiAction;
 			_client.Start ();
-			Thread.Sleep (200);
+			Thread.Sleep (100);
 			Assert.IsTrue (receiver.Called > 0);
 		}
 

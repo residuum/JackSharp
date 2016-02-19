@@ -1,5 +1,5 @@
 // Author:
-//       Thomas Mayer <thomas@residuum.org>
+//	   Thomas Mayer <thomas@residuum.org>
 //
 // Copyright (c) 2016 Thomas Mayer
 //
@@ -21,9 +21,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using JackSharp.ApiWrapper;
 using JackSharp.Events;
 using JackSharp.Pointers;
+using JackSharp.Ports;
 
 namespace JackSharp
 {
@@ -225,6 +228,28 @@ namespace JackSharp
 			AlreadyThere,
 			New,
 			Failure
+		}
+		protected unsafe List<PortReference> GetAllJackPorts ()
+		{
+			IntPtr initialPorts = PortApi.GetPorts (JackClient, null, null, 0);
+			List<PortReference> ports = PortListFromPointer (initialPorts);
+			Invoke.Free (initialPorts);
+			return ports;
+		}
+
+		protected List<PortReference> PortListFromPointer (IntPtr initialPorts)
+		{
+			List<PortReference> ports = initialPorts.PtrToStringArray ().Select (MapPort).ToList ();
+			return ports;
+		}
+
+		unsafe PortReference MapPort (string portName)
+		{
+			UnsafeStructs.jack_port_t* portPointer = PortApi.GetPortByName (JackClient, portName);
+			if (portPointer == null) {
+				return null;
+			}
+			return new PortReference (portPointer);
 		}
 	}
 }

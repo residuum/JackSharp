@@ -25,7 +25,7 @@ using JackSharp.Processing;
 
 namespace JackSharpTest.Dummies
 {
-	public class CallbackReceiver
+	public class ClientReceiver
 	{
 		public int Called { get; private set; }
 
@@ -36,7 +36,7 @@ namespace JackSharpTest.Dummies
 		public Action<ProcessBuffer> CallBackOneAction;
 		public Action<ProcessBuffer> CallBackTwoAction;
 
-		public CallbackReceiver ()
+		public ClientReceiver ()
 		{
 			CopyInToOutAction = CopyInToOut;
 			PlayMidiNoteAction = PlayMidiNote;

@@ -64,7 +64,7 @@ namespace Naudio.JackTest
 			_client.ProcessFunc += analyser.AnalyseOutAction;
 			_jackOut.Init (converter);
 			_jackOut.Play ();
-			Thread.Sleep (10000);
+			Thread.Sleep (100);
 			_jackOut.Stop ();
 			reader.Close ();
 			Assert.AreNotEqual (0, analyser.NotEmptySamples);

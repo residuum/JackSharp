@@ -1,5 +1,5 @@
 // Author:
-//       Thomas Mayer <thomas@residuum.org>
+//	   Thomas Mayer <thomas@residuum.org>
 //
 // Copyright (c) 2016 Thomas Mayer
 //
@@ -92,15 +92,6 @@ namespace JackSharp
 			return new PortReference (portPointer);
 		}
 
-		unsafe PortReference MapPort (string portName)
-		{
-			UnsafeStructs.jack_port_t* portPointer = PortApi.GetPortByName (JackClient, portName);
-			if (portPointer == null) {
-				return null;
-			}
-			return new PortReference (portPointer);
-		}
-
 		void OnPortRename (uint portId, string oldName, string newName, IntPtr arg)
 		{
 			if (PortChanged != null) {
@@ -163,20 +154,12 @@ namespace JackSharp
 
 		unsafe List<PortReference> GetAndSendPorts ()
 		{
-			IntPtr initialPorts = PortApi.GetPorts (JackClient, null, null, 0);
-			List<PortReference> ports = PortListFromPointer (initialPorts);
+			List<PortReference> ports = GetAllJackPorts ();
 			if (PortChanged != null) {
 				foreach (PortReference port in ports) {
 					PortChanged (this, new PortRegistrationEventArgs (port, ChangeType.New));
 				}
 			}
-			Invoke.Free (initialPorts);
-			return ports;
-		}
-
-		List<PortReference> PortListFromPointer (IntPtr initialPorts)
-		{
-			List<PortReference> ports = initialPorts.PtrToStringArray ().Select (MapPort).ToList ();
 			return ports;
 		}
 

@@ -60,7 +60,7 @@ namespace Naudio.JackTest
 				Assert.AreNotEqual (0, fileSize);
 			};
 			_jackIn.StartRecording ();
-			Thread.Sleep (200);
+			Thread.Sleep (100);
 			_jackIn.StopRecording ();
 			writtenSamples = writer.Length;
 			Assert.AreNotEqual (0, writtenSamples);

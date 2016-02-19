@@ -42,7 +42,7 @@ namespace JackSharpTest
 		[Test]
 		public virtual void AudioCopying ()
 		{
-			CallbackReceiver receiver = new CallbackReceiver ();
+			ClientReceiver receiver = new ClientReceiver ();
 			_client.ProcessFunc = receiver.CopyInToOutAction;
 			_client.Start ();
 			Thread.Sleep (2000);
@@ -52,7 +52,7 @@ namespace JackSharpTest
 		[Test]
 		public virtual void AudioAddMultipleActions ()
 		{
-			CallbackReceiver receiver = new CallbackReceiver ();
+			ClientReceiver receiver = new ClientReceiver ();
 			_client.ProcessFunc += receiver.CallBackOneAction;
 			_client.ProcessFunc += receiver.CallBackTwoAction;
 			_client.Start ();
@@ -64,7 +64,7 @@ namespace JackSharpTest
 		[Test]
 		public virtual void AudioAddRemoveAction ()
 		{
-			CallbackReceiver receiver = new CallbackReceiver ();
+			ClientReceiver receiver = new ClientReceiver ();
 			_client.ProcessFunc += receiver.CallBackOneAction;
 			_client.ProcessFunc += receiver.CallBackTwoAction;
 			_client.ProcessFunc -= receiver.CallBackOneAction;

@@ -1,5 +1,5 @@
 // Author:
-//       Thomas Mayer <thomas@residuum.org>
+//	   Thomas Mayer <thomas@residuum.org>
 //
 // Copyright (c) 2016 Thomas Mayer
 //
@@ -53,13 +53,13 @@ namespace JackSharpTest
 		public virtual void StartAfterStopped ()
 		{
 			using (Client client = new Client ("testing", 1)) {
-				CallbackReceiver receiver = new CallbackReceiver ();
+				ClientReceiver receiver = new ClientReceiver ();
 				client.ProcessFunc += receiver.ChannelCounterAction;
 				Assert.IsTrue (client.Start ());
 				client.Stop ();
 				Assert.IsTrue (client.Start ());
 				Assert.AreEqual (1, client.AudioInPorts.Count ());
-				Thread.Sleep (200);
+				Thread.Sleep (100);
 				Assert.AreEqual(1, receiver.Called);
 			}
 		}
@@ -98,6 +98,24 @@ namespace JackSharpTest
 				client.Start ();
 				Assert.IsTrue (client.BufferSize > 0);
 				client.Stop ();
+			}
+		}
+
+		[Test]
+		public virtual void AutoConnect()
+		{
+			using (Controller controller = new Controller ("testController"))
+			using (Client client = new Client ("testClient", 2, 2, 0, 0, true)) {
+				ControllerReceiver receiver = new ControllerReceiver ();
+				controller.ConnectionChanged += receiver.ConnectionChanged;
+				controller.Start ();
+				Thread.Sleep (100);
+				int connectionsWithoutClient = receiver.ConnectionsFound;
+				client.Start ();
+				Thread.Sleep (100);
+				Assert.AreNotEqual (connectionsWithoutClient, receiver.ConnectionsFound);
+				client.Stop ();
+				controller.Stop ();
 			}
 		}
 	}

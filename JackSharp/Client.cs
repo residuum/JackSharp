@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using System.Linq;
 using JackSharp.Ports;
 using JackSharp.ApiWrapper;
+using JackSharp.Pointers;
 using JackSharp.Processing;
 
 namespace JackSharp
@@ -35,14 +36,16 @@ namespace JackSharp
 		AudioOutPort[] _audioOutPorts;
 		MidiInPort[] _midiInPorts;
 		MidiOutPort[] _midiOutPorts;
+		private bool _autoconnect;
 
 		/// <summary>
 		/// Delegates to be called on the process callback of Jack. Multiple Actions can be added.
 		/// </summary>
 		public Action<ProcessBuffer> ProcessFunc { get; set; }
 
-		public Client (string name, int audioInPorts = 0, int audioOutPorts = 0, int midiInPorts = 0, int midiOutPorts = 0) : base (name)
+		public Client (string name, int audioInPorts = 0, int audioOutPorts = 0, int midiInPorts = 0, int midiOutPorts = 0, bool autoconnect = false) : base (name)
 		{
+			_autoconnect = autoconnect;
 			SetUpPorts (audioInPorts, audioOutPorts, midiInPorts, midiOutPorts);
 			SetUpCallbacks ();
 		}
@@ -101,7 +104,13 @@ namespace JackSharp
 		/// </summary>
 		public new bool Start ()
 		{
-			return base.Start ();
+			if (!base.Start ()) {
+				return false;
+			}
+			if (_autoconnect) {
+				AutoConnectPorts ();
+			}
+			return true;
 		}
 
 		protected override bool Open ()
@@ -196,6 +205,34 @@ namespace JackSharp
 			}
 			for (int i = 0; i < _midiOutPorts.Length; i++) {
 				_midiOutPorts [i] = new MidiOutPort (JackClient, i);
+			}
+		}
+
+		unsafe void AutoConnectPorts ()
+		{
+			List<PortReference> ports = GetAllJackPorts ().Where (p => p.IsPhysicalPort).ToList ();
+
+			List<string> outlets = ports.Where (p => p.Direction == Direction.Out && p.PortType == PortType.Audio).Select (p => p.FullName).ToList ();
+			List<string> inlets = _audioInPorts.Select (p => PortApi.GetName (p._port).PtrToString ()).ToList ();
+			ConnectPorts (outlets, inlets);
+
+			outlets = _audioOutPorts.Select (p => PortApi.GetName (p._port).PtrToString ()).ToList ();
+			inlets = ports.Where (p => p.Direction == Direction.In && p.PortType == PortType.Audio).Select (p => p.FullName).ToList ();
+			ConnectPorts (outlets, inlets);
+
+			outlets = ports.Where (p => p.Direction == Direction.Out && p.PortType == PortType.Midi).Select (p => p.FullName).ToList ();
+			inlets = _midiInPorts.Select (p => PortApi.GetName (p._port).PtrToString ()).ToList ();
+			ConnectPorts (outlets, inlets);
+
+			outlets = _midiOutPorts.Select (p => PortApi.GetName (p._port).PtrToString ()).ToList ();
+			inlets = ports.Where (p => p.Direction == Direction.In && p.PortType == PortType.Midi).Select (p => p.FullName).ToList ();
+			ConnectPorts (outlets, inlets);
+		}
+
+		unsafe void ConnectPorts (List<string> outlets, List<string> inlets)
+		{
+			for (int i = 0; i < Math.Min (outlets.Count, inlets.Count); i++) {
+				PortApi.Connect (JackClient, outlets[i], inlets[i]);
 			}
 		}
 	}

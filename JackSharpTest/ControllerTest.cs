@@ -1,5 +1,5 @@
 // Author:
-//       Thomas Mayer <thomas@residuum.org>
+//	   Thomas Mayer <thomas@residuum.org>
 //
 // Copyright (c) 2016 Thomas Mayer
 //
@@ -51,7 +51,7 @@ namespace JackSharpTest
 			ControllerReceiver receiver = new ControllerReceiver ();
 			_controller.PortChanged += receiver.PortChanged;
 			_controller.Start ();
-			Thread.Sleep (200);
+			Thread.Sleep (100);
 			_controller.Stop ();
 			Assert.AreNotEqual (0, receiver.PortsFound);
 		}
@@ -64,10 +64,10 @@ namespace JackSharpTest
 			_controller.ConnectionChanged += receiver.ConnectionChanged;
 			_controller.Start ();
 			_controller.Connect (receiver.FirstOutPort, receiver.FirstInPort);
-			Thread.Sleep (200);
+			Thread.Sleep (100);
 			Assert.AreNotEqual (0, receiver.ConnectionsFound);
 			_controller.Disconnect (receiver.FirstOutPort, receiver.FirstInPort);
-			Thread.Sleep (200);
+			Thread.Sleep (100);
 			Assert.AreEqual (0, receiver.ConnectionsFound);
 			_controller.Stop ();
 		}
@@ -80,30 +80,41 @@ namespace JackSharpTest
 			_controller.ConnectionChanged += receiver.ConnectionChanged;
 			_controller.Start ();
 			Assert.True (_controller.Connect (receiver.FirstOutPort, receiver.FirstInPort));
-			Thread.Sleep (200);
+			Thread.Sleep (100);
 			Assert.False (_controller.Connect (receiver.FirstOutPort, receiver.FirstInPort));
-			Thread.Sleep (200);
+			Thread.Sleep (100);
 			_controller.Disconnect (receiver.FirstOutPort, receiver.FirstInPort);
-			Thread.Sleep (200);
+			Thread.Sleep (100);
 			_controller.Stop ();
 		}
 
 		[Test]
-		public virtual void DisconnectDisconnectedPorts ()
+		public virtual void DisconnectDisconnectedPorts()
+		{
+			ControllerReceiver receiver = new ControllerReceiver();
+			_controller.PortChanged += receiver.PortChanged;
+			_controller.ConnectionChanged += receiver.ConnectionChanged;
+			_controller.Start();
+			Assert.True(_controller.Connect(receiver.FirstOutPort, receiver.FirstInPort));
+			Thread.Sleep(100);
+			Assert.True(_controller.Disconnect(receiver.FirstOutPort, receiver.FirstInPort));
+			Thread.Sleep(100);
+			Assert.False(_controller.Disconnect(receiver.FirstOutPort, receiver.FirstInPort));
+			Thread.Sleep(100);
+			_controller.Stop();
+		}
+
+		[Test]
+		public virtual void CanFindPhysicalPorts ()
 		{
 			ControllerReceiver receiver = new ControllerReceiver ();
 			_controller.PortChanged += receiver.PortChanged;
-			_controller.ConnectionChanged += receiver.ConnectionChanged;
 			_controller.Start ();
-			Assert.True (_controller.Connect (receiver.FirstOutPort, receiver.FirstInPort));
-			Thread.Sleep (200);
-			Assert.True (_controller.Disconnect (receiver.FirstOutPort, receiver.FirstInPort));
-			Thread.Sleep (200);
-			Assert.False (_controller.Disconnect (receiver.FirstOutPort, receiver.FirstInPort));
-			Thread.Sleep (200);
+			Thread.Sleep (100);
+			Assert.AreNotEqual (0, receiver.PhysicalPortsFound);
 			_controller.Stop ();
 		}
-
+		
 		[TearDown]
 		public static void DestroyClient ()
 		{

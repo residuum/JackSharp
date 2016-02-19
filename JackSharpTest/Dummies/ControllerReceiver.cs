@@ -1,5 +1,5 @@
 // Author:
-//       Thomas Mayer <thomas@residuum.org>
+//	   Thomas Mayer <thomas@residuum.org>
 //
 // Copyright (c) 2016 Thomas Mayer
 //
@@ -31,6 +31,8 @@ namespace JackSharpTest.Dummies
 	{
 		public int PortsFound { get; private set; }
 
+		public int PhysicalPortsFound { get; private set; }
+
 		public int ConnectionsFound { get; private set; }
 
 		List<PortReference> _ports = new List<PortReference> ();
@@ -42,10 +44,16 @@ namespace JackSharpTest.Dummies
 			case ChangeType.New:
 				_ports.Add (e.Port);
 				PortsFound++;
+				if (e.Port.IsPhysicalPort) {
+					PhysicalPortsFound++;
+				}
 				break;
 			case ChangeType.Deleted:
 				_ports.Remove (e.Port);
 				PortsFound--;
+				if (e.Port.IsPhysicalPort) {
+					PhysicalPortsFound--;
+				}
 				break;
 			}
 		}

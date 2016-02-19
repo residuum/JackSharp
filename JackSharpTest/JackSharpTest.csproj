@@ -45,7 +45,7 @@
     <Compile Include="Dummies\ControllerReceiver.cs" />
     <Compile Include="PortTest.cs" />
     <Compile Include="AudioTest.cs" />
-    <Compile Include="Dummies\CallbackReceiver.cs" />
+    <Compile Include="Dummies\ClientReceiver.cs" />
     <Compile Include="MidiTest.cs" />
   </ItemGroup>
   <ItemGroup>

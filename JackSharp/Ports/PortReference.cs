@@ -1,5 +1,5 @@
 // Author:
-//       Thomas Mayer <thomas@residuum.org>
+//	   Thomas Mayer <thomas@residuum.org>
 //
 // Copyright (c) 2016 Thomas Mayer
 //
@@ -38,6 +38,12 @@ namespace JackSharp.Ports
 		public Direction Direction { get; private set; }
 
 		/// <summary>
+		/// Gets whether the port is corresponding to a physical inlet or outlet.
+		/// </summary>
+		/// <value>[true] if port is physical.</value>
+		public bool IsPhysicalPort { get; private set; }
+
+		/// <summary>
 		/// Gets the type of the port.
 		/// </summary>
 		/// <value>The type of the port.</value>
@@ -67,7 +73,11 @@ namespace JackSharp.Ports
 		{
 			PortPointer = portPointer;
 			FullName = PortApi.GetName (portPointer).PtrToString ();
-			Direction = GetDirection (portPointer);
+			bool isPhysicalPort;
+			Direction direction;
+			ReadJackPortFlags (portPointer, out direction, out isPhysicalPort);
+			Direction = direction;
+			IsPhysicalPort = isPhysicalPort;
 			PortType = GetPortType (portPointer);
 		}
 
@@ -83,14 +93,20 @@ namespace JackSharp.Ports
 			throw new IndexOutOfRangeException ("jack_port_type");
 		}
 
-		static unsafe Direction GetDirection (UnsafeStructs.jack_port_t* portPointer)
+		static unsafe void ReadJackPortFlags (UnsafeStructs.jack_port_t* portPointer, out Direction direction, out bool isPhysicalPort)
 		{
+			isPhysicalPort = false;
 			JackPortFlags portFlags = (JackPortFlags)PortApi.GetPortFlags (portPointer);
+			if ((portFlags & JackPortFlags.JackPortIsPhysical) == JackPortFlags.JackPortIsPhysical) {
+				isPhysicalPort = true;
+			}
 			if ((portFlags & JackPortFlags.JackPortIsInput) == JackPortFlags.JackPortIsInput) {
-				return Direction.In;
+				direction = Direction.In;
+				return;
 			}
 			if ((portFlags & JackPortFlags.JackPortIsOutput) == JackPortFlags.JackPortIsOutput) {
-				return Direction.Out;
+				direction= Direction.Out;
+				return;
 			}
 			throw new IndexOutOfRangeException ("jack_port_flags");
 		}
