@@ -70,6 +70,24 @@ namespace Naudio.JackTest
 			Assert.AreNotEqual (0, analyser.NotEmptySamples);
 		}
 
+		[Test]
+		public virtual void PlayAudioFileSilent()
+		{
+			string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+			string wavFile = Path.Combine (currentDirectory, "example.wav");
+			WaveFileReader reader = new WaveFileReader (wavFile);
+			Wave16ToFloatProvider converter = new Wave16ToFloatProvider (reader);
+			Analyser analyser = new Analyser ();
+			_client.ProcessFunc += analyser.AnalyseOutAction;
+			_jackOut.Volume = 0;
+			_jackOut.Init (converter);
+			_jackOut.Play ();
+			Thread.Sleep (100);
+			_jackOut.Stop ();
+			reader.Close ();
+			Assert.AreEqual (0, analyser.NotEmptySamples);
+		}
+
 		[TearDown]
 		public static void DestroyClient ()
 		{

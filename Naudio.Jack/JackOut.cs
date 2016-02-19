@@ -29,13 +29,14 @@ using JackSharp.Processing;
 
 namespace Naudio.Jack
 {
-	public class JackOut : IWavePlayer, IWavePosition
+	public class JackOut : IWavePlayer
 	{
 		readonly Client _client;
 
 		IWaveProvider _waveStream;
 
 		PlaybackState _playbackState;
+		float _volume = 1;
 
 		public JackOut (Client client)
 		{
@@ -52,11 +53,6 @@ namespace Naudio.Jack
 		{
 			Dispose (false);
 			GC.SuppressFinalize (this);
-		}
-
-		public long GetPosition ()
-		{
-			throw new NotImplementedException ();
 		}
 
 		public WaveFormat OutputWaveFormat {
@@ -86,29 +82,31 @@ namespace Naudio.Jack
 
 		public void Pause ()
 		{
-			if (_client.Stop ()) {
-				_playbackState = PlaybackState.Paused;
-			}
+			_playbackState = PlaybackState.Paused;
 		}
 
 		void ProcessAudio (ProcessBuffer processingChunk)
 		{
+			if (_playbackState != PlaybackState.Playing) {
+				return;
+			}
 			int bufferCount = processingChunk.AudioOut.Length;
 			if (bufferCount == 0) {
 				return;
 			}
-			int bufferSize = processingChunk.AudioOut [0].BufferSize;
+			int bufferSize = processingChunk.Frames;
 			int floatsCount = bufferCount * bufferSize;
 			int bytesCount = floatsCount * sizeof(float);
 			byte[] fromWave = new byte[bytesCount];
 
 			_waveStream.Read (fromWave, 0, bytesCount);
-            
+
 			float[] interlacedSamples = new float[floatsCount];
 			Buffer.BlockCopy (fromWave, 0, interlacedSamples, 0, bytesCount);
-
+			for (int i = 0; i < floatsCount; i++) {
+				interlacedSamples[i] = interlacedSamples[i] * _volume;
+			}
 			BufferOperations.DeinterlaceAudio (interlacedSamples, processingChunk.AudioOut, bufferSize, bufferCount);
-			
 		}
 
 		public void Init (IWaveProvider waveProvider)
@@ -125,12 +123,19 @@ namespace Naudio.Jack
 			}
 		}
 
-		public float Volume {
-			get {
-				throw new NotImplementedException ();
+		public float Volume
+		{
+			get { 
+				return _volume; 
 			}
 			set {
-				throw new NotImplementedException ();
+				if (value < 0) {
+					throw new ArgumentOutOfRangeException("value", "Volume must be between 0.0 and 1.0");
+				}
+				if (value > 1) {
+					throw new ArgumentOutOfRangeException("value", "Volume must be between 0.0 and 1.0");
+				}
+				_volume = value;
 			}
 		}
 
@@ -140,4 +145,3 @@ namespace Naudio.Jack
 		}
 	}
 }
-
