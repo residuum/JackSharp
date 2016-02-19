@@ -23,7 +23,10 @@
 
 namespace JackSharp.Processing
 {
-	public class Chunk
+	/// <summary>
+	/// Buffer containing audio and MIDI data in arrays.
+	/// </summary>
+	public class ProcessBuffer
 	{
 		/// <summary>
 		/// Audio in buffers. Should not be changed.
@@ -46,11 +49,11 @@ namespace JackSharp.Processing
 		public MidiEventCollection<MidiOutEvent>[] MidiOut { get; set; }
 
 		/// <summary>
-		/// Number of frames for this Chunk
+		/// Number of frames for this buffer.
 		/// </summary>
 		public int Frames { get; private set; }
 
-		internal Chunk (uint nframes, AudioBuffer[] audioInBuffers, AudioBuffer[] audioOutBuffers, MidiEventCollection<MidiInEvent>[] midiInEvents, MidiEventCollection<MidiOutEvent>[] midiOutEvents)
+		internal ProcessBuffer (uint nframes, AudioBuffer[] audioInBuffers, AudioBuffer[] audioOutBuffers, MidiEventCollection<MidiInEvent>[] midiInEvents, MidiEventCollection<MidiOutEvent>[] midiOutEvents)
 		{
 			Frames = (int)nframes;
 			AudioIn = audioInBuffers;

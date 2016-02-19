@@ -29,12 +29,12 @@ namespace JackSharpTest.Dummies
 	{
 		public int Called { get; private set; }
 
-		public Action<Chunk> CopyInToOutAction;
-		public Action<Chunk> PlayMidiNoteAction;
-		public Action<Chunk> SequenceMidiAction;
-		public Action<Chunk> ChannelCounterAction;
-		public Action<Chunk> CallBackOneAction;
-		public Action<Chunk> CallBackTwoAction;
+		public Action<ProcessBuffer> CopyInToOutAction;
+		public Action<ProcessBuffer> PlayMidiNoteAction;
+		public Action<ProcessBuffer> SequenceMidiAction;
+		public Action<ProcessBuffer> ChannelCounterAction;
+		public Action<ProcessBuffer> CallBackOneAction;
+		public Action<ProcessBuffer> CallBackTwoAction;
 
 		public CallbackReceiver ()
 		{
@@ -46,7 +46,7 @@ namespace JackSharpTest.Dummies
 			SequenceMidiAction = SequenceMidi;
 		}
 
-		void CopyInToOut (Chunk processItems)
+		void CopyInToOut (ProcessBuffer processItems)
 		{
 			for (int i = 0; i < Math.Min (processItems.AudioIn.Length, processItems.AudioOut.Length); i++) {
 				Array.Copy (processItems.AudioIn [i].Audio, processItems.AudioOut [i].Audio, processItems.AudioIn [i].BufferSize);
@@ -54,29 +54,29 @@ namespace JackSharpTest.Dummies
 			Called++;
 		}
 
-		void PlayMidiNote (Chunk processItems)
+		void PlayMidiNote (ProcessBuffer processItems)
 		{
 			foreach (MidiEventCollection<MidiInEvent> eventCollection in processItems.MidiIn) {
 				Called++;
 			}
 		}
 
-		void ChannelCounter (Chunk processItems)
+		void ChannelCounter (ProcessBuffer processItems)
 		{
 			Called = processItems.AudioIn.Length;
 		}
 
-		void CallBackOne (Chunk processItems)
+		void CallBackOne (ProcessBuffer processItems)
 		{
 			Called |= 1;
 		}
 
-		void CallBackTwo (Chunk processItems)
+		void CallBackTwo (ProcessBuffer processItems)
 		{
 			Called |= 2;
 		}
 
-		public void SequenceMidi (Chunk processItems)
+		public void SequenceMidi (ProcessBuffer processItems)
 		{
 			foreach (MidiEventCollection<MidiOutEvent> eventCollection in processItems.MidiOut) {
 				var noteOn = new MidiOutEvent (processItems.Frames / 4,

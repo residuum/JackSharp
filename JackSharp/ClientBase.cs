@@ -50,29 +50,49 @@ namespace JackSharp
 			GC.SuppressFinalize (this);
 		}
 
+		/// <summary>
+		/// Gets the sample rate.
+		/// </summary>
+		/// <value>The sample rate.</value>
 		public int SampleRate { get; private set; }
 
+		/// <summary>
+		/// Gets the size of the buffer.
+		/// </summary>
+		/// <value>The size of the buffer.</value>
 		public int BufferSize { get; private set; }
 
 
 		Callbacks.JackBufferSizeCallback _bufferSizeCallback;
 
+		/// <summary>
+		/// Occurs when buffer size has changed.
+		/// </summary>
 		public event EventHandler<BufferSizeEventArgs> BufferSizeChanged;
 
 		Callbacks.JackSampleRateCallback _sampleRateCallback;
 
+		/// <summary>
+		/// Occurs when sample rate has changed.
+		/// </summary>
 		public event EventHandler<SampleRateEventArgs> SampleRateChanged;
 
 		Callbacks.JackShutdownCallback _shutdownCallback;
 
 		Callbacks.JackInfoShutdownCallback _jackInfoShutdown;
 
+		/// <summary>
+		/// Occurs when jack shuts down.
+		/// </summary>
 		public event EventHandler<EventArgs> Shutdown;
 
 		object _jackErrorFunction;
 
 		object _jackInfoFunction;
 
+		/// <summary>
+		/// Occurs on xrun.
+		/// </summary>
 		public event EventHandler<XrunEventArgs> Xrun;
 
 		Callbacks.JackXRunCallback _jackXrunCallback;
@@ -193,7 +213,6 @@ namespace JackSharp
 				JackClient = null;
 			}
 		}
-
 
 		protected void Dispose (bool isDisposing)
 		{

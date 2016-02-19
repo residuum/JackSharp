@@ -91,7 +91,7 @@ namespace Naudio.Jack
 			}
 		}
 
-		void ProcessAudio (Chunk processingChunk)
+		void ProcessAudio (ProcessBuffer processingChunk)
 		{
 			int bufferCount = processingChunk.AudioOut.Length;
 			if (bufferCount == 0) {

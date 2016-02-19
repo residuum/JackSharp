@@ -34,15 +34,24 @@ namespace JackSharp
 	{
 		Callbacks.JackClientRegistrationCallback _clientRegistration;
 
+		/// <summary>
+		/// Occurs when a client has changed.
+		/// </summary>
 		public event EventHandler<ClientRegistrationEventArgs> ClientChanged;
 
 		Callbacks.JackPortRegistrationCallback _portRegistration;
 
+		/// <summary>
+		/// Occurs when a port has changed.
+		/// </summary>
 		public event EventHandler<PortRegistrationEventArgs> PortChanged;
 
 		Callbacks.JackPortRenameCallback _portRename;
 		Callbacks.JackPortConnectCallback _portConnect;
 
+		/// <summary>
+		/// Occurs when a connection has changed.
+		/// </summary>
 		public event EventHandler<ConnectionChangeEventArgs> ConnectionChanged;
 
 		public Controller (string name) : base (name)
@@ -182,17 +191,24 @@ namespace JackSharp
 		/// <summary>
 		/// Activates the client and connects to Jack.
 		/// </summary>
-		/// <returns>[true] is starting was successful, else [false].</returns>
 		public new bool Start ()
 		{
 			return base.Start ();
 		}
 
+		/// <summary>
+		/// Stops the client and disconnects from Jack.
+		/// </summary>
 		public new bool Stop ()
 		{
 			return base.Stop ();
 		}
 
+		/// <summary>
+		/// Connect the specified outPort and inPort.
+		/// </summary>
+		/// <param name="outPort">Out port.</param>
+		/// <param name="inPort">In port.</param>
 		public bool Connect (PortReference outPort, PortReference inPort)
 		{
 			unsafe {
@@ -200,6 +216,11 @@ namespace JackSharp
 			}
 		}
 
+		/// <summary>
+		/// Disconnect the specified outPort and inPort.
+		/// </summary>
+		/// <param name="outPort">Out port.</param>
+		/// <param name="inPort">In port.</param>
 		public bool Disconnect (PortReference outPort, PortReference inPort)
 		{
 			unsafe {

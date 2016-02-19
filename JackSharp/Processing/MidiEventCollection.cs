@@ -27,18 +27,33 @@ using JackSharp.Ports;
 
 namespace JackSharp.Processing
 {
+	/// <summary>
+	/// Midi event collection.
+	/// </summary>
 	public class MidiEventCollection<T> : IEnumerable<T>, IProcessingItem where T: IMidiEvent
 	{
+		/// <summary>
+		/// Gets the port.
+		/// </summary>
+		/// <value>The port.</value>
 		public Port Port { get; private set; }
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="JackSharp.Processing.MidiEventCollection`1"/> class.
+		/// </summary>
+		/// <param name="port">Port.</param>
 		internal MidiEventCollection (Port port)
 		{
 			Port = port;
 		}
 
-		public void AddEvent (T midiInEvent)
+		/// <summary>
+		/// Adds a MIDI event.
+		/// </summary>
+		/// <param name="midiInEvent">Midi event.</param>
+		public void AddEvent (T midiEvent)
 		{
-			_midiEvents.Add (midiInEvent);
+			_midiEvents.Add (midiEvent);
 		}
 
 		readonly List<T> _midiEvents = new List<T> ();

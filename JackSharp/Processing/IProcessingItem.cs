@@ -25,6 +25,9 @@ using JackSharp.Ports;
 
 namespace JackSharp.Processing
 {
+	/// <summary>
+	/// Processing item.
+	/// </summary>
 	interface IProcessingItem
 	{
 		Port Port { get; }

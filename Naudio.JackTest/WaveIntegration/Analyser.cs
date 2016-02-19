@@ -28,7 +28,7 @@ namespace Naudio.JackTest.WaveIntegration
 {
 	class Analyser
 	{
-		public Action<Chunk> AnalyseOutAction;
+		public Action<ProcessBuffer> AnalyseOutAction;
 
 		public int NotEmptySamples { get; private set; }
 
@@ -37,7 +37,7 @@ namespace Naudio.JackTest.WaveIntegration
 			AnalyseOutAction = AnalyseOut;
 		}
 
-		void AnalyseOut (Chunk processItem)
+		void AnalyseOut (ProcessBuffer processItem)
 		{
 			foreach (AudioBuffer outBuffer in processItem.AudioOut) {
 				if (outBuffer.Audio.Any (s => s != 0)) {

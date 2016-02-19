@@ -22,10 +22,22 @@
 // THE SOFTWARE.
 namespace JackSharp.Events
 {
+	/// <summary>
+	/// Change type.
+	/// </summary>
 	public enum ChangeType
 	{
+		/// <summary>
+		/// Item is new.
+		/// </summary>
 		New,
+		/// <summary>
+		/// Item has been deleted.
+		/// </summary>
 		Deleted,
+		/// <summary>
+		/// Item has been renamed.
+		/// </summary>
 		Renamed
 	}
 }

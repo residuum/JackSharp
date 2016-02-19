@@ -28,15 +28,30 @@ using JackSharp.ApiWrapper;
 
 namespace JackSharp.Ports
 {
+	/// <summary>
+	/// Port for client to contain data to process.
+	/// </summary>
 	public abstract class Port : IDisposable
 	{
 		internal readonly unsafe UnsafeStructs.jack_client_t* _jackClient;
 		internal readonly unsafe UnsafeStructs.jack_port_t* _port;
 
+		/// <summary>
+		/// Gets the type of the port.
+		/// </summary>
+		/// <value>The type of the port.</value>
 		public PortType PortType { get; private set; }
 
+		/// <summary>
+		/// Gets the direction of the port.
+		/// </summary>
+		/// <value>The direction.</value>
 		public Direction Direction { get; private set; }
 
+		/// <summary>
+		/// Gets or sets the name.
+		/// </summary>
+		/// <value>The name.</value>
 		public string Name { get; set; }
 
 		internal unsafe Port (UnsafeStructs.jack_client_t*jackClient, int index, Direction direction, PortType portType)

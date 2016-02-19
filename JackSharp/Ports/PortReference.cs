@@ -26,18 +26,37 @@ using JackSharp.Pointers;
 
 namespace JackSharp.Ports
 {
+	/// <summary>
+	/// Port reference for Controller.
+	/// </summary>
 	public class PortReference
 	{
+		/// <summary>
+		/// Gets the direction.
+		/// </summary>
+		/// <value>The direction.</value>
 		public Direction Direction { get; private set; }
 
+		/// <summary>
+		/// Gets the type of the port.
+		/// </summary>
+		/// <value>The type of the port.</value>
 		public PortType PortType { get; private set; }
 
 		internal string FullName { get; set; }
 
+		/// <summary>
+		/// Gets the name of the client.
+		/// </summary>
+		/// <value>The name of the client.</value>
 		public string ClientName {
 			get { return FullName.Split (new char[] { ':' }, 2) [0]; }
 		}
 
+		/// <summary>
+		/// Gets the name of the port.
+		/// </summary>
+		/// <value>The name of the port.</value>
 		public string PortName {
 			get { return FullName.Split (new char[] { ':' }, 2) [1]; }
 		}

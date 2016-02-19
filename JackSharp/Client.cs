@@ -39,7 +39,7 @@ namespace JackSharp
 		/// <summary>
 		/// Delegates to be called on the process callback of Jack. Multiple Actions can be added.
 		/// </summary>
-		public Action<Chunk> ProcessFunc { get; set; }
+		public Action<ProcessBuffer> ProcessFunc { get; set; }
 
 		public Client (string name, int audioInPorts = 0, int audioOutPorts = 0, int midiInPorts = 0, int midiOutPorts = 0) : base (name)
 		{
@@ -70,12 +70,28 @@ namespace JackSharp
 			_processCallback = OnProcess;
 		}
 
+		/// <summary>
+		/// Gets the MIDI out ports.
+		/// </summary>
+		/// <value>The MIDI out ports.</value>
 		public IEnumerable<MidiOutPort> MidiOutPorts { get { return _midiOutPorts; } }
 
+		/// <summary>
+		/// Gets the MIDI in ports.
+		/// </summary>
+		/// <value>The MIDI in ports.</value>
 		public IEnumerable<MidiInPort> MidiInPorts { get { return _midiInPorts; } }
 
+		/// <summary>
+		/// Gets the audio out ports.
+		/// </summary>
+		/// <value>The audio out ports.</value>
 		public IEnumerable<AudioOutPort> AudioOutPorts { get { return _audioOutPorts; } }
 
+		/// <summary>
+		/// Gets the audio in ports.
+		/// </summary>
+		/// <value>The audio in ports.</value>
 		public IEnumerable<AudioInPort> AudioInPorts { get { return _audioInPorts; } }
 
 		Callbacks.JackProcessCallback _processCallback;
@@ -83,7 +99,6 @@ namespace JackSharp
 		/// <summary>
 		/// Activates the client and connects to Jack.
 		/// </summary>
-		/// <returns>[true] is starting was successful, else [false].</returns>
 		public new bool Start ()
 		{
 			return base.Start ();
@@ -120,7 +135,7 @@ namespace JackSharp
 			MidiEventCollection<MidiOutEvent>[] midiOutEvents = _midiOutPorts.Select (p => p.GetMidiBuffer ()).ToArray ();
 
 			if (ProcessFunc != null) {
-				ProcessFunc (new Chunk (nframes, audioInBuffers, audioOutBuffers, midiInEvents, midiOutEvents));
+				ProcessFunc (new ProcessBuffer (nframes, audioInBuffers, audioOutBuffers, midiInEvents, midiOutEvents));
 			}
 			foreach (var audioInBuffer in audioInBuffers) {
 				audioInBuffer.CopyToPointer ();
@@ -135,6 +150,9 @@ namespace JackSharp
 			return 0;
 		}
 
+		/// <summary>
+		/// Stop this instance and siconnects from Jack.
+		/// </summary>
 		public new bool Stop ()
 		{
 			return base.Stop ();

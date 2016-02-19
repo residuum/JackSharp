@@ -22,10 +22,21 @@
 // THE SOFTWARE.
 namespace JackSharp.Processing
 {
+	/// <summary>
+	/// Midi out event.
+	/// </summary>
 	public class MidiOutEvent : IMidiEvent
 	{
+		/// <summary>
+		/// Gets the time.
+		/// </summary>
+		/// <value>The index of the MIDI event in the current processing frame.</value>
 		public int Time { get; private set; }
 
+		/// <summary>
+		/// Gets the midi data. Please read the MIDI specifications for valid content.
+		/// </summary>
+		/// <value>The midi data.</value>
 		public byte[] MidiData { get; private set; }
 
 		public MidiOutEvent (int time, byte[] midiData)

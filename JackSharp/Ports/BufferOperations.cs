@@ -28,6 +28,9 @@ using JackSharp.Processing;
 
 namespace JackSharp.Ports
 {
+	/// <summary>
+	/// Buffer operations.
+	/// </summary>
 	public static class BufferOperations
 	{
 		internal static AudioBuffer GetAudioBuffer (this Port port, uint nframes)
@@ -51,6 +54,13 @@ namespace JackSharp.Ports
 			return eventCollection;
 		}
 
+		/// <summary>
+		/// Merges audio buffers such that all samples of a frame appear directly after each other.
+		/// </summary>
+		/// <returns>The audio.</returns>
+		/// <param name="audioBuffers">Audio buffers.</param>
+		/// <param name="bufferSize">Buffer size.</param>
+		/// <param name="bufferCount">Buffer count.</param>
 		public static float[] InterlaceAudio (AudioBuffer[] audioBuffers, int bufferSize, int bufferCount)
 		{
 			float[] interlaced = new float[bufferSize * bufferCount];
@@ -63,6 +73,13 @@ namespace JackSharp.Ports
 			return interlaced;
 		}
 
+		/// <summary>
+		/// Unmerges interlaced audio such that samples of a frame are put into audio buffers.
+		/// </summary>
+		/// <param name="interlaced">Interlaced.</param>
+		/// <param name="audioBuffers">Audio buffers.</param>
+		/// <param name="bufferSize">Buffer size.</param>
+		/// <param name="bufferCount">Buffer count.</param>
 		public static void DeinterlaceAudio (float[] interlaced, AudioBuffer[] audioBuffers, int bufferSize, int bufferCount)
 		{
 			for (int i = 0; i < bufferSize; i++) {
@@ -72,7 +89,7 @@ namespace JackSharp.Ports
 			}
 		}
 
-		public static unsafe void WriteToJackMidi (this MidiEventCollection<MidiOutEvent> midiEvents, uint nframes)
+		internal static unsafe void WriteToJackMidi (this MidiEventCollection<MidiOutEvent> midiEvents, uint nframes)
 		{
 			float* portBuf = PortApi.GetBuffer (midiEvents.Port._port, nframes);
 			MidiApi.ClearBuffer (portBuf);

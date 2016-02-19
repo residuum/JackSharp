@@ -26,14 +26,29 @@ using JackSharp.Ports;
 
 namespace JackSharp.Processing
 {
+	/// <summary>
+	/// Audio buffer for an audio port. Contains a float array with the specified buffer size.
+	/// </summary>
 	public class AudioBuffer : IProcessingItem
 	{
+		/// <summary>
+		/// Gets the port.
+		/// </summary>
+		/// <value>The port.</value>
 		public Port Port { get; private set; }
 
+		/// <summary>
+		/// Gets the size of the buffer.
+		/// </summary>
+		/// <value>The size of the buffer.</value>
 		public int BufferSize { get; private set; }
 
 		internal StructPointer<float> PointerWrapper { get; private set; }
 
+		/// <summary>
+		/// Gets or sets the audio.
+		/// </summary>
+		/// <value>The audio.</value>
 		public float[] Audio { get; set; }
 
 		internal AudioBuffer (Port port, uint bufferSize, StructPointer<float> pointer)

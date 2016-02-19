@@ -80,12 +80,12 @@
     <Compile Include="Events\BufferSizeEventArgs.cs" />
     <Compile Include="Events\SampleRateEventArgs.cs" />
     <Compile Include="Processing\AudioBuffer.cs" />
-    <Compile Include="Processing\Chunk.cs" />
     <Compile Include="Processing\IProcessingItem.cs" />
     <Compile Include="Processing\MidiInEvent.cs" />
     <Compile Include="Processing\MidiEventCollection.cs" />
     <Compile Include="ClientBase.cs" />
     <Compile Include="Events\XrunEventArgs.cs" />
+    <Compile Include="Processing\ProcessBuffer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

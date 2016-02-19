@@ -24,6 +24,9 @@ using JackSharp.Pointers;
 
 namespace JackSharp.Ports
 {
+	/// <summary>
+	/// Audio out port.
+	/// </summary>
 	public class AudioOutPort : Port
 	{
 		internal unsafe AudioOutPort (UnsafeStructs.jack_client_t* jackClient, int index) : base (jackClient, index, Direction.Out, PortType.Audio)
