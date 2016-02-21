@@ -167,7 +167,7 @@ namespace JackSharp
 		{
 			PortCallbackApi.SetClientRegistrationCallback (JackClient, _clientRegistration, IntPtr.Zero);
 			PortCallbackApi.SetPortRegistrationCallback (JackClient, _portRegistration, IntPtr.Zero);
-			PortCallbackApi.SetPortRenameCallback (JackClient, _portRename, IntPtr.Zero);
+			//PortCallbackApi.SetPortRenameCallback (JackClient, _portRename, IntPtr.Zero);
 			PortCallbackApi.SetPortConnectCallback (JackClient, _portConnect, IntPtr.Zero);
 		}
 

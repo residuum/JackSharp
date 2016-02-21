@@ -232,7 +232,7 @@ namespace JackSharp
 		unsafe void ConnectPorts (List<string> outlets, List<string> inlets)
 		{
 			for (int i = 0; i < Math.Min (outlets.Count, inlets.Count); i++) {
-				PortApi.Connect (JackClient, outlets[i], inlets[i]);
+				PortApi.Connect (JackClient, outlets [i], inlets [i]);
 			}
 		}
 	}

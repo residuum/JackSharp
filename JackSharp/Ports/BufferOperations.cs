@@ -33,24 +33,12 @@ namespace JackSharp.Ports
 	/// </summary>
 	public static class BufferOperations
 	{
-		internal static AudioBuffer GetAudioBuffer (this Port port, uint nframes)
-		{
-			StructPointer<float> buffer = port.GetBuffer (nframes);
-			return new AudioBuffer (port, nframes, buffer);
-		}
-
 		internal static MidiEventCollection<MidiInEvent> GetMidiBuffer (this MidiInPort port, uint nframes)
 		{
 			MidiEventCollection<MidiInEvent> eventCollection = new MidiEventCollection<MidiInEvent> (port);
 			foreach (MidiInEvent midiEvent in port.GetMidiEvents(nframes)) {
 				eventCollection.AddEvent (midiEvent);
 			}
-			return eventCollection;
-		}
-
-		internal static MidiEventCollection<MidiOutEvent> GetMidiBuffer (this MidiOutPort port)
-		{
-			MidiEventCollection<MidiOutEvent> eventCollection = new MidiEventCollection<MidiOutEvent> (port);
 			return eventCollection;
 		}
 

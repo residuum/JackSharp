@@ -21,6 +21,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using JackSharp.Pointers;
+using JackSharp.Processing;
 
 namespace JackSharp.Ports
 {
@@ -31,6 +32,13 @@ namespace JackSharp.Ports
 	{
 		internal unsafe MidiOutPort (UnsafeStructs.jack_client_t* jackClient, int index) : base (jackClient, index, Direction.Out, PortType.Midi)
 		{
+		}
+
+
+		internal MidiEventCollection<MidiOutEvent> GetMidiBuffer ()
+		{
+			MidiEventCollection<MidiOutEvent> eventCollection = new MidiEventCollection<MidiOutEvent> (this);
+			return eventCollection;
 		}
 	}
 }
