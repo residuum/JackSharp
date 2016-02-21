@@ -24,6 +24,7 @@ using System.Threading;
 using JackSharp;
 using JackSharpTest.Dummies;
 using NUnit.Framework;
+using JackSharp.Ports;
 
 namespace JackSharpTest
 {
@@ -72,6 +73,36 @@ namespace JackSharpTest
 			_controller.Stop ();
 		}
 
+
+		[Test]
+		public virtual void CorrectPortsOnConnectionChanged ()
+		{
+			ControllerReceiver receiver = new ControllerReceiver ();
+			_controller.PortChanged += receiver.PortChanged;
+			PortReference inPort = null;
+			PortReference outPort = null;
+			_controller.ConnectionChanged += (sender, e) => {
+				inPort = e.Inlet;
+				outPort = e.Outlet;
+			};
+			_controller.Start ();
+			_controller.Connect (receiver.FirstOutPort, receiver.FirstInPort);
+			Thread.Sleep (100);
+			Assert.AreNotEqual (null, inPort);
+			Assert.AreNotEqual (null, outPort);
+			Assert.AreEqual (Direction.In, inPort.Direction);
+			Assert.AreEqual (Direction.Out, outPort.Direction);
+			inPort = null;
+			outPort = null;
+			_controller.Disconnect (receiver.FirstOutPort, receiver.FirstInPort);
+			Thread.Sleep (100);
+			Assert.AreNotEqual (null, inPort);
+			Assert.AreNotEqual (null, outPort);
+			Assert.AreEqual (Direction.In, inPort.Direction);
+			Assert.AreEqual (Direction.Out, outPort.Direction);
+			_controller.Stop ();
+		}
+
 		[Test]
 		public virtual void ConnectConnectedPorts ()
 		{
@@ -89,19 +120,19 @@ namespace JackSharpTest
 		}
 
 		[Test]
-		public virtual void DisconnectDisconnectedPorts()
+		public virtual void DisconnectDisconnectedPorts ()
 		{
-			ControllerReceiver receiver = new ControllerReceiver();
+			ControllerReceiver receiver = new ControllerReceiver ();
 			_controller.PortChanged += receiver.PortChanged;
 			_controller.ConnectionChanged += receiver.ConnectionChanged;
-			_controller.Start();
-			Assert.True(_controller.Connect(receiver.FirstOutPort, receiver.FirstInPort));
-			Thread.Sleep(100);
-			Assert.True(_controller.Disconnect(receiver.FirstOutPort, receiver.FirstInPort));
-			Thread.Sleep(100);
-			Assert.False(_controller.Disconnect(receiver.FirstOutPort, receiver.FirstInPort));
-			Thread.Sleep(100);
-			_controller.Stop();
+			_controller.Start ();
+			Assert.True (_controller.Connect (receiver.FirstOutPort, receiver.FirstInPort));
+			Thread.Sleep (100);
+			Assert.True (_controller.Disconnect (receiver.FirstOutPort, receiver.FirstInPort));
+			Thread.Sleep (100);
+			Assert.False (_controller.Disconnect (receiver.FirstOutPort, receiver.FirstInPort));
+			Thread.Sleep (100);
+			_controller.Stop ();
 		}
 
 		[Test]
@@ -114,7 +145,7 @@ namespace JackSharpTest
 			Assert.AreNotEqual (0, receiver.PhysicalPortsFound);
 			_controller.Stop ();
 		}
-		
+
 		[TearDown]
 		public static void DestroyClient ()
 		{

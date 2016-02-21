@@ -105,7 +105,7 @@ namespace JackSharp
 		{
 			if (ConnectionChanged != null) {
 				PortReference outlet = MapPort (a);
-				PortReference inlet = MapPort (a);
+				PortReference inlet = MapPort (b);
 				ConnectionChanged (this,
 					new ConnectionChangeEventArgs (outlet, inlet, connect > 0 ? ChangeType.New : ChangeType.Deleted));
 			}
