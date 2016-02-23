@@ -54,12 +54,25 @@ namespace Naudio.JackTest
 		}
 
 		[Test]
+		public virtual void PlayPauseStop ()
+		{
+			_jackOut.Play ();
+			Assert.AreEqual (PlaybackState.Playing, _jackOut.PlaybackState);
+			_jackOut.Pause ();
+			Assert.AreEqual (PlaybackState.Paused, _jackOut.PlaybackState);
+			_jackOut.Play ();
+			Assert.AreEqual (PlaybackState.Playing, _jackOut.PlaybackState);
+			_jackOut.Stop ();
+			Assert.AreEqual (PlaybackState.Stopped, _jackOut.PlaybackState);
+		}
+
+		[Test]
 		public virtual void PlayAudioFile ()
 		{
 			string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
 			string wavFile = Path.Combine (currentDirectory, "example.wav");
 			WaveFileReader reader = new WaveFileReader (wavFile);
-			Wave16ToFloatProvider converter = new Wave16ToFloatProvider (reader);				
+			Wave16ToFloatProvider converter = new Wave16ToFloatProvider (reader);
 			Analyser analyser = new Analyser ();
 			_client.ProcessFunc += analyser.AnalyseOutAction;
 			_jackOut.Init (converter);
@@ -71,7 +84,23 @@ namespace Naudio.JackTest
 		}
 
 		[Test]
-		public virtual void PlayAudioFileSilent()
+		public virtual void PlayAudioFilePaused ()
+		{
+			string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+			string wavFile = Path.Combine (currentDirectory, "example.wav");
+			WaveFileReader reader = new WaveFileReader (wavFile);
+			Wave16ToFloatProvider converter = new Wave16ToFloatProvider (reader);
+			_jackOut.Init (converter);
+			_jackOut.Play ();
+			_jackOut.Pause ();
+			Thread.Sleep (100);
+			_jackOut.Stop ();
+			Assert.AreEqual (0, reader.Position);
+			reader.Close ();
+		}
+
+		[Test]
+		public virtual void PlayAudioFileSilent ()
 		{
 			string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
 			string wavFile = Path.Combine (currentDirectory, "example.wav");

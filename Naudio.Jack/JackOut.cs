@@ -65,8 +65,17 @@ namespace Naudio.Jack
 
 		public void Play ()
 		{
-			if (_client.Start ()) {
+			switch (_playbackState) {
+			case PlaybackState.Playing:
+				return;
+			case PlaybackState.Paused:
 				_playbackState = PlaybackState.Playing;
+				return;
+			case PlaybackState.Stopped:
+				if (_client.Start ()) {
+					_playbackState = PlaybackState.Playing;
+				}
+				break;
 			}
 		}
 
@@ -104,7 +113,7 @@ namespace Naudio.Jack
 			float[] interlacedSamples = new float[floatsCount];
 			Buffer.BlockCopy (fromWave, 0, interlacedSamples, 0, bytesCount);
 			for (int i = 0; i < floatsCount; i++) {
-				interlacedSamples[i] = interlacedSamples[i] * _volume;
+				interlacedSamples [i] = interlacedSamples [i] * _volume;
 			}
 			BufferOperations.DeinterlaceAudio (interlacedSamples, processingChunk.AudioOut, bufferSize, bufferCount);
 		}
@@ -118,22 +127,17 @@ namespace Naudio.Jack
 		}
 
 		public PlaybackState PlaybackState {
-			get {
-				return _playbackState;
-			}
+			get { return _playbackState; }
 		}
 
-		public float Volume
-		{
-			get { 
-				return _volume; 
-			}
+		public float Volume {
+			get { return _volume; }
 			set {
 				if (value < 0) {
-					throw new ArgumentOutOfRangeException("value", "Volume must be between 0.0 and 1.0");
+					throw new ArgumentOutOfRangeException ("value", "Volume must be between 0.0 and 1.0");
 				}
 				if (value > 1) {
-					throw new ArgumentOutOfRangeException("value", "Volume must be between 0.0 and 1.0");
+					throw new ArgumentOutOfRangeException ("value", "Volume must be between 0.0 and 1.0");
 				}
 				_volume = value;
 			}
