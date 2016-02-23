@@ -98,6 +98,15 @@ namespace JackSharp
 		/// </summary>
 		public event EventHandler<XrunEventArgs> Xrun;
 
+		public event EventHandler<NotAvailableEventArgs> NotAvailable;
+
+		protected void InvokeNotAvaible (string eventName)
+		{
+			if (NotAvailable != null) {
+				NotAvailable (this, new NotAvailableEventArgs ("Port Rename"));
+			}
+		}
+
 		Callbacks.JackXRunCallback _jackXrunCallback;
 
 		void SetUpBaseCallbacks ()
@@ -229,6 +238,7 @@ namespace JackSharp
 			New,
 			Failure
 		}
+
 		protected unsafe List<PortReference> GetAllJackPorts ()
 		{
 			IntPtr initialPorts = PortApi.GetPorts (JackClient, null, null, 0);

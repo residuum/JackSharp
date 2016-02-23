@@ -152,7 +152,7 @@ namespace JackSharp
 			}
 		}
 
-		unsafe List<PortReference> GetAndSendPorts ()
+		List<PortReference> GetAndSendPorts ()
 		{
 			List<PortReference> ports = GetAllJackPorts ();
 			if (PortChanged != null) {
@@ -167,7 +167,11 @@ namespace JackSharp
 		{
 			PortCallbackApi.SetClientRegistrationCallback (JackClient, _clientRegistration, IntPtr.Zero);
 			PortCallbackApi.SetPortRegistrationCallback (JackClient, _portRegistration, IntPtr.Zero);
-			//PortCallbackApi.SetPortRenameCallback (JackClient, _portRename, IntPtr.Zero);
+			try {
+				PortCallbackApi.SetPortRenameCallback (JackClient, _portRename, IntPtr.Zero);
+			} catch (EntryPointNotFoundException) {
+				InvokeNotAvaible ("Port Rename");
+			}
 			PortCallbackApi.SetPortConnectCallback (JackClient, _portConnect, IntPtr.Zero);
 		}
 

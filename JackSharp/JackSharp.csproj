@@ -49,6 +49,7 @@
     <Compile Include="Events\ClientRegistrationEventArgs.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="Events\ChangeType.cs" />
+    <Compile Include="Events\NotAvailableEventArgs.cs" />
     <Compile Include="Pointers\MarshallingHelper.cs" />
     <Compile Include="Pointers\StructPointer.cs" />
     <Compile Include="Ports\AudioInPort.cs" />

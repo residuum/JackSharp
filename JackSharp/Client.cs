@@ -36,7 +36,7 @@ namespace JackSharp
 		AudioOutPort[] _audioOutPorts;
 		MidiInPort[] _midiInPorts;
 		MidiOutPort[] _midiOutPorts;
-		private bool _autoconnect;
+		readonly bool _autoconnect;
 
 		/// <summary>
 		/// Delegates to be called on the process callback of Jack. Multiple Actions can be added.

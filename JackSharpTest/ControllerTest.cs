@@ -58,6 +58,19 @@ namespace JackSharpTest
 		}
 
 		[Test]
+		public virtual void PortAndClientNames ()
+		{
+			ControllerReceiver receiver = new ControllerReceiver ();
+			_controller.PortChanged += receiver.PortChanged;
+			_controller.Start ();
+			Thread.Sleep (100);
+			PortReference outPort = receiver.FirstOutPort;
+			Assert.IsTrue (!string.IsNullOrEmpty (outPort.ClientName));
+			Assert.IsTrue (!string.IsNullOrEmpty (outPort.PortName));
+			_controller.Stop ();
+		}
+
+		[Test]
 		public virtual void ConnectAndDisconnectPorts ()
 		{
 			ControllerReceiver receiver = new ControllerReceiver ();
