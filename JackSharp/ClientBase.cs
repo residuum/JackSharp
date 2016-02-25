@@ -214,7 +214,9 @@ namespace JackSharp
 		protected virtual unsafe bool Stop ()
 		{
 			bool status = ClientApi.Deactivate (JackClient) == 0;
-			IsStarted = !status;
+			if (status) {
+				IsStarted = false;
+			}
 			return status;
 		}
 

@@ -25,18 +25,18 @@ namespace JackSharp.ApiWrapper
 	enum JackLatencyCallbackMode
 	{
 
-		/**
-         * Latency Callback for Capture Latency.
-         * Input Ports have their latency value setup.
-         * In the Callback the client needs to set the latency of the output ports
-         */
+		/// <summary>
+		/// Latency Callback for Capture Latency.
+		/// Input Ports have their latency value setup.
+		/// In the Callback the client needs to set the latency of the output ports
+		/// </summary>
 		JackCaptureLatency,
 
-		/**
-         * Latency Callback for Playback Latency.
-         * Output Ports have their latency value setup.
-         * In the Callback the client needs to set the latency of the input ports
-         */
+		/// <summary>
+		/// Latency Callback for Playback Latency.
+		/// Output Ports have their latency value setup.
+		/// In the Callback the client needs to set the latency of the input ports
+		/// </summary>
 		JackPlaybackLatency
 	}
 }

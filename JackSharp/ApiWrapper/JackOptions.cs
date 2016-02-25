@@ -28,45 +28,45 @@ namespace JackSharp.ApiWrapper
 	enum JackOptions
 	{
 
-		/**
-         * Null value to use when no option bits are needed.
-         */
+		/// <summary>
+		/// Null value to use when no option bits are needed.
+		/// </summary>
 		JackNullOption = 0x00,
 
-		/**
-         * Do not automatically start the JACK server when it is not
-         * already running.  This option is always selected if
-         * \$JACK_NO_START_SERVER is defined in the calling process
-         * environment.
-         */
+		/// <summary>
+		/// Do not automatically start the JACK server when it is not
+		/// already running.  This option is always selected if
+		/// JACK_NO_START_SERVER is defined in the calling process
+		/// environment.
+		/// </summary>
 		JackNoStartServer = 0x01,
 
-		/**
-         * Use the exact client name requested.  Otherwise, JACK
-         * automatically generates a unique one, if needed.
-         */
+		/// <summary>
+		/// Use the exact client name requested.  Otherwise, JACK
+		/// automatically generates a unique one, if needed.
+		/// </summary>
 		JackUseExactName = 0x02,
 
-		/**
-         * Open with optional <em>(char *) server_name</em> parameter.
-         */
+		/// <summary>
+		/// Open with optional <em>(char *) server_name</em> parameter.
+		/// </summary>
 		JackServerName = 0x04,
 
-		/**
-         * Load internal client from optional <em>(char *)
-         * load_name</em>.  Otherwise use the @a client_name.
-         */
+		/// <summary>
+		/// Load internal client from optional <em>(char *)
+		/// load_name</em>.  Otherwise use the @a client_name.
+		/// </summary>
 		JackLoadName = 0x08,
 
-		/**
-         * Pass optional <em>(char *) load_init</em> string to the
-         * jack_initialize() entry point of an internal client.
-         */
+		/// <summary>
+		/// Pass optional <em>(char *) load_init</em> string to the
+		/// jack_initialize() entry point of an internal client.
+		/// </summary>
 		JackLoadInit = 0x10,
 
-		/**
-         * pass a SessionID Token this allows the sessionmanager to identify the client again.
-         */
+		/// <summary>
+		/// pass a SessionID Token this allows the sessionmanager to identify the client again.
+		/// </summary>
 		JackSessionID = 0x20
 	}
 }
