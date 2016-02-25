@@ -54,14 +54,25 @@ namespace JackSharp.Ports
 		/// <value>The name.</value>
 		public string Name { get; set; }
 
-		internal unsafe Port (UnsafeStructs.jack_client_t*jackClient, int index, Direction direction, PortType portType)
+		internal unsafe Port (UnsafeStructs.jack_client_t*jackClient, int index, Direction direction, PortType portType, string nameFormat)
 		{
+			if (nameFormat == null) {
+				nameFormat = "{type}{direction}_{index}";
+			}
 			_jackClient = jackClient;
 			Direction = direction;
-			Name = (portType == PortType.Audio ? "audio" : "midi") + (direction == Direction.In ? "in_" : "out_") +
-			(index + 1);
+			Name = CreateName (nameFormat, index, direction, portType);
 			PortType = portType;
 			_port = RegisterPort (direction, portType);
+		}
+
+		private string CreateName (string nameFormat, int index, Direction direction, PortType portType)
+		{
+			string typeName = portType == PortType.Audio ? "audio" : "midi";
+			string directionName = direction == Direction.In ? "in" : "out";
+			return nameFormat.Replace ("{type}", typeName)
+	            .Replace ("{direction}", directionName)
+	            .Replace ("{index}", (index + 1).ToString ());
 		}
 
 		~Port ()

@@ -30,7 +30,7 @@ namespace JackSharp.Ports
 	/// </summary>
 	public class MidiOutPort : Port
 	{
-		internal unsafe MidiOutPort (UnsafeStructs.jack_client_t* jackClient, int index) : base (jackClient, index, Direction.Out, PortType.Midi)
+		internal unsafe MidiOutPort (UnsafeStructs.jack_client_t* jackClient, int index, string nameFormat = null) : base (jackClient, index, Direction.Out, PortType.Midi, nameFormat)
 		{
 		}
 

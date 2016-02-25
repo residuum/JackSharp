@@ -31,7 +31,7 @@ namespace JackSharp.Ports
 	/// </summary>
 	public class AudioInPort : Port
 	{
-		internal unsafe AudioInPort (UnsafeStructs.jack_client_t* jackClient, int index) : base (jackClient, index, Direction.In, PortType.Audio)
+		internal unsafe AudioInPort (UnsafeStructs.jack_client_t* jackClient, int index, string nameFormat = null) : base (jackClient, index, Direction.In, PortType.Audio, nameFormat)
 		{
 		}
 

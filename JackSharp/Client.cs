@@ -97,6 +97,8 @@ namespace JackSharp
 		/// <value>The audio in ports.</value>
 		public IEnumerable<AudioInPort> AudioInPorts { get { return _audioInPorts; } }
 
+		public string PortNameFormat { private get; set; }
+
 		Callbacks.JackProcessCallback _processCallback;
 
 		/// <summary>
@@ -129,7 +131,6 @@ namespace JackSharp
 			}
 			return false;
 		}
-
 
 		unsafe void WireUpCallbacks ()
 		{
@@ -195,16 +196,16 @@ namespace JackSharp
 		unsafe void CreatePorts ()
 		{
 			for (int i = 0; i < _audioInPorts.Length; i++) {
-				_audioInPorts [i] = new AudioInPort (JackClient, i);
+				_audioInPorts [i] = new AudioInPort (JackClient, i, PortNameFormat);
 			}
 			for (int i = 0; i < _audioOutPorts.Length; i++) {
-				_audioOutPorts [i] = new AudioOutPort (JackClient, i);
+				_audioOutPorts [i] = new AudioOutPort (JackClient, i, PortNameFormat);
 			}
 			for (int i = 0; i < _midiInPorts.Length; i++) {
-				_midiInPorts [i] = new MidiInPort (JackClient, i);
+				_midiInPorts [i] = new MidiInPort (JackClient, i, PortNameFormat);
 			}
 			for (int i = 0; i < _midiOutPorts.Length; i++) {
-				_midiOutPorts [i] = new MidiOutPort (JackClient, i);
+				_midiOutPorts [i] = new MidiOutPort (JackClient, i, PortNameFormat);
 			}
 		}
 

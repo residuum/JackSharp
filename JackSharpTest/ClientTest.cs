@@ -60,7 +60,7 @@ namespace JackSharpTest
 				Assert.IsTrue (client.Start ());
 				Assert.AreEqual (1, client.AudioInPorts.Count ());
 				Thread.Sleep (100);
-				Assert.AreEqual(1, receiver.Called);
+				Assert.AreEqual (1, receiver.Called);
 			}
 		}
 
@@ -102,7 +102,7 @@ namespace JackSharpTest
 		}
 
 		[Test]
-		public virtual void AutoConnect()
+		public virtual void AutoConnect ()
 		{
 			using (Controller controller = new Controller ("testController"))
 			using (Client client = new Client ("testClient", 2, 2, 0, 0, true)) {
@@ -114,6 +114,33 @@ namespace JackSharpTest
 				client.Start ();
 				Thread.Sleep (100);
 				Assert.AreNotEqual (connectionsWithoutClient, receiver.ConnectionsFound);
+				client.Stop ();
+				controller.Stop ();
+			}
+		}
+
+		[Test]
+		public virtual void DefaultNameFormat ()
+		{
+			using (Controller controller = new Controller ("testController"))
+			using (Client client = new Client ("testClient", 1)) {
+				client.Start ();
+				Thread.Sleep (100);
+				Assert.AreEqual ("audioin_1", client.AudioInPorts.First ().Name);
+				client.Stop ();
+				controller.Stop ();
+			}
+		}
+
+		[Test]
+		public virtual void ChangeNameFormat ()
+		{
+			using (Controller controller = new Controller ("testController"))
+			using (Client client = new Client ("testClient", 1)) {
+				client.PortNameFormat = "my_{direction}-{type}_{index}";
+				client.Start ();
+				Thread.Sleep (100);
+				Assert.AreEqual ("my_in-audio_1", client.AudioInPorts.First ().Name);
 				client.Stop ();
 				controller.Stop ();
 			}
