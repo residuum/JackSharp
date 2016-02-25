@@ -20,9 +20,12 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+
+using System;
+
 namespace JackSharp.Events
 {
-	public class SampleRateEventArgs
+	public class SampleRateEventArgs : EventArgs
 	{
 		public int SampleRate { get; private set; }
 

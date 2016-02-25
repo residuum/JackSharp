@@ -8,6 +8,8 @@
     <RootNamespace>Naudio.Jack</RootNamespace>
     <AssemblyName>Naudio.Jack</AssemblyName>
     <ReleaseVersion>0.1.0-prealpha</ReleaseVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

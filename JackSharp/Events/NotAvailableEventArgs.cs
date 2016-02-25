@@ -21,9 +21,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System;
+
 namespace JackSharp.Events
 {
-	public class NotAvailableEventArgs
+	public class NotAvailableEventArgs : EventArgs
 	{
 		public string EventName { get; private set; }
 

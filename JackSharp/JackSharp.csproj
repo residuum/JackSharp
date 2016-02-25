@@ -11,6 +11,8 @@
     <AssemblyName>JackSharp</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <ReleaseVersion>0.1.0-prealpha</ReleaseVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
