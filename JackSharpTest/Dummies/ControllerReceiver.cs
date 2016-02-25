@@ -77,5 +77,12 @@ namespace JackSharpTest.Dummies
 				break;
 			}
 		}
+
+		public void IsConnectionEqual (object sender, ConnectionChangeEventArgs e)
+		{
+			if (e.ChangeType == ChangeType.New) {
+				ConnectionsFound = (e.Inlet == FirstInPort) ? 1 : 0;
+			}
+		}
 	}
 }

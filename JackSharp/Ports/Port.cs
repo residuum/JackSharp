@@ -120,5 +120,44 @@ namespace JackSharp.Ports
 		{
 			PortApi.Unregister (_jackClient, _port);
 		}
+
+		public override bool Equals (object obj)
+		{
+			Port otherPort = obj as Port;
+			return Equals (otherPort);
+		}
+
+		public bool Equals (Port other)
+		{
+			if (other == null)
+				return false;
+			unsafe {
+				return _port == other._port && _jackClient == other._jackClient;
+			}
+		}
+
+		public override int GetHashCode ()
+		{
+			unsafe {
+				return ((IntPtr)_port).GetHashCode () << 3 & ((IntPtr)_jackClient).GetHashCode ();
+			}
+		}
+
+		public static bool operator == (Port a, Port b)
+		{
+			if (object.ReferenceEquals (a, b)) {
+				return true;
+			}
+
+			if (((object)a == null) || ((object)b == null)) {
+				return false;
+			}
+			return (a.Equals (b));
+		}
+
+		public static bool operator != (Port a, Port b)
+		{
+			return !(a == b);
+		}
 	}
 }

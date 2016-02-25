@@ -105,10 +105,49 @@ namespace JackSharp.Ports
 				return;
 			}
 			if ((portFlags & JackPortFlags.JackPortIsOutput) == JackPortFlags.JackPortIsOutput) {
-				direction= Direction.Out;
+				direction = Direction.Out;
 				return;
 			}
 			throw new IndexOutOfRangeException ("jack_port_flags");
+		}
+
+		public override bool Equals (object obj)
+		{
+			PortReference otherPort = obj as PortReference;
+			return Equals (otherPort);
+		}
+
+		public bool Equals (PortReference other)
+		{
+			if (other == null)
+				return false;
+			unsafe {
+				return PortPointer == other.PortPointer;
+			}
+		}
+
+		public override int GetHashCode ()
+		{
+			unsafe {
+				return ((IntPtr)PortPointer).GetHashCode ();
+			}
+		}
+
+		public static bool operator == (PortReference a, PortReference b)
+		{
+			if (object.ReferenceEquals (a, b)) {
+				return true;
+			}
+
+			if (((object)a == null) || ((object)b == null)) {
+				return false;
+			}
+			return (a.Equals (b));
+		}
+
+		public static bool operator != (PortReference a, PortReference b)
+		{
+			return !(a == b);
 		}
 	}
 }

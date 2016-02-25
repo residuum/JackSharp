@@ -86,6 +86,21 @@ namespace JackSharpTest
 			_controller.Stop ();
 		}
 
+		[Test]
+		public virtual void PortsEquality ()
+		{
+			ControllerReceiver receiver = new ControllerReceiver ();
+			_controller.PortChanged += receiver.PortChanged;
+			_controller.ConnectionChanged += receiver.IsConnectionEqual;
+			_controller.Start ();
+			_controller.Connect (receiver.FirstOutPort, receiver.FirstInPort);
+			Thread.Sleep (100);
+			_controller.Disconnect (receiver.FirstOutPort, receiver.FirstInPort);
+			Thread.Sleep (100);
+			Assert.AreEqual (1, receiver.ConnectionsFound);
+			_controller.Stop ();
+		}
+
 
 		[Test]
 		public virtual void CorrectPortsOnConnectionChanged ()
