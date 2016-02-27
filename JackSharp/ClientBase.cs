@@ -33,7 +33,13 @@ namespace JackSharp
 	public abstract class ClientBase: IDisposable
 	{
 		internal unsafe UnsafeStructs.jack_client_t* JackClient;
-		protected bool IsStarted;
+        
+		/// <summary>
+		/// Gets whether the client is connected to Jack.
+		/// </summary>
+		/// <value>[true] if client is connected to Jack.</value>
+		public bool IsConnectedToJack { get; private set; }
+
 		protected readonly string Name;
 
 		protected ClientBase (string name)
@@ -195,7 +201,7 @@ namespace JackSharp
 
 		protected virtual unsafe bool Start ()
 		{
-			if (IsStarted) {
+			if (IsConnectedToJack) {
 				return false;
 			}
 			if (!Open ()) {
@@ -207,7 +213,7 @@ namespace JackSharp
 			}
 			SampleRate = (int)Invoke.GetSampleRate (JackClient);
 			BufferSize = (int)Invoke.GetBufferSize (JackClient);
-			IsStarted = true;
+			IsConnectedToJack = true;
 			return true;
 		}
 
@@ -215,7 +221,7 @@ namespace JackSharp
 		{
 			bool status = ClientApi.Deactivate (JackClient) == 0;
 			if (status) {
-				IsStarted = false;
+				IsConnectedToJack = false;
 			}
 			return status;
 		}
