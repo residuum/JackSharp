@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package >
+	<metadata>
+		<id>$id$</id>
+		<version>0.1.0</version>
+		<title>$title$</title>
+		<authors>Thomas Mayer</authors>
+		<owners>Thomas Mayer</owners>
+		<licenseUrl>https://raw.githubusercontent.com/residuum/JackSharp/master/LICENSE</licenseUrl>
+		<projectUrl>https://github.com/residuum/JackSharp</projectUrl>
+		<description>Binding for JackSharp.Client for NAudio. It contains implementations for IWavePlayer and IWaveIn.</description>
+		<releaseNotes>First release.</releaseNotes>
+		<copyright>Copyright 2016</copyright>
+		<tags>C# .NET Mono audio sound</tags>
+		<dependencies>
+			<dependency id="JackSharp" version="0.1.0" />
+		</dependencies>
+	</metadata>
+	<files>
+		<file src="bin\$configuration$\$id$.xml" target="lib" />
+	</files>
+</package>
