@@ -10,7 +10,7 @@
     <RootNamespace>JackSharp</RootNamespace>
     <AssemblyName>JackSharp</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <ReleaseVersion>0.1.0-prealpha</ReleaseVersion>
+    <ReleaseVersion>0.2.0</ReleaseVersion>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>

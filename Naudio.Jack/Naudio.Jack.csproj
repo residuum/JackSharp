@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Naudio.Jack</RootNamespace>
     <AssemblyName>Naudio.Jack</AssemblyName>
-    <ReleaseVersion>0.1.0-prealpha</ReleaseVersion>
+    <ReleaseVersion>0.2.0</ReleaseVersion>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
