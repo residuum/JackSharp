@@ -185,26 +185,27 @@ namespace JackSharp
 			return 0;
 		}
 
-		protected abstract bool Open ();
+		protected abstract bool Open (bool startServer);
 
-		protected unsafe ClientStatus BaseOpen ()
+		protected unsafe ClientStatus BaseOpen (bool startServer)
 		{
 			if (JackClient != null) {
 				return ClientStatus.AlreadyThere;
 			}
-			JackClient = ClientApi.Open (Name, JackOptions.JackNullOption, IntPtr.Zero);
+			JackOptions startOptions = startServer ? JackOptions.JackNullOption : JackOptions.JackNoStartServer;
+			JackClient = ClientApi.Open (Name, startOptions, IntPtr.Zero);
 			if (JackClient == null) {
 				return ClientStatus.Failure;
 			}
 			return ClientStatus.New;
 		}
 
-		protected virtual unsafe bool Start ()
+		protected virtual unsafe bool Start (bool startServer)
 		{
 			if (IsConnectedToJack) {
 				return false;
 			}
-			if (!Open ()) {
+			if (!Open (startServer)) {
 				return false;
 			}
 			int status = ClientApi.Activate (JackClient);

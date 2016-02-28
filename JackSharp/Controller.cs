@@ -111,9 +111,9 @@ namespace JackSharp
 			}
 		}
 
-		protected override bool Open ()
+		protected override bool Open (bool startServer)
 		{
-			ClientStatus status = BaseOpen ();
+			ClientStatus status = BaseOpen (startServer);
 			switch (status) {
 			case ClientStatus.AlreadyThere:
 				return true;
@@ -178,9 +178,10 @@ namespace JackSharp
 		/// <summary>
 		/// Activates the client and connects to Jack.
 		/// </summary>
-		public new bool Start ()
+		/// <param name="startServer">If [true], the client will start Jack if it is not running.</param>
+		public new bool Start (bool startServer = false)
 		{
-			return base.Start ();
+			return base.Start (startServer);
 		}
 
 		/// <summary>
