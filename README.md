@@ -1,5 +1,5 @@
 # Jack-Sharp
-Jack-Sharp is a .NET/mono binding for [Jackd](http://jackaudio.org/).
+Jack-Sharp is a .NET/mono binding for [Jackd](http://jackaudio.org/), and contains two projects: JackSharp and NAudio.Jack, a Binding of JackSharp for NAudio.
 
 ## Tested Platforms
 * Debian GNU/Linux sid amd64 and i386
@@ -7,6 +7,8 @@ Jack-Sharp is a .NET/mono binding for [Jackd](http://jackaudio.org/).
 
 ## JackSharp
 C# Wrapper around libjack API. Uses the following classes to structure the API into manageable chunks. Abstracts away all pointers.
+
+Install via NuGet: [nuget install JackSharp](https://www.nuget.org/packages/JackSharp/).
 
 ### ClientBase: Base Class for Client and Controller
 Emits events on general Jack information, that consumers can subscribe to. See the source code comments for details.
@@ -21,8 +23,12 @@ Client for controlling the Jack server and connections. Useful for creating a co
 
 Can connect and disconnect ports of different applications.
 
-If your application needs functionality from both `Client` and `Controller`, then you must create both classes in your consumer.
+If your application needs functionality from both `Client` and `Controller`, then you must create instances of both classes in your consumer with different names.
 
-## Naudio.Jack
+## NAudio.Jack
 Binding for `JackSharp.Client` for [NAudio](https://github.com/naudio). It contains implementations for `IWavePlayer` and `IWaveIn`.
 
+Install via NuGet: [nuget install NAudio.Jack](https://www.nuget.org/packages/NAudio.Jack/).
+
+## Running Unit Tests
+Unit test require an already running instance of Jack to run successfully. 

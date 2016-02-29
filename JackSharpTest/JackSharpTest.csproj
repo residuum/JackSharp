@@ -48,6 +48,8 @@
     <Compile Include="AudioTest.cs" />
     <Compile Include="Dummies\ClientReceiver.cs" />
     <Compile Include="MidiTest.cs" />
+    <Compile Include="ServerStartTest.cs" />
+    <Compile Include="Dummies\ShutdownReceiver.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\JackSharp\JackSharp.csproj">

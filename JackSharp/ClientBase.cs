@@ -33,7 +33,7 @@ namespace JackSharp
 	public abstract class ClientBase: IDisposable
 	{
 		internal unsafe UnsafeStructs.jack_client_t* JackClient;
-        
+
 		/// <summary>
 		/// Gets whether the client is connected to Jack.
 		/// </summary>
@@ -88,8 +88,6 @@ namespace JackSharp
 
 		Callbacks.JackShutdownCallback _shutdownCallback;
 
-		Callbacks.JackInfoShutdownCallback _jackInfoShutdown;
-
 		/// <summary>
 		/// Occurs when jack shuts down.
 		/// </summary>
@@ -120,9 +118,8 @@ namespace JackSharp
 			_bufferSizeCallback = OnBufferSizeChange;
 			_sampleRateCallback = OnSampleRateChange;
 			_shutdownCallback = OnShutdown;
-			_jackInfoShutdown = OnInfoShutdown;
 			//	_jackErrorFunction = OnJackError;
-			//	_jackInfoFunction = OnJackInfo;
+			//	_jackInfoFunction = OnJackInfo;6
 			_jackXrunCallback = OnJackXrun;
 		}
 
@@ -131,7 +128,6 @@ namespace JackSharp
 			ClientCallbackApi.SetBufferSizeCallback (JackClient, _bufferSizeCallback, IntPtr.Zero);
 			ClientCallbackApi.SetSampleRateCallback (JackClient, _sampleRateCallback, IntPtr.Zero);
 			ClientCallbackApi.SetShutdownCallback (JackClient, _shutdownCallback, IntPtr.Zero);
-			ClientCallbackApi.SetInfoShutdownCallback (JackClient, _jackInfoShutdown, IntPtr.Zero);
 			//ClientCallbackApi.SetErrorFunction (JackClient, _jackErrorFunction, IntPtr.Zero);
 			//ClientCallbackApi.SetInfoFunction (JackClient, _jackInfoFunction, IntPtr.Zero);
 			ClientCallbackApi.SetXrunCallback (JackClient, _jackXrunCallback, IntPtr.Zero);
@@ -156,21 +152,10 @@ namespace JackSharp
 			return 0;
 		}
 
-		unsafe void OnInfoShutdown (JackStatus code, string reason, IntPtr arg)
-		{
-			if (JackClient != null) {
-				Close ();
-			}
-			if (Shutdown != null) {
-				Shutdown (this, new EventArgs ());
-			}
-		}
-
 		unsafe void OnShutdown (IntPtr args)
 		{
-			if (JackClient != null) {
-				Close ();
-			}
+			IsConnectedToJack = false;
+			JackClient = null;
 			if (Shutdown != null) {
 				Shutdown (this, new EventArgs ());
 			}
@@ -231,6 +216,7 @@ namespace JackSharp
 		{
 			int status = ClientApi.Close (JackClient);
 			if (status == 0) {
+				IsConnectedToJack = false;
 				JackClient = null;
 			}
 		}

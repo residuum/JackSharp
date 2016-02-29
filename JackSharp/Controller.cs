@@ -120,9 +120,9 @@ namespace JackSharp
 			case ClientStatus.Failure:
 				return false;
 			case ClientStatus.New:
-				SendPortsAndConnections ();
 				WireUpCallbacks ();
 				WireUpBaseCallbacks ();
+				SendPortsAndConnections ();
 				return true;
 			}
 			return false;
@@ -136,19 +136,17 @@ namespace JackSharp
 
 		unsafe void GetAndSendConnections (List<PortReference> allPorts)
 		{
-			foreach (PortReference port in allPorts) {
-				// In ports are connected to out ports, so we only need to map these.
-				if (port.Direction == Direction.Out) {
-					IntPtr connectedPortNames = PortApi.GetConnections (port.PortPointer);
-					List<PortReference> connectedPorts = PortListFromPointer (connectedPortNames);
+			// In ports are connected to out ports, so we only need to map these.
+			foreach (PortReference port in allPorts.Where(p => p.Direction == Direction.Out)) {
+				IntPtr connectedPortNames = PortApi.GetConnections (port.PortPointer);
+				List<PortReference> connectedPorts = PortListFromPointer (connectedPortNames);
 
-					if (ConnectionChanged != null) {
-						foreach (PortReference connected in connectedPorts) {
-							ConnectionChanged (this, new ConnectionChangeEventArgs (port, connected, ChangeType.New));
-						}
+				if (ConnectionChanged != null) {
+					foreach (PortReference connected in connectedPorts) {
+						ConnectionChanged (this, new ConnectionChangeEventArgs (port, connected, ChangeType.New));
 					}
-					Invoke.Free (connectedPortNames);
 				}
+				Invoke.Free (connectedPortNames);
 			}
 		}
 
