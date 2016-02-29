@@ -34,7 +34,6 @@ namespace JackSharp.Ports
 		{
 		}
 
-
 		internal MidiEventCollection<MidiOutEvent> GetMidiBuffer ()
 		{
 			MidiEventCollection<MidiOutEvent> eventCollection = new MidiEventCollection<MidiOutEvent> (this);

@@ -75,11 +75,22 @@ namespace JackSharp.Ports
 	            .Replace ("{index}", (index + 1).ToString ());
 		}
 
+		/// <summary>
+		/// Releases unmanaged resources and performs other cleanup operations before the <see cref="JackSharp.Ports.Port"/>
+		/// is reclaimed by garbage collection.
+		/// </summary>
 		~Port ()
 		{
 			Dispose (false);
 		}
 
+		/// <summary>
+		/// Releases all resource used by the <see cref="JackSharp.Ports.Port"/> object.
+		/// </summary>
+		/// <remarks>Call <see cref="Dispose"/> when you are finished using the <see cref="JackSharp.Ports.Port"/>. The
+		/// <see cref="Dispose"/> method leaves the <see cref="JackSharp.Ports.Port"/> in an unusable state. After calling
+		/// <see cref="Dispose"/>, you must release all references to the <see cref="JackSharp.Ports.Port"/> so the garbage
+		/// collector can reclaim the memory that the <see cref="JackSharp.Ports.Port"/> was occupying.</remarks>
 		public void Dispose ()
 		{
 			Dispose (true);
@@ -132,12 +143,24 @@ namespace JackSharp.Ports
 			PortApi.Unregister (_jackClient, _port);
 		}
 
+		/// <summary>
+		/// Determines whether the specified <see cref="System.Object"/> is equal to the current <see cref="JackSharp.Ports.Port"/>.
+		/// </summary>
+		/// <param name="obj">The <see cref="System.Object"/> to compare with the current <see cref="JackSharp.Ports.Port"/>.</param>
+		/// <returns><c>true</c> if the specified <see cref="System.Object"/> is equal to the current
+		/// <see cref="JackSharp.Ports.Port"/>; otherwise, <c>false</c>.</returns>
 		public override bool Equals (object obj)
 		{
 			Port otherPort = obj as Port;
 			return Equals (otherPort);
 		}
 
+		/// <summary>
+		/// Determines whether the specified <see cref="JackSharp.Ports.Port"/> is equal to the current <see cref="JackSharp.Ports.Port"/>.
+		/// </summary>
+		/// <param name="other">The <see cref="JackSharp.Ports.Port"/> to compare with the current <see cref="JackSharp.Ports.Port"/>.</param>
+		/// <returns><c>true</c> if the specified <see cref="JackSharp.Ports.Port"/> is equal to the current
+		/// <see cref="JackSharp.Ports.Port"/>; otherwise, <c>false</c>.</returns>
 		public bool Equals (Port other)
 		{
 			if (other == null)
@@ -147,6 +170,10 @@ namespace JackSharp.Ports
 			}
 		}
 
+		/// <summary>
+		/// Serves as a hash function for a <see cref="JackSharp.Ports.Port"/> object.
+		/// </summary>
+		/// <returns>A hash code for this instance that is suitable for use in hashing algorithms and data structures such as a hash table.</returns>
 		public override int GetHashCode ()
 		{
 			unsafe {
@@ -154,6 +181,8 @@ namespace JackSharp.Ports
 			}
 		}
 
+		/// <param name="a">The Port a.</param>
+		/// <param name="b">The Port b.</param>
 		public static bool operator == (Port a, Port b)
 		{
 			if (object.ReferenceEquals (a, b)) {
@@ -166,6 +195,8 @@ namespace JackSharp.Ports
 			return (a.Equals (b));
 		}
 
+		/// <param name="a">The Port a.</param>
+		/// <param name="b">The Port b.</param>
 		public static bool operator != (Port a, Port b)
 		{
 			return !(a == b);

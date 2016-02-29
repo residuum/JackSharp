@@ -1,4 +1,4 @@
-// Author:
+﻿// Author:
 //       Thomas Mayer <thomas@residuum.org>
 //
 // Copyright (c) 2016 Thomas Mayer
@@ -20,55 +20,29 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-using System.Linq;
-using JackSharp;
-using NUnit.Framework;
+using System;
+using JackSharp.Ports;
 
-namespace JackSharpTest
+namespace JackSharp.Events
 {
-	[TestFixture]
-	public class PortTest
+	/// <summary>
+	/// Port rename event arguments.
+	/// </summary>
+	public class PortRenameEventArgs : EventArgs
 	{
-		static Processor _client;
+		/// <summary>
+		/// Gets the port.
+		/// </summary>
+		/// <value>The port.</value>
+		public PortReference Port { get; private set; }
 
-		[SetUp]
-		public static void CreateClient ()
+		/// <summary>
+		/// Initializes a new instance of the <see cref="JackSharp.Events.PortRenameEventArgs"/> class.
+		/// </summary>
+		/// <param name="port">Port.</param>
+		public PortRenameEventArgs (PortReference port)
 		{
-			_client = new Processor ("testPorts", 2, 4, 1, 3);
-		}
-
-		[Test]
-		public virtual void AudioInPortsAreCreated ()
-		{
-			_client.Start ();
-			Assert.AreEqual (2, _client.AudioInPorts.Count ());
-		}
-
-		[Test]
-		public virtual void AudioOutPortsAreCreated ()
-		{
-			_client.Start ();
-			Assert.AreEqual (4, _client.AudioOutPorts.Count ());
-		}
-
-		[Test]
-		public virtual void MidiInPortsAreCreated ()
-		{
-			_client.Start ();
-			Assert.AreEqual (1, _client.MidiInPorts.Count ());
-		}
-
-		[Test]
-		public virtual void MidiOutPortsAreCreated ()
-		{
-			_client.Start ();
-			Assert.AreEqual (3, _client.MidiOutPorts.Count ());
-		}
-
-		[TearDown]
-		public static void DestroyClient ()
-		{
-			_client.Dispose ();
+			Port = port;
 		}
 	}
 }

@@ -25,10 +25,21 @@ using System;
 
 namespace JackSharp.Events
 {
+	/// <summary>
+	/// Xrun event arguments.
+	/// </summary>
 	public class XrunEventArgs : EventArgs
 	{
+		/// <summary>
+		/// Gets the xrun delay.
+		/// </summary>
+		/// <value>The xrun delay.</value>
 		public float XrunDelay { get; private set; }
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="JackSharp.Events.XrunEventArgs"/> class.
+		/// </summary>
+		/// <param name="xrunDelay">Xrun delay.</param>
 		public XrunEventArgs (float xrunDelay)
 		{
 			XrunDelay = xrunDelay;

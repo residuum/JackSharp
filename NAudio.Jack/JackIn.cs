@@ -27,14 +27,14 @@ using JackSharp.Ports;
 using JackSharp.Processing;
 using NAudio.Wave;
 
-namespace Naudio.Jack
+namespace NAudio.Jack
 {
 	public class JackIn : IWaveIn
 	{
-		readonly Client _client;
+		readonly Processor _client;
 		bool _isRecording;
 
-		public JackIn (Client client)
+		public JackIn (Processor client)
 		{
 			_client = client;
 			_client.ProcessFunc += ProcessAudio;

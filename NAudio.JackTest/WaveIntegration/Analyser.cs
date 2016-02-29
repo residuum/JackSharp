@@ -24,7 +24,7 @@ using System;
 using System.Linq;
 using JackSharp.Processing;
 
-namespace Naudio.JackTest.WaveIntegration
+namespace NAudio.JackTest.WaveIntegration
 {
 	class Analyser
 	{

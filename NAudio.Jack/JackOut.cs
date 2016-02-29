@@ -27,18 +27,18 @@ using System.Linq;
 using JackSharp.Ports;
 using JackSharp.Processing;
 
-namespace Naudio.Jack
+namespace NAudio.Jack
 {
 	public class JackOut : IWavePlayer
 	{
-		readonly Client _client;
+		readonly Processor _client;
 
 		IWaveProvider _waveStream;
 
 		PlaybackState _playbackState;
 		float _volume = 1;
 
-		public JackOut (Client client)
+		public JackOut (Processor client)
 		{
 			_client = client;
 			_playbackState = PlaybackState.Stopped;

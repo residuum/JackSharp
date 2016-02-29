@@ -8,12 +8,12 @@ namespace JackSharpTest
 	[TestFixture]
 	public class MidiTest
 	{
-		static Client _client;
+		static Processor _client;
 
 		[SetUp]
 		public static void CreateClient ()
 		{
-			_client = new Client ("testMidi", 0, 1, 1, 1);
+			_client = new Processor ("testMidi", 0, 1, 1, 1);
 		}
 
 		[Test]

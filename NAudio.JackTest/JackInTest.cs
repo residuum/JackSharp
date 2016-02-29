@@ -24,22 +24,22 @@ using System;
 using System.IO;
 using System.Threading;
 using JackSharp;
-using Naudio.Jack;
+using NAudio.Jack;
 using NAudio.Wave;
 using NUnit.Framework;
 
-namespace Naudio.JackTest
+namespace NAudio.JackTest
 {
 	[TestFixture]
 	public class JackInTest
 	{
-		static Client _client;
+		static Processor _client;
 		static JackIn _jackIn;
 
 		[SetUp]
 		public static void CreateInput ()
 		{
-			_client = new Client ("testNaudioIn", 2);
+			_client = new Processor ("testNaudioIn", 2);
 			_jackIn = new JackIn (_client);
 		}
 

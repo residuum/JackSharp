@@ -25,10 +25,21 @@ using System;
 
 namespace JackSharp.Events
 {
+	/// <summary>
+	/// Buffer size event arguments.
+	/// </summary>
 	public class BufferSizeEventArgs : EventArgs
 	{
+		/// <summary>
+		/// Gets the size of the buffer.
+		/// </summary>
+		/// <value>The size of the buffer.</value>
 		public int BufferSize { get; private set; }
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="JackSharp.Events.BufferSizeEventArgs"/> class.
+		/// </summary>
+		/// <param name="bufferSize">Buffer size.</param>
 		public BufferSizeEventArgs (int bufferSize)
 		{
 			BufferSize = bufferSize;

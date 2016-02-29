@@ -58,7 +58,7 @@ namespace JackSharpTest
 		public virtual void ShutdownEvent ()
 		{
 			using (Controller controller = new Controller ("testController"))
-			using (Client client = new Client ("TestClient", 2, 2)) {
+			using (Processor client = new Processor ("TestClient", 2, 2)) {
 				ShutdownReceiver receiver = new ShutdownReceiver ();
 				controller.Start (true);
 				client.Shutdown += receiver.OnShutdown;

@@ -50,7 +50,7 @@ namespace JackSharp.Processing
 		/// <summary>
 		/// Adds a MIDI event.
 		/// </summary>
-		/// <param name="midiInEvent">Midi event.</param>
+		/// <param name="midiEvent">Midi event.</param>
 		public void AddEvent (T midiEvent)
 		{
 			_midiEvents.Add (midiEvent);
@@ -58,6 +58,10 @@ namespace JackSharp.Processing
 
 		readonly List<T> _midiEvents = new List<T> ();
 
+		/// <summary>
+		/// Gets the enumerator.
+		/// </summary>
+		/// <returns>The enumerator.</returns>
 		public IEnumerator<T> GetEnumerator ()
 		{
 			return _midiEvents.GetEnumerator ();

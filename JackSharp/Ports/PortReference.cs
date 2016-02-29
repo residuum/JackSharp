@@ -111,12 +111,24 @@ namespace JackSharp.Ports
 			throw new IndexOutOfRangeException ("jack_port_flags");
 		}
 
+		/// <summary>
+		/// Determines whether the specified <see cref="System.Object"/> is equal to the current <see cref="JackSharp.Ports.PortReference"/>.
+		/// </summary>
+		/// <param name="obj">The <see cref="System.Object"/> to compare with the current <see cref="JackSharp.Ports.PortReference"/>.</param>
+		/// <returns><c>true</c> if the specified <see cref="System.Object"/> is equal to the current
+		/// <see cref="JackSharp.Ports.PortReference"/>; otherwise, <c>false</c>.</returns>
 		public override bool Equals (object obj)
 		{
 			PortReference otherPort = obj as PortReference;
 			return Equals (otherPort);
 		}
 
+		/// <summary>
+		/// Determines whether the specified <see cref="JackSharp.Ports.PortReference"/> is equal to the current <see cref="JackSharp.Ports.PortReference"/>.
+		/// </summary>
+		/// <param name="other">The <see cref="JackSharp.Ports.PortReference"/> to compare with the current <see cref="JackSharp.Ports.PortReference"/>.</param>
+		/// <returns><c>true</c> if the specified <see cref="JackSharp.Ports.PortReference"/> is equal to the current
+		/// <see cref="JackSharp.Ports.PortReference"/>; otherwise, <c>false</c>.</returns>
 		public bool Equals (PortReference other)
 		{
 			if (other == null)
@@ -126,6 +138,10 @@ namespace JackSharp.Ports
 			}
 		}
 
+		/// <summary>
+		/// Serves as a hash function for a <see cref="JackSharp.Ports.PortReference"/> object.
+		/// </summary>
+		/// <returns>A hash code for this instance that is suitable for use in hashing algorithms and data structures such as a hash table.</returns>
 		public override int GetHashCode ()
 		{
 			unsafe {
@@ -133,6 +149,8 @@ namespace JackSharp.Ports
 			}
 		}
 
+		/// <param name="a">The PortReference a.</param>
+		/// <param name="b">The PortReference b.</param>
 		public static bool operator == (PortReference a, PortReference b)
 		{
 			if (object.ReferenceEquals (a, b)) {
@@ -145,6 +163,9 @@ namespace JackSharp.Ports
 			return (a.Equals (b));
 		}
 
+
+		/// <param name="a">The PortReference a.</param>
+		/// <param name="b">The PortReference b.</param>
 		public static bool operator != (PortReference a, PortReference b)
 		{
 			return !(a == b);

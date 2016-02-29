@@ -23,219 +23,241 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using JackSharp.Ports;
 using JackSharp.ApiWrapper;
+using JackSharp.Events;
 using JackSharp.Pointers;
-using JackSharp.Processing;
+using JackSharp.Ports;
 
 namespace JackSharp
 {
-	public class Client : ClientBase
+	/// <summary>
+	/// Base class for JackClients.
+	/// </summary>
+	public abstract class Client: IDisposable
 	{
-		AudioInPort[] _audioInPorts;
-		AudioOutPort[] _audioOutPorts;
-		MidiInPort[] _midiInPorts;
-		MidiOutPort[] _midiOutPorts;
-		readonly bool _autoconnect;
+		internal unsafe UnsafeStructs.jack_client_t* JackClient;
 
 		/// <summary>
-		/// Delegates to be called on the process callback of Jack. Multiple Actions can be added.
+		/// Gets whether the client is connected to Jack.
 		/// </summary>
-		public Action<ProcessBuffer> ProcessFunc { get; set; }
+		/// <value>[true] if client is connected to Jack.</value>
+		public bool IsConnectedToJack { get; private set; }
 
-		public Client (string name, int audioInPorts = 0, int audioOutPorts = 0, int midiInPorts = 0, int midiOutPorts = 0, bool autoconnect = false) : base (name)
+		protected readonly string Name;
+
+		protected Client (string name)
 		{
-			_autoconnect = autoconnect;
-			SetUpPorts (audioInPorts, audioOutPorts, midiInPorts, midiOutPorts);
-			SetUpCallbacks ();
+			Name = name;
+			SetUpBaseCallbacks ();
 		}
 
 		~Client ()
 		{
-			base.Dispose (false);
+			Dispose (false);
 		}
 
-		public new void Dispose ()
+		public void Dispose ()
 		{
-			base.Dispose ();
-		}
-
-		void SetUpPorts (int audioInPorts, int audioOutPorts, int midiInPorts, int midiOutPorts)
-		{
-			_audioInPorts = new AudioInPort[audioInPorts];
-			_audioOutPorts = new AudioOutPort[audioOutPorts];
-			_midiInPorts = new MidiInPort[midiInPorts];
-			_midiOutPorts = new MidiOutPort[midiOutPorts];
-		}
-
-		void SetUpCallbacks ()
-		{
-			_processCallback = OnProcess;
+			Dispose (true);
+			GC.SuppressFinalize (this);
 		}
 
 		/// <summary>
-		/// Gets the MIDI out ports.
+		/// Gets the sample rate.
 		/// </summary>
-		/// <value>The MIDI out ports.</value>
-		public IEnumerable<MidiOutPort> MidiOutPorts { get { return _midiOutPorts; } }
+		/// <value>The sample rate.</value>
+		public int SampleRate { get; private set; }
 
 		/// <summary>
-		/// Gets the MIDI in ports.
+		/// Gets the size of the buffer.
 		/// </summary>
-		/// <value>The MIDI in ports.</value>
-		public IEnumerable<MidiInPort> MidiInPorts { get { return _midiInPorts; } }
+		/// <value>The size of the buffer.</value>
+		public int BufferSize { get; private set; }
+
+
+		Callbacks.JackBufferSizeCallback _bufferSizeCallback;
 
 		/// <summary>
-		/// Gets the audio out ports.
+		/// Occurs when buffer size has changed.
 		/// </summary>
-		/// <value>The audio out ports.</value>
-		public IEnumerable<AudioOutPort> AudioOutPorts { get { return _audioOutPorts; } }
+		public event EventHandler<BufferSizeEventArgs> BufferSizeChanged;
+
+		Callbacks.JackSampleRateCallback _sampleRateCallback;
 
 		/// <summary>
-		/// Gets the audio in ports.
+		/// Occurs when sample rate has changed.
 		/// </summary>
-		/// <value>The audio in ports.</value>
-		public IEnumerable<AudioInPort> AudioInPorts { get { return _audioInPorts; } }
+		public event EventHandler<SampleRateEventArgs> SampleRateChanged;
 
-		public string PortNameFormat { private get; set; }
-
-		Callbacks.JackProcessCallback _processCallback;
+		Callbacks.JackShutdownCallback _shutdownCallback;
 
 		/// <summary>
-		/// Activates the client and connects to Jack.
+		/// Occurs when jack shuts down.
 		/// </summary>
-		/// <param name="startServer">If [true], the client will start Jack if it is not running.</param>
-		public new bool Start (bool startServer = false)
+		public event EventHandler<EventArgs> Shutdown;
+
+		object _jackErrorFunction;
+
+		object _jackInfoFunction;
+
+		/// <summary>
+		/// Occurs on xrun.
+		/// </summary>
+		public event EventHandler<XrunEventArgs> Xrun;
+
+		public event EventHandler<NotAvailableEventArgs> NotAvailable;
+
+		protected void InvokeNotAvaible (string eventName)
 		{
-			if (!base.Start (startServer)) {
-				return false;
+			if (NotAvailable != null) {
+				NotAvailable (this, new NotAvailableEventArgs ("Port Rename"));
 			}
-			if (_autoconnect) {
-				AutoConnectPorts ();
-			}
-			return true;
 		}
 
-		protected override bool Open (bool startServer)
+		Callbacks.JackXRunCallback _jackXrunCallback;
+
+		void SetUpBaseCallbacks ()
 		{
-			ClientStatus status = BaseOpen (startServer);
-			switch (status) {
-			case ClientStatus.AlreadyThere:
-				return true;
-			case ClientStatus.Failure:
-				return false;
-			case ClientStatus.New:
-				CreatePorts ();
-				WireUpCallbacks ();
-				WireUpBaseCallbacks ();
-				return true;
-			}
-			return false;
+			_bufferSizeCallback = OnBufferSizeChange;
+			_sampleRateCallback = OnSampleRateChange;
+			_shutdownCallback = OnShutdown;
+			//	_jackErrorFunction = OnJackError;
+			//	_jackInfoFunction = OnJackInfo;6
+			_jackXrunCallback = OnJackXrun;
 		}
 
-		unsafe void WireUpCallbacks ()
+		protected unsafe void WireUpBaseCallbacks ()
 		{
-			ClientCallbackApi.SetProcessCallback (JackClient, _processCallback, IntPtr.Zero);
+			ClientCallbackApi.SetBufferSizeCallback (JackClient, _bufferSizeCallback, IntPtr.Zero);
+			ClientCallbackApi.SetSampleRateCallback (JackClient, _sampleRateCallback, IntPtr.Zero);
+			ClientCallbackApi.SetShutdownCallback (JackClient, _shutdownCallback, IntPtr.Zero);
+			//ClientCallbackApi.SetErrorFunction (JackClient, _jackErrorFunction, IntPtr.Zero);
+			//ClientCallbackApi.SetInfoFunction (JackClient, _jackInfoFunction, IntPtr.Zero);
+			ClientCallbackApi.SetXrunCallback (JackClient, _jackXrunCallback, IntPtr.Zero);
 		}
 
-		int OnProcess (uint nframes, IntPtr arg)
+
+		int OnSampleRateChange (uint nframes, IntPtr arg)
 		{
-			AudioBuffer[] audioInBuffers = _audioInPorts.Select (p => p.GetAudioBuffer (nframes)).ToArray ();
-			AudioBuffer[] audioOutBuffers = _audioOutPorts.Select (p => p.GetAudioBuffer (nframes)).ToArray ();
-			MidiEventCollection<MidiInEvent>[] midiInEvents = _midiInPorts.Select (p => p.GetMidiBuffer (nframes)).ToArray ();
-			MidiEventCollection<MidiOutEvent>[] midiOutEvents = _midiOutPorts.Select (p => p.GetMidiBuffer ()).ToArray ();
-
-			if (ProcessFunc != null) {
-				ProcessFunc (new ProcessBuffer (nframes, audioInBuffers, audioOutBuffers, midiInEvents, midiOutEvents));
+			SampleRate = (int)nframes;
+			if (SampleRateChanged != null) {
+				SampleRateChanged (this, new SampleRateEventArgs (SampleRate));
 			}
-			foreach (var audioInBuffer in audioInBuffers) {
-				audioInBuffer.CopyToPointer ();
-			}
-			foreach (var audioOutBuffer in audioOutBuffers) {
-				audioOutBuffer.CopyToPointer ();
-			}
-			foreach (MidiEventCollection<MidiOutEvent> midiEvents in midiOutEvents) {
-				midiEvents.WriteToJackMidi (nframes);
-			}
-
 			return 0;
 		}
 
-		/// <summary>
-		/// Stop this instance and siconnects from Jack.
-		/// </summary>
-		public new bool Stop ()
+		int OnBufferSizeChange (uint nframes, IntPtr arg)
 		{
-			return base.Stop ();
+			BufferSize = (int)nframes;
+			if (BufferSizeChanged != null) {
+				BufferSizeChanged (this, new BufferSizeEventArgs (BufferSize));
+			}
+			return 0;
 		}
 
-		protected override void Close ()
+		unsafe void OnShutdown (IntPtr args)
 		{
-			for (int i = _midiOutPorts.Length - 1; i >= 0; i--) {
-				if (_midiOutPorts [i] != null) {
-					_midiOutPorts [i].Dispose ();
-				}
-			}
-			for (int i = _midiInPorts.Length - 1; i >= 0; i--) {
-				if (_midiInPorts [i] != null) {
-					_midiInPorts [i].Dispose ();
-				}
-			}
-			for (int i = _audioOutPorts.Length - 1; i >= 0; i--) {
-				if (_audioOutPorts [i] != null) {
-					_audioOutPorts [i].Dispose ();
-				}
-			}
-			for (int i = _audioInPorts.Length - 1; i >= 0; i--) {
-				if (_audioInPorts [i] != null) {
-					_audioInPorts [i].Dispose ();
-				}
-			}
-			base.Close ();
-		}
-
-		unsafe void CreatePorts ()
-		{
-			for (int i = 0; i < _audioInPorts.Length; i++) {
-				_audioInPorts [i] = new AudioInPort (JackClient, i, PortNameFormat);
-			}
-			for (int i = 0; i < _audioOutPorts.Length; i++) {
-				_audioOutPorts [i] = new AudioOutPort (JackClient, i, PortNameFormat);
-			}
-			for (int i = 0; i < _midiInPorts.Length; i++) {
-				_midiInPorts [i] = new MidiInPort (JackClient, i, PortNameFormat);
-			}
-			for (int i = 0; i < _midiOutPorts.Length; i++) {
-				_midiOutPorts [i] = new MidiOutPort (JackClient, i, PortNameFormat);
+			IsConnectedToJack = false;
+			JackClient = null;
+			if (Shutdown != null) {
+				Shutdown (this, new EventArgs ());
 			}
 		}
 
-		unsafe void AutoConnectPorts ()
+		unsafe int OnJackXrun (IntPtr args)
 		{
-			List<PortReference> ports = GetAllJackPorts ().Where (p => p.IsPhysicalPort).ToList ();
-
-			List<string> outlets = ports.Where (p => p.Direction == Direction.Out && p.PortType == PortType.Audio).Select (p => p.FullName).ToList ();
-			List<string> inlets = _audioInPorts.Select (p => PortApi.GetName (p._port).PtrToString ()).ToList ();
-			ConnectPorts (outlets, inlets);
-
-			outlets = _audioOutPorts.Select (p => PortApi.GetName (p._port).PtrToString ()).ToList ();
-			inlets = ports.Where (p => p.Direction == Direction.In && p.PortType == PortType.Audio).Select (p => p.FullName).ToList ();
-			ConnectPorts (outlets, inlets);
-
-			outlets = ports.Where (p => p.Direction == Direction.Out && p.PortType == PortType.Midi).Select (p => p.FullName).ToList ();
-			inlets = _midiInPorts.Select (p => PortApi.GetName (p._port).PtrToString ()).ToList ();
-			ConnectPorts (outlets, inlets);
-
-			outlets = _midiOutPorts.Select (p => PortApi.GetName (p._port).PtrToString ()).ToList ();
-			inlets = ports.Where (p => p.Direction == Direction.In && p.PortType == PortType.Midi).Select (p => p.FullName).ToList ();
-			ConnectPorts (outlets, inlets);
+			float xrunDelay = Invoke.GetXrunDelayedUsecs (JackClient);
+			if (xrunDelay > 0 && Xrun != null) { 
+				Xrun (this, new XrunEventArgs (xrunDelay));
+			}
+			return 0;
 		}
 
-		unsafe void ConnectPorts (List<string> outlets, List<string> inlets)
+		internal abstract bool Open (bool startServer);
+
+		protected unsafe ClientStatus BaseOpen (bool startServer)
 		{
-			for (int i = 0; i < Math.Min (outlets.Count, inlets.Count); i++) {
-				PortApi.Connect (JackClient, outlets [i], inlets [i]);
+			if (JackClient != null) {
+				return ClientStatus.AlreadyThere;
 			}
+			JackOptions startOptions = startServer ? JackOptions.JackNullOption : JackOptions.JackNoStartServer;
+			JackClient = ClientApi.Open (Name, startOptions, IntPtr.Zero);
+			if (JackClient == null) {
+				return ClientStatus.Failure;
+			}
+			return ClientStatus.New;
+		}
+
+		protected virtual unsafe bool Start (bool startServer)
+		{
+			if (IsConnectedToJack) {
+				return false;
+			}
+			if (!Open (startServer)) {
+				return false;
+			}
+			int status = ClientApi.Activate (JackClient);
+			if (status != 0) {
+				return false;
+			}
+			SampleRate = (int)Invoke.GetSampleRate (JackClient);
+			BufferSize = (int)Invoke.GetBufferSize (JackClient);
+			IsConnectedToJack = true;
+			return true;
+		}
+
+		protected virtual unsafe bool Stop ()
+		{
+			bool status = ClientApi.Deactivate (JackClient) == 0;
+			if (status) {
+				IsConnectedToJack = false;
+			}
+			return status;
+		}
+
+		protected virtual unsafe void Close ()
+		{
+			int status = ClientApi.Close (JackClient);
+			if (status == 0) {
+				IsConnectedToJack = false;
+				JackClient = null;
+			}
+		}
+
+		protected void Dispose (bool isDisposing)
+		{
+			Stop ();
+			Close ();
+		}
+
+		protected enum ClientStatus
+		{
+			AlreadyThere,
+			New,
+			Failure
+		}
+
+		protected unsafe List<PortReference> GetAllJackPorts ()
+		{
+			IntPtr initialPorts = PortApi.GetPorts (JackClient, null, null, 0);
+			List<PortReference> ports = PortListFromPointer (initialPorts);
+			Invoke.Free (initialPorts);
+			return ports;
+		}
+
+		protected List<PortReference> PortListFromPointer (IntPtr initialPorts)
+		{
+			List<PortReference> ports = initialPorts.PtrToStringArray ().Select (MapPort).ToList ();
+			return ports;
+		}
+
+		unsafe PortReference MapPort (string portName)
+		{
+			UnsafeStructs.jack_port_t* portPointer = PortApi.GetPortByName (JackClient, portName);
+			if (portPointer == null) {
+				return null;
+			}
+			return new PortReference (portPointer);
 		}
 	}
 }

@@ -39,6 +39,11 @@ namespace JackSharp.Processing
 		/// <value>The midi data.</value>
 		public byte[] MidiData { get; private set; }
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="JackSharp.Processing.MidiOutEvent"/> class.
+		/// </summary>
+		/// <param name="time">Time.</param>
+		/// <param name="midiData">Midi data.</param>
 		public MidiOutEvent (int time, byte[] midiData)
 		{
 			Time = time;

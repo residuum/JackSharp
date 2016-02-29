@@ -30,7 +30,10 @@ using JackSharp.Ports;
 
 namespace JackSharp
 {
-	public class Controller : ClientBase
+	/// <summary>
+	/// Controller.
+	/// </summary>
+	public sealed class Controller : Client
 	{
 		Callbacks.JackClientRegistrationCallback _clientRegistration;
 
@@ -54,6 +57,10 @@ namespace JackSharp
 		/// </summary>
 		public event EventHandler<ConnectionChangeEventArgs> ConnectionChanged;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="JackSharp.Controller"/> class.
+		/// </summary>
+		/// <param name="name">Name.</param>
 		public Controller (string name) : base (name)
 		{
 			SetUpCallbacks ();
@@ -111,7 +118,7 @@ namespace JackSharp
 			}
 		}
 
-		protected override bool Open (bool startServer)
+		internal override bool Open (bool startServer)
 		{
 			ClientStatus status = BaseOpen (startServer);
 			switch (status) {

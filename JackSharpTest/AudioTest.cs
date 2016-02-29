@@ -31,12 +31,12 @@ namespace JackSharpTest
 	[TestFixture]
 	public class AudioTest
 	{
-		static Client _client;
+		static Processor _client;
 
 		[SetUp]
 		public static void CreateClient ()
 		{
-			_client = new Client ("testAudio", 2, 2);
+			_client = new Processor ("testAudio", 2, 2);
 		}
 
 		[Test]

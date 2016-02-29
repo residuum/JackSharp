@@ -45,7 +45,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client.cs" />
     <Compile Include="Events\PortRegistrationEventArgs.cs" />
     <Compile Include="Events\ConnectionChangeEventArgs.cs" />
     <Compile Include="Events\ClientRegistrationEventArgs.cs" />
@@ -86,9 +85,11 @@
     <Compile Include="Processing\IProcessingItem.cs" />
     <Compile Include="Processing\MidiInEvent.cs" />
     <Compile Include="Processing\MidiEventCollection.cs" />
-    <Compile Include="ClientBase.cs" />
     <Compile Include="Events\XrunEventArgs.cs" />
     <Compile Include="Processing\ProcessBuffer.cs" />
+    <Compile Include="Processor.cs" />
+    <Compile Include="Client.cs" />
+    <Compile Include="Events\PortRenameEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

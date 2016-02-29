@@ -34,7 +34,7 @@ namespace JackSharpTest
 		[Test]
 		public virtual void Start ()
 		{
-			using (Client client = new Client ("testClient")) {
+			using (Processor client = new Processor ("testClient")) {
 				Assert.IsTrue (client.Start ());
 				client.Stop ();
 			}
@@ -43,7 +43,7 @@ namespace JackSharpTest
 		[Test]
 		public virtual void DoubleStart ()
 		{
-			using (Client client = new Client ("testing")) {
+			using (Processor client = new Processor ("testing")) {
 				Assert.IsTrue (client.Start ());
 				Assert.IsFalse (client.Start ());
 			}
@@ -52,7 +52,7 @@ namespace JackSharpTest
 		[Test]
 		public virtual void StartAfterStopped ()
 		{
-			using (Client client = new Client ("testing", 1)) {
+			using (Processor client = new Processor ("testing", 1)) {
 				ClientReceiver receiver = new ClientReceiver ();
 				client.ProcessFunc += receiver.ChannelCounterAction;
 				Assert.IsTrue (client.Start ());
@@ -67,7 +67,7 @@ namespace JackSharpTest
 		[Test]
 		public virtual void Stop ()
 		{
-			using (Client client = new Client ("testing")) {
+			using (Processor client = new Processor ("testing")) {
 				client.Start ();
 				Assert.IsTrue (client.Stop ());
 			}
@@ -76,7 +76,7 @@ namespace JackSharpTest
 		[Test]
 		public virtual void StopIfNotStarted ()
 		{
-			using (Client client = new Client ("testing")) {
+			using (Processor client = new Processor ("testing")) {
 				Assert.IsFalse (client.Stop ());
 			}
 		}
@@ -84,7 +84,7 @@ namespace JackSharpTest
 		[Test]
 		public virtual void SampleRate ()
 		{
-			using (Client client = new Client ("testing")) {
+			using (Processor client = new Processor ("testing")) {
 				client.Start ();
 				Assert.IsTrue (client.SampleRate == 44100 || client.SampleRate == 48000);
 				client.Stop ();
@@ -94,7 +94,7 @@ namespace JackSharpTest
 		[Test]
 		public virtual void BufferSize ()
 		{
-			using (Client client = new Client ("testing")) {
+			using (Processor client = new Processor ("testing")) {
 				client.Start ();
 				Assert.IsTrue (client.BufferSize > 0);
 				client.Stop ();
@@ -105,7 +105,7 @@ namespace JackSharpTest
 		public virtual void AutoConnect ()
 		{
 			using (Controller controller = new Controller ("testController"))
-			using (Client client = new Client ("testClient", 2, 2, 0, 0, true)) {
+			using (Processor client = new Processor ("testClient", 2, 2, 0, 0, true)) {
 				ControllerReceiver receiver = new ControllerReceiver ();
 				controller.ConnectionChanged += receiver.ConnectionChanged;
 				controller.Start ();
@@ -123,7 +123,7 @@ namespace JackSharpTest
 		public virtual void DefaultNameFormat ()
 		{
 			using (Controller controller = new Controller ("testController"))
-			using (Client client = new Client ("testClient", 1)) {
+			using (Processor client = new Processor ("testClient", 1)) {
 				client.Start ();
 				Thread.Sleep (100);
 				Assert.AreEqual ("audioin_1", client.AudioInPorts.First ().Name);
@@ -136,7 +136,7 @@ namespace JackSharpTest
 		public virtual void ChangeNameFormat ()
 		{
 			using (Controller controller = new Controller ("testController"))
-			using (Client client = new Client ("testClient", 1)) {
+			using (Processor client = new Processor ("testClient", 1)) {
 				client.PortNameFormat = "my_{direction}-{type}_{index}";
 				client.Start ();
 				Thread.Sleep (100);

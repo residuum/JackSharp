@@ -25,23 +25,23 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using JackSharp;
-using Naudio.Jack;
-using Naudio.JackTest.WaveIntegration;
+using NAudio.Jack;
+using NAudio.JackTest.WaveIntegration;
 using NAudio.Wave;
 using NUnit.Framework;
 
-namespace Naudio.JackTest
+namespace NAudio.JackTest
 {
 	[TestFixture]
 	public class JackOutTest
 	{
-		static Client _client;
+		static Processor _client;
 		static JackOut _jackOut;
 
 		[SetUp]
 		public static void CreateOutput ()
 		{
-			_client = new Client ("testNaudioOut", 0, 2);
+			_client = new Processor ("testNaudioOut", 0, 2);
 			_jackOut = new JackOut (_client);
 		}
 

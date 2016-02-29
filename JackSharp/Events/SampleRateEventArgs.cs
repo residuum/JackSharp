@@ -25,10 +25,21 @@ using System;
 
 namespace JackSharp.Events
 {
+	/// <summary>
+	/// Sample rate event arguments.
+	/// </summary>
 	public class SampleRateEventArgs : EventArgs
 	{
+		/// <summary>
+		/// Gets the sample rate.
+		/// </summary>
+		/// <value>The sample rate.</value>
 		public int SampleRate { get; private set; }
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="JackSharp.Events.SampleRateEventArgs"/> class.
+		/// </summary>
+		/// <param name="sampleRate">Sample rate.</param>
 		public SampleRateEventArgs (int sampleRate)
 		{
 			SampleRate = sampleRate;
