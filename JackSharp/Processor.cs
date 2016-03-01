@@ -68,7 +68,7 @@ namespace JackSharp
 		/// </summary>
 		~Processor ()
 		{
-			base.Dispose (false);
+			Dispose (false);
 		}
 
 		/// <summary>
@@ -80,7 +80,7 @@ namespace JackSharp
 		/// collector can reclaim the memory that the <see cref="JackSharp.Processor"/> was occupying.</remarks>
 		public new void Dispose ()
 		{
-			base.Dispose ();
+			Dispose (true);
 		}
 
 		void SetUpPorts (int audioInPorts, int audioOutPorts, int midiInPorts, int midiOutPorts)
@@ -198,10 +198,11 @@ namespace JackSharp
 		/// </summary>
 		public new bool Stop ()
 		{
+			DisposePorts ();
 			return base.Stop ();
 		}
 
-		protected override void Close ()
+		void DisposePorts() 
 		{
 			for (int i = _midiOutPorts.Length - 1; i >= 0; i--) {
 				if (_midiOutPorts [i] != null) {
@@ -223,7 +224,6 @@ namespace JackSharp
 					_audioInPorts [i].Dispose ();
 				}
 			}
-			base.Close ();
 		}
 
 		unsafe void CreatePorts ()

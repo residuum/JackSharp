@@ -58,6 +58,21 @@ namespace JackSharpTest
 		}
 
 		[Test]
+		public virtual void CallbacksOnRestart ()
+		{
+			ControllerReceiver receiver = new ControllerReceiver ();
+			_controller.PortChanged += receiver.PortChanged;
+			_controller.Start ();
+			Thread.Sleep (100);
+			_controller.Stop ();
+			int firstRun = receiver.PortsFound;
+			_controller.Start ();
+			Thread.Sleep (100);
+			_controller.Stop ();
+			Assert.AreNotEqual (firstRun, receiver.PortsFound);
+		}
+
+		[Test]
 		public virtual void PortAndClientNames ()
 		{
 			ControllerReceiver receiver = new ControllerReceiver ();

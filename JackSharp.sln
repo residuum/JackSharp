@@ -50,7 +50,7 @@ Global
 		$5.NamingStyle = None
 		$5.IncludeInstanceMembers = True
 		$5.IncludeStaticEntities = True
-		version = 0.2.0
+		version = 0.3.0
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

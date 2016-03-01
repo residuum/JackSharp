@@ -211,11 +211,12 @@ namespace JackSharp
 			bool status = ClientApi.Deactivate (JackClient) == 0;
 			if (status) {
 				IsConnectedToJack = false;
+				Close ();
 			}
 			return status;
 		}
 
-		protected virtual unsafe void Close ()
+		protected unsafe void Close ()
 		{
 			int status = ClientApi.Close (JackClient);
 			if (status == 0) {
@@ -227,7 +228,6 @@ namespace JackSharp
 		protected void Dispose (bool isDisposing)
 		{
 			Stop ();
-			Close ();
 		}
 
 		protected enum ClientStatus

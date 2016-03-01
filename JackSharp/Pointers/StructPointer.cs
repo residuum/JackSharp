@@ -47,6 +47,9 @@ namespace JackSharp.Pointers
 		/// </summary>
 		public void CopyToPointer ()
 		{
+			if (_pointer == IntPtr.Zero){
+				return;
+			}
 			int length = Math.Min (Size, Array.Length);
 			int byteCount = length * Marshal.SizeOf (typeof(T));
 			GCHandle handle = GCHandle.Alloc (Array, GCHandleType.Pinned);
@@ -72,6 +75,9 @@ namespace JackSharp.Pointers
 		/// </summary>
 		public T[] CopyFromPointer ()
 		{
+			if (_pointer == IntPtr.Zero){
+				return new T[Size];
+			}
 			T[] array = new T[Size];
 			GCHandle handle = GCHandle.Alloc (array, GCHandleType.Pinned);
 			int byteCount = array.Length * Marshal.SizeOf (typeof(T));

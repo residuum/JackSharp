@@ -33,8 +33,8 @@ namespace JackSharp.Ports
 	/// </summary>
 	public abstract class Port : IDisposable
 	{
-		internal readonly unsafe UnsafeStructs.jack_client_t* _jackClient;
-		internal readonly unsafe UnsafeStructs.jack_port_t* _port;
+		internal unsafe UnsafeStructs.jack_client_t* _jackClient;
+		internal unsafe UnsafeStructs.jack_port_t* _port;
 
 		/// <summary>
 		/// Gets the type of the port.
@@ -140,7 +140,13 @@ namespace JackSharp.Ports
 
 		unsafe void Dispose (bool isDisposing)
 		{
-			PortApi.Unregister (_jackClient, _port);
+			if (_jackClient == null || _port == null) {
+				return;
+			}
+			if (PortApi.Unregister (_jackClient, _port) == 0){
+				_jackClient = null;
+				_port = null;		
+			}
 		}
 
 		/// <summary>
