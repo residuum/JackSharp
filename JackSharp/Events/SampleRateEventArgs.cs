@@ -28,7 +28,7 @@ namespace JackSharp.Events
 	/// <summary>
 	/// Sample rate event arguments.
 	/// </summary>
-	public class SampleRateEventArgs : EventArgs
+	public sealed class SampleRateEventArgs : EventArgs
 	{
 		/// <summary>
 		/// Gets the sample rate.

@@ -28,7 +28,7 @@ namespace JackSharp.Events
 	/// <summary>
 	/// Xrun event arguments.
 	/// </summary>
-	public class XrunEventArgs : EventArgs
+	public sealed class XrunEventArgs : EventArgs
 	{
 		/// <summary>
 		/// Gets the xrun delay.

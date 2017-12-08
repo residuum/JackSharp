@@ -47,7 +47,7 @@ namespace JackSharp.Pointers
 		/// </summary>
 		public void CopyToPointer ()
 		{
-			if (_pointer == IntPtr.Zero){
+			if (_pointer == IntPtr.Zero) {
 				return;
 			}
 			int length = Math.Min (Size, Array.Length);
@@ -75,7 +75,7 @@ namespace JackSharp.Pointers
 		/// </summary>
 		public T[] CopyFromPointer ()
 		{
-			if (_pointer == IntPtr.Zero){
+			if (_pointer == IntPtr.Zero) {
 				return new T[Size];
 			}
 			T[] array = new T[Size];

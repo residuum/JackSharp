@@ -29,7 +29,7 @@ namespace JackSharp.Ports
 	/// <summary>
 	/// Port reference for Controller.
 	/// </summary>
-	public class PortReference
+	public sealed class PortReference
 	{
 		/// <summary>
 		/// Gets the direction.
@@ -95,11 +95,8 @@ namespace JackSharp.Ports
 
 		static unsafe void ReadJackPortFlags (UnsafeStructs.jack_port_t* portPointer, out Direction direction, out bool isPhysicalPort)
 		{
-			isPhysicalPort = false;
 			JackPortFlags portFlags = (JackPortFlags)PortApi.GetPortFlags (portPointer);
-			if ((portFlags & JackPortFlags.JackPortIsPhysical) == JackPortFlags.JackPortIsPhysical) {
-				isPhysicalPort = true;
-			}
+			isPhysicalPort = (portFlags & JackPortFlags.JackPortIsPhysical) == JackPortFlags.JackPortIsPhysical;
 			if ((portFlags & JackPortFlags.JackPortIsInput) == JackPortFlags.JackPortIsInput) {
 				direction = Direction.In;
 				return;

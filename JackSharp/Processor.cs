@@ -81,6 +81,7 @@ namespace JackSharp
 		public new void Dispose ()
 		{
 			Dispose (true);
+			GC.SuppressFinalize (this);
 		}
 
 		void SetUpPorts (int audioInPorts, int audioOutPorts, int midiInPorts, int midiOutPorts)
@@ -202,7 +203,7 @@ namespace JackSharp
 			return base.Stop ();
 		}
 
-		void DisposePorts() 
+		void DisposePorts ()
 		{
 			for (int i = _midiOutPorts.Length - 1; i >= 0; i--) {
 				if (_midiOutPorts [i] != null) {

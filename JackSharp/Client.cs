@@ -122,7 +122,7 @@ namespace JackSharp
 			_sampleRateCallback = OnSampleRateChange;
 			_shutdownCallback = OnShutdown;
 			//	_jackErrorFunction = OnJackError;
-			//	_jackInfoFunction = OnJackInfo;6
+			//	_jackInfoFunction = OnJackInfo;
 			_jackXrunCallback = OnJackXrun;
 		}
 

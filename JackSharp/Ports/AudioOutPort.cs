@@ -28,7 +28,7 @@ namespace JackSharp.Ports
 	/// <summary>
 	/// Audio out port.
 	/// </summary>
-	public class AudioOutPort : Port
+	public sealed class AudioOutPort : Port
 	{
 		internal unsafe AudioOutPort (UnsafeStructs.jack_client_t* jackClient, int index, string nameFormat = null) : base (jackClient, index, Direction.Out, PortType.Audio,nameFormat)
 		{

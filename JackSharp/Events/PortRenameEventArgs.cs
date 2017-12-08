@@ -1,4 +1,4 @@
-﻿// Author:
+// Author:
 //       Thomas Mayer <thomas@residuum.org>
 //
 // Copyright (c) 2016 Thomas Mayer
@@ -28,7 +28,7 @@ namespace JackSharp.Events
 	/// <summary>
 	/// Port rename event arguments.
 	/// </summary>
-	public class PortRenameEventArgs : EventArgs
+	public sealed class PortRenameEventArgs : EventArgs
 	{
 		/// <summary>
 		/// Gets the port.

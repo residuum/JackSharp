@@ -28,7 +28,7 @@ namespace JackSharp.Events
 	/// <summary>
 	/// Buffer size event arguments.
 	/// </summary>
-	public class BufferSizeEventArgs : EventArgs
+	public sealed class BufferSizeEventArgs : EventArgs
 	{
 		/// <summary>
 		/// Gets the size of the buffer.

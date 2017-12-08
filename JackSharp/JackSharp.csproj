@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiWrapper\JackTransportState.cs" />
     <Compile Include="Events\PortRegistrationEventArgs.cs" />
     <Compile Include="Events\ConnectionChangeEventArgs.cs" />
     <Compile Include="Events\ClientRegistrationEventArgs.cs" />
@@ -92,7 +93,9 @@
     <Compile Include="Events\PortRenameEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

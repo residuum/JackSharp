@@ -28,7 +28,7 @@ namespace JackSharp.Ports
 	/// <summary>
 	/// MIDI out port.
 	/// </summary>
-	public class MidiOutPort : Port
+	public sealed class MidiOutPort : Port
 	{
 		internal unsafe MidiOutPort (UnsafeStructs.jack_client_t* jackClient, int index, string nameFormat = null) : base (jackClient, index, Direction.Out, PortType.Midi, nameFormat)
 		{

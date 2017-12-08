@@ -29,7 +29,7 @@ using NUnit.Framework;
 namespace JackSharpTest
 {
 	[TestFixture]
-	public class ClientTest
+	public class ProcessorTest
 	{
 		[Test]
 		public virtual void Start ()

@@ -28,7 +28,7 @@ namespace JackSharp.Events
 	/// <summary>
 	/// Not available event arguments.
 	/// </summary>
-	public class NotAvailableEventArgs : EventArgs
+	public sealed class NotAvailableEventArgs : EventArgs
 	{
 		/// <summary>
 		/// Gets the name of the event.

@@ -28,7 +28,7 @@ namespace JackSharp.Events
 	/// <summary>
 	/// Connection change event arguments.
 	/// </summary>
-	public class ConnectionChangeEventArgs : EventArgs
+	public sealed class ConnectionChangeEventArgs : EventArgs
 	{
 		/// <summary>
 		/// Gets the outlet.

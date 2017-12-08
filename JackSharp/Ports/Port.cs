@@ -143,7 +143,7 @@ namespace JackSharp.Ports
 			if (_jackClient == null || _port == null) {
 				return;
 			}
-			if (PortApi.Unregister (_jackClient, _port) == 0){
+			if (PortApi.Unregister (_jackClient, _port) == 0) {
 				_jackClient = null;
 				_port = null;		
 			}

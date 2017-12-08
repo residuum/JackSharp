@@ -2,17 +2,19 @@
 <package >
 	<metadata>
 		<id>$id$</id>
-		<version>0.3.0</version>
+		<version>0.4.0</version>
 		<title>$title$</title>
 		<authors>Thomas Mayer</authors>
 		<owners>Thomas Mayer</owners>
 		<licenseUrl>https://raw.githubusercontent.com/residuum/JackSharp/master/LICENSE</licenseUrl>
 		<projectUrl>https://github.com/residuum/JackSharp</projectUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<description>C# Wrapper around libjack API.</description>
+		<description>C# Wrapper around libjack API.
+		
+JACK Audio Connection Kit (or JACK; a recursive acronym) is a professional sound server daemon that provides real-time, low-latency connections for both audio and MIDI data between applications that implement its API.</description>
 		<releaseNotes>Bugfix for invocation of shutdown event.</releaseNotes>
 		<copyright>Copyright 2016</copyright>
-		<tags>C# .NET Mono audio sound</tags>
+		<tags>C# .NET Mono audio sound jack</tags>
 	</metadata>
 	<files>
 		<file src="bin\$configuration$\$id$.xml" target="lib" />

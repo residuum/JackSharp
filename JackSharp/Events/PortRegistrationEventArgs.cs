@@ -28,7 +28,7 @@ namespace JackSharp.Events
 	/// <summary>
 	/// Port registration event arguments.
 	/// </summary>
-	public class PortRegistrationEventArgs : EventArgs
+	public sealed class PortRegistrationEventArgs : EventArgs
 	{
 		/// <summary>
 		/// Gets the port.

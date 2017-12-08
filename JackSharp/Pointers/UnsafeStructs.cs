@@ -20,22 +20,41 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+
+using System;
+
 namespace JackSharp.Pointers
 {
-	class UnsafeStructs
-	{
-		internal struct jack_client_t
-		{
-		}
+    class UnsafeStructs
+    {
+        internal struct jack_client_t
+        {
+            public ulong unique_1;
+            public ulong usecs;
+            public uint frame_rate;
+            public uint frame;
+            public JackPosition valid;
 
-		internal struct jack_port_t
-		{
-		}
-		internal struct jack_midi_event_t
-		{
-			public uint time;
-			public uint size;
-			public unsafe byte* buffer;
-		}
-	}
+        }
+
+        internal struct jack_port_t
+        {
+        }
+        internal struct jack_midi_event_t
+        {
+            public uint time;
+            public uint size;
+            public unsafe byte* buffer;
+        }
+
+        [Flags]
+        internal enum JackPosition
+        {
+            JackPositionBBT = 1,
+            JackPositionTimecode = 2,
+            JackBBTFrameOffset = 4,
+            JackAudioVideoRatio = 8,
+            JackVideoFrameOffset = 16
+        }
+    }
 }

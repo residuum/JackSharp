@@ -41,7 +41,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClientTest.cs" />
+    <Compile Include="ProcessorTest.cs" />
     <Compile Include="ControllerTest.cs" />
     <Compile Include="Dummies\ControllerReceiver.cs" />
     <Compile Include="PortTest.cs" />

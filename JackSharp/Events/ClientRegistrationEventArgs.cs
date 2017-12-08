@@ -27,7 +27,7 @@ namespace JackSharp.Events
 	/// <summary>
 	/// Client registration event arguments.
 	/// </summary>
-	public class ClientRegistrationEventArgs : EventArgs
+	public sealed class ClientRegistrationEventArgs : EventArgs
 	{
 		/// <summary>
 		/// Gets the name.
