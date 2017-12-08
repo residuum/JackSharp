@@ -2,18 +2,20 @@
 <package >
 	<metadata>
 		<id>$id$</id>
-		<version>0.3.0</version>
+		<version>0.4.0</version>
 		<title>$title$</title>
 		<authors>Thomas Mayer</authors>
 		<owners>Thomas Mayer</owners>
 		<licenseUrl>https://raw.githubusercontent.com/residuum/JackSharp/master/LICENSE</licenseUrl>
 		<projectUrl>https://github.com/residuum/JackSharp</projectUrl>
-		<description>Binding for JackSharp.Client for NAudio. It contains implementations for IWavePlayer and IWaveIn.</description>
+		<description>Binding for JackSharp.Client for NAudio. It contains implementations for IWavePlayer and IWaveIn.
+		
+JACK Audio Connection Kit (or JACK; a recursive acronym) is a professional sound server daemon that provides real-time, low-latency connections for both audio and MIDI data between applications that implement its API.</description>
 		<releaseNotes>Update of JackSharp.</releaseNotes>
 		<copyright>Copyright 2016</copyright>
-		<tags>C# .NET Mono audio sound</tags>
+		<tags>C# .NET Mono audio sound jack</tags>
 		<dependencies>
-			<dependency id="JackSharp" version="0.3.0" />
+			<dependency id="JackSharp" version="0.4.0" />
 		</dependencies>
 	</metadata>
 	<files>

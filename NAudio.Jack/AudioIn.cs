@@ -29,30 +29,31 @@ using NAudio.Wave;
 
 namespace NAudio.Jack
 {
-	public class JackIn : IWaveIn
+	public sealed class AudioIn : IWaveIn
 	{
 		readonly Processor _client;
 		bool _isRecording;
 
-		public JackIn (Processor client)
+		public AudioIn (Processor client)
 		{
 			_client = client;
 			_client.ProcessFunc += ProcessAudio;
 		}
 
-		~JackIn ()
+		~AudioIn ()
 		{
-			Dispose (true);
+			Dispose (false);
 		}
 
 		public void Dispose ()
 		{
-			Dispose (false);
+			Dispose (true);
 			GC.SuppressFinalize (this);
 		}
 
 		void Dispose (bool isDisposing)
 		{
+			_client.ProcessFunc -= ProcessAudio;
 			StopRecording ();
 		}
 

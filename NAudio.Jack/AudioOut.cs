@@ -29,7 +29,7 @@ using JackSharp.Processing;
 
 namespace NAudio.Jack
 {
-	public class JackOut : IWavePlayer
+	public sealed class AudioOut : IWavePlayer
 	{
 		readonly Processor _client;
 
@@ -38,20 +38,20 @@ namespace NAudio.Jack
 		PlaybackState _playbackState;
 		float _volume = 1;
 
-		public JackOut (Processor client)
+		public AudioOut (Processor client)
 		{
 			_client = client;
 			_playbackState = PlaybackState.Stopped;
 		}
 
-		~JackOut ()
+		~AudioOut ()
 		{
-			Dispose (true);
+			Dispose (false);
 		}
 
 		public void Dispose ()
 		{
-			Dispose (false);
+			Dispose (true);
 			GC.SuppressFinalize (this);
 		}
 
@@ -145,6 +145,7 @@ namespace NAudio.Jack
 
 		void Dispose (bool isDisposing)
 		{
+			_client.ProcessFunc -= ProcessAudio;
 			Stop ();
 		}
 	}

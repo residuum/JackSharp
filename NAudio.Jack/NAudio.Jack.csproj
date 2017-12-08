@@ -38,8 +38,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="JackOut.cs" />
-    <Compile Include="JackIn.cs" />
+    <Compile Include="AudioOut.cs" />
+    <Compile Include="AudioIn.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

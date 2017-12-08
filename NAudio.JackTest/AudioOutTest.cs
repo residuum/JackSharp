@@ -33,16 +33,16 @@ using NUnit.Framework;
 namespace NAudio.JackTest
 {
 	[TestFixture]
-	public class JackOutTest
+	public class AudioOutTest
 	{
 		static Processor _client;
-		static JackOut _jackOut;
+		static AudioOut _jackOut;
 
 		[SetUp]
 		public static void CreateOutput ()
 		{
 			_client = new Processor ("testNaudioOut", 0, 2);
-			_jackOut = new JackOut (_client);
+			_jackOut = new AudioOut (_client);
 		}
 
 		[Test]

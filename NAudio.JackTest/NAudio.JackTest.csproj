@@ -44,8 +44,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="JackInTest.cs" />
-    <Compile Include="JackOutTest.cs" />
+    <Compile Include="AudioInTest.cs" />
+    <Compile Include="AudioOutTest.cs" />
     <Compile Include="WaveIntegration\Analyser.cs" />
   </ItemGroup>
   <ItemGroup>
