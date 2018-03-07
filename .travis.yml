@@ -1,10 +1,12 @@
 language: csharp
 solution: JackSharp.sln
 install:
-  - sudo apt-get install -y libjack-dev
+  - sudo apt-get install -y libjack-dev jackd1
   - nuget restore JackSharp.sln
   - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
 script:
   - xbuild /p:Configuration=Release JackSharp.sln
+  - jackd -r -d dummy&
   - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./JackSharpTest/bin/Release/JackSharpTest.dll
   - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./NAudio.JackTest/bin/Release/NAudio.JackTest.dll
+  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./CSCore.JackTest/bin/Release/CSCore.JackTest.dll
