@@ -13,7 +13,7 @@
 		
 JACK Audio Connection Kit (or JACK; a recursive acronym) is a professional sound server daemon that provides real-time, low-latency connections for both audio and MIDI data between applications that implement its API.</description>
 		<releaseNotes>Bugfix for invocation of shutdown event.</releaseNotes>
-		<copyright>Copyright 2016</copyright>
+		<copyright>Copyright 2016-2018</copyright>
 		<tags>C# .NET Mono audio sound jack</tags>
 	</metadata>
 	<files>
