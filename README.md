@@ -37,7 +37,7 @@ Install via NuGet: [nuget install NAudio.Jack](https://www.nuget.org/packages/NA
 ## CSCore.Jack
 Binding for `JackSharp.Processor` for [CSCore](https://github.com/filoe/cscore). It contains implementations for `ISoundOut` and `ISoundIn`.
 
-Install via NuGet: [nuget install NAudio.Jack](https://www.nuget.org/packages/NAudio.Jack/).
+Install via NuGet: [nuget install CSCore.Jack](https://www.nuget.org/packages/CSCore.Jack/).
 
 ## Running Unit Tests
 Running unit tests can be a bit tricky, as some unit tests require an already running instance of Jack, while others require, that Jack must be started by the tested objects themselves. 
