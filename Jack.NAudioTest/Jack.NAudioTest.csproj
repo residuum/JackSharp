@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Jack.NAudioTest</RootNamespace>
     <AssemblyName>Jack.NAudioTest</AssemblyName>
-    <ReleaseVersion>0.3.0</ReleaseVersion>
+    <ReleaseVersion>0.5.0</ReleaseVersion>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>

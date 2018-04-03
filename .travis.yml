@@ -8,5 +8,5 @@ script:
   - xbuild /p:Configuration=Release JackSharp.sln
   - jackd -r -d dummy&
   - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./JackSharpTest/bin/Release/JackSharpTest.dll
-  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./NAudio.JackTest/bin/Release/NAudio.JackTest.dll
-  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./CSCore.JackTest/bin/Release/CSCore.JackTest.dll
+  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./Jack.NAudioTest/bin/Release/Jack.NAudioTest.dll
+  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./Jack.CSCoreTest/bin/Release/Jack.CSCoreTest.dll
