@@ -23,16 +23,16 @@
 
 using System;
 using System.IO;
-using System.Linq;
 using System.Threading;
+using CSCore;
 using CSCore.Codecs.WAV;
-using CSCore.Jack;
-using CSCore.JackTest.WaveIntegration;
+using Jack.CSCore;
+using Jack.CSCoreTest.WaveIntegration;
 using CSCore.SoundOut;
 using JackSharp;
 using NUnit.Framework;
 
-namespace CSCore.JackTest
+namespace Jack.CSCoreTest
 {
 	[TestFixture]
 	public class AudioOutTest

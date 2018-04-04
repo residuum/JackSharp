@@ -7,13 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JackSharp", "JackSharp\Jack
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JackSharpTest", "JackSharpTest\JackSharpTest.csproj", "{FF26D28D-D7DB-4E19-8713-4E057182DF7B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NAudio.Jack", "NAudio.Jack\NAudio.Jack.csproj", "{4EEA78CA-593E-48B1-BF6A-EED70F6DC557}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jack.NAudio", "Jack.NAudio\Jack.NAudio.csproj", "{4EEA78CA-593E-48B1-BF6A-EED70F6DC557}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NAudio.JackTest", "NAudio.JackTest\NAudio.JackTest.csproj", "{516BF6A5-5B69-4A24-B709-C8D817D60634}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jack.NAudioTest", "Jack.NAudioTest\Jack.NAudioTest.csproj", "{516BF6A5-5B69-4A24-B709-C8D817D60634}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSCore.Jack", "CSCore.Jack\CSCore.Jack.csproj", "{70F1E304-98E1-4464-BCBA-03BA6E7A3CC5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jack.CSCore", "Jack.CSCore\Jack.CSCore.csproj", "{70F1E304-98E1-4464-BCBA-03BA6E7A3CC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSCore.JackTest", "CSCore.JackTest\CSCore.JackTest.csproj", "{942A9172-E950-4699-8336-21549D923488}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jack.CSCoreTest", "Jack.CSCoreTest\Jack.CSCoreTest.csproj", "{942A9172-E950-4699-8336-21549D923488}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -5,8 +5,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{4EEA78CA-593E-48B1-BF6A-EED70F6DC557}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>NAudio.Jack</RootNamespace>
-    <AssemblyName>Naudio.Jack</AssemblyName>
+    <RootNamespace>Jack.NAudio</RootNamespace>
+    <AssemblyName>Jack.NAudio</AssemblyName>
     <ReleaseVersion>0.4.0</ReleaseVersion>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile />
@@ -28,7 +28,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <DocumentationFile>bin\Release\Naudio.Jack.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\Jack.NAudio.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

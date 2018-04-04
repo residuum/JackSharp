@@ -24,11 +24,11 @@ using System;
 using System.IO;
 using System.Threading;
 using JackSharp;
-using NAudio.Jack;
+using Jack.NAudio;
 using NAudio.Wave;
 using NUnit.Framework;
 
-namespace NAudio.JackTest
+namespace Jack.NAudioTest
 {
 	[TestFixture]
 	public class AudioInTest

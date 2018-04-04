@@ -7,8 +7,8 @@
     <ProjectGuid>{70F1E304-98E1-4464-BCBA-03BA6E7A3CC5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CSCore.Jack</RootNamespace>
-    <AssemblyName>CSCore.Jack</AssemblyName>
+    <RootNamespace>Jack.CSCore</RootNamespace>
+    <AssemblyName>Jack.CSCore</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -30,7 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\CSCore.Jack.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\Jack.CSCore.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

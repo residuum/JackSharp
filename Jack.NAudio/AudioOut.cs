@@ -1,7 +1,7 @@
 // Author:
 //	   Thomas Mayer <thomas@residuum.org>
 //
-// Copyright (c) 2017 Thomas Mayer
+// Copyright (c) 2016 Thomas Mayer
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,16 +21,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using CSCore.SoundOut;
+using NAudio.Wave;
 using JackSharp;
+using System.Linq;
 using JackSharp.Ports;
 using JackSharp.Processing;
 
-namespace CSCore.Jack
+namespace Jack.NAudio
 {
-	public class AudioOut : ISoundOut
+	public sealed class AudioOut : IWavePlayer
 	{
 		readonly Processor _client;
+
+		IWaveProvider _waveStream;
+
 		PlaybackState _playbackState;
 		float _volume = 1;
 
@@ -51,34 +55,15 @@ namespace CSCore.Jack
 			GC.SuppressFinalize (this);
 		}
 
-		void Dispose (bool isDisposing)
-		{
-			_client.ProcessFunc -= ProcessAudio;
-			Stop ();
-		}
-
-		public void Play ()
-		{
-			switch (_playbackState) {
-			case PlaybackState.Playing:
-				return;
-			case PlaybackState.Paused:
-				_playbackState = PlaybackState.Playing;
-				return;
-			case PlaybackState.Stopped:
-				if (_client.Start ()) {
-					_playbackState = PlaybackState.Playing;
-				}
-				break;
+		public WaveFormat OutputWaveFormat {
+			get {
+				return WaveFormat.CreateIeeeFloatWaveFormat (_client.SampleRate, _client.AudioOutPorts.Count ());
 			}
 		}
 
-		public void Pause ()
-		{
-			_playbackState = PlaybackState.Paused;
-		}
+		public event EventHandler<StoppedEventArgs> PlaybackStopped;
 
-		public void Resume ()
+		public void Play ()
 		{
 			switch (_playbackState) {
 			case PlaybackState.Playing:
@@ -98,17 +83,15 @@ namespace CSCore.Jack
 		{
 			if (_client.Stop ()) {
 				_playbackState = PlaybackState.Stopped;
-				if (Stopped != null) {
-					Stopped (this, new PlaybackStoppedEventArgs ());
+				if (PlaybackStopped != null) {
+					PlaybackStopped (this, new StoppedEventArgs ());
 				}
 			}
 		}
 
-		public void Initialize (IWaveSource source)
+		public void Pause ()
 		{
-			_sampleSource = source.ToSampleSource ();
-			_playbackState = PlaybackState.Stopped;
-			_client.ProcessFunc += ProcessAudio;
+			_playbackState = PlaybackState.Paused;
 		}
 
 		void ProcessAudio (ProcessBuffer processingChunk)
@@ -122,14 +105,29 @@ namespace CSCore.Jack
 			}
 			int bufferSize = processingChunk.Frames;
 			int floatsCount = bufferCount * bufferSize;
+			int bytesCount = floatsCount * sizeof(float);
+			byte[] fromWave = new byte[bytesCount];
+
+			_waveStream.Read (fromWave, 0, bytesCount);
+
 			float[] interlacedSamples = new float[floatsCount];
-
-			_sampleSource.Read (interlacedSamples, 0, floatsCount);
-
+			Buffer.BlockCopy (fromWave, 0, interlacedSamples, 0, bytesCount);
 			for (int i = 0; i < floatsCount; i++) {
 				interlacedSamples [i] = interlacedSamples [i] * _volume;
 			}
 			BufferOperations.DeinterlaceAudio (interlacedSamples, processingChunk.AudioOut, bufferSize, bufferCount);
+		}
+
+		public void Init (IWaveProvider waveProvider)
+		{
+			_waveStream = waveProvider;
+
+			_playbackState = PlaybackState.Stopped;
+			_client.ProcessFunc += ProcessAudio;
+		}
+
+		public PlaybackState PlaybackState {
+			get { return _playbackState; }
 		}
 
 		public float Volume {
@@ -145,18 +143,10 @@ namespace CSCore.Jack
 			}
 		}
 
-		private ISampleSource _sampleSource;
-
-		public IWaveSource WaveSource { 
-			get { 
-				return _sampleSource.ToWaveSource ();
-			}
+		void Dispose (bool isDisposing)
+		{
+			_client.ProcessFunc -= ProcessAudio;
+			Stop ();
 		}
-
-		public PlaybackState PlaybackState {
-			get { return _playbackState; }
-		}
-
-		public event EventHandler<PlaybackStoppedEventArgs> Stopped;
 	}
 }

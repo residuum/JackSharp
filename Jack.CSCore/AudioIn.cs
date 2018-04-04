@@ -22,12 +22,13 @@
 // THE SOFTWARE.
 using System;
 using System.Linq;
+using CSCore;
 using CSCore.SoundIn;
 using JackSharp;
 using JackSharp.Ports;
 using JackSharp.Processing;
 
-namespace CSCore.Jack
+namespace Jack.CSCore
 {
 	public class AudioIn : ISoundIn
 	{

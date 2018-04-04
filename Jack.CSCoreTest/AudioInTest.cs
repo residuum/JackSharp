@@ -1,7 +1,7 @@
 // Author:
 //	   Thomas Mayer <thomas@residuum.org>
 //
-// Copyright (c) 2016 Thomas Mayer
+// Copyright (c) 2017 Thomas Mayer
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,30 +20,55 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+
 using System;
-using System.Linq;
-using JackSharp.Processing;
+using System.IO;
+using System.Threading;
+using CSCore.Codecs.WAV;
+using Jack.CSCore;
+using JackSharp;
+using NUnit.Framework;
 
-namespace NAudio.JackTest.WaveIntegration
+namespace Jack.CSCoreTest
 {
-	class Analyser
+	[TestFixture]
+	public class AudioInTest
 	{
-		public Action<ProcessBuffer> AnalyseOutAction;
+		static Processor _client;
+		static AudioIn _jackIn;
 
-		public int NotEmptySamples { get; private set; }
-
-		public Analyser ()
+		[SetUp]
+		public static void CreateInput ()
 		{
-			AnalyseOutAction = AnalyseOut;
+			_client = new Processor ("testCSCoreIn", 2);
+			_jackIn = new AudioIn (_client);
 		}
 
-		void AnalyseOut (ProcessBuffer processItem)
+		[Test]
+		public virtual void RecordAudioFile ()
 		{
-			foreach (AudioBuffer outBuffer in processItem.AudioOut) {
-				if (outBuffer.Audio.Any (s => s != 0)) {
-					NotEmptySamples++;
-				}
-			}
+			string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+			string wavFile = Path.Combine (currentDirectory, "recording.wav");
+			_jackIn.Initialize ();
+			WaveWriter writer = new WaveWriter (wavFile, _jackIn.WaveFormat);
+			_jackIn.DataAvailable += (sender, args) => {
+				writer.Write (args.Data, 0, args.ByteCount);
+			};
+			_jackIn.Stopped += (sender, e) => {
+				writer.Dispose ();
+				long fileSize = new FileInfo (wavFile).Length;
+				Assert.AreNotEqual (0, fileSize);
+			};
+			_jackIn.Start ();
+			Thread.Sleep (100);
+			_jackIn.Stop ();
+		}
+
+		[TearDown]
+		public static void DestroyClient ()
+		{
+			_jackIn.Dispose ();
+			_client.Dispose ();
 		}
 	}
 }

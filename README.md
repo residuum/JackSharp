@@ -1,5 +1,5 @@
 # Jack-Sharp
-Jack-Sharp is a .NET/mono binding for [Jack](http://jackaudio.org/), and contains two projects: JackSharp and NAudio.Jack, a binding of JackSharp for NAudio.
+Jack-Sharp is a .NET/mono binding for [Jack](http://jackaudio.org/), and contains multiple: JackSharp, Jack.NAudio, and Jack.CSCore. The latter projects are bindings of JackSharp for NAudio and CSCore.
 
 ## Tested Platforms
 * Debian GNU/Linux sid amd64 and i386
@@ -29,15 +29,15 @@ Can connect and disconnect ports of different applications.
 
 If your application needs functionality from both `Processor` and `Controller`, then you must create instances of both classes in your consumer with different names.
 
-## NAudio.Jack
+## Jack.NAudio
 Binding for `JackSharp.Processor` for [NAudio](https://github.com/naudio). It contains implementations for `IWavePlayer` and `IWaveIn`.
 
-Install via NuGet: [nuget install NAudio.Jack](https://www.nuget.org/packages/NAudio.Jack/).
+Install via NuGet: [nuget install Jack.NAudio](https://www.nuget.org/packages/Jack.NAudio/).
 
-## CSCore.Jack
+## Jack.CSCore
 Binding for `JackSharp.Processor` for [CSCore](https://github.com/filoe/cscore). It contains implementations for `ISoundOut` and `ISoundIn`.
 
-Install via NuGet: [nuget install CSCore.Jack](https://www.nuget.org/packages/CSCore.Jack/).
+Install via NuGet: [nuget install Jack.CSCore](https://www.nuget.org/packages/Jack.CSCore/).
 
 ## Running Unit Tests
 Running unit tests can be a bit tricky, as some unit tests require an already running instance of Jack, while others require, that Jack must be started by the tested objects themselves. 

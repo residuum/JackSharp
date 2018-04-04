@@ -7,8 +7,8 @@
     <ProjectGuid>{942A9172-E950-4699-8336-21549D923488}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CSCore.JackTest</RootNamespace>
-    <AssemblyName>CSCore.JackTest</AssemblyName>
+    <RootNamespace>Jack.CSCoreTest</RootNamespace>
+    <AssemblyName>Jack.CSCoreTest</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -55,9 +55,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CSCore.Jack\CSCore.Jack.csproj">
+    <ProjectReference Include="..\Jack.CSCore\Jack.CSCore.csproj">
       <Project>{70F1E304-98E1-4464-BCBA-03BA6E7A3CC5}</Project>
-      <Name>CSCore.Jack</Name>
+      <Name>Jack.CSCore</Name>
     </ProjectReference>
     <ProjectReference Include="..\JackSharp\JackSharp.csproj">
       <Project>{4F92C51C-92A4-4B82-A3D9-0F9EBF76ADA7}</Project>

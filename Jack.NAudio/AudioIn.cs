@@ -27,7 +27,7 @@ using JackSharp.Ports;
 using JackSharp.Processing;
 using NAudio.Wave;
 
-namespace NAudio.Jack
+namespace Jack.NAudio
 {
 	public sealed class AudioIn : IWaveIn
 	{

@@ -25,12 +25,12 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using JackSharp;
-using NAudio.Jack;
-using NAudio.JackTest.WaveIntegration;
+using Jack.NAudio;
+using Jack.NAudioTest.WaveIntegration;
 using NAudio.Wave;
 using NUnit.Framework;
 
-namespace NAudio.JackTest
+namespace Jack.NAudioTest
 {
 	[TestFixture]
 	public class AudioOutTest
