@@ -1,3 +1,5 @@
+**Due to Github's determination to be the "world’s leading AI-powered developer platform" I will move my projects to [Codeberg](https://codeberg.org/Residuum)**
+
 # Jack-Sharp
 Jack-Sharp is a .NET/mono binding for [Jack](http://jackaudio.org/), and contains multiple: JackSharp, Jack.NAudio, and Jack.CSCore. The latter projects are bindings of JackSharp for NAudio and CSCore.
 
